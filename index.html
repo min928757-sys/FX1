@@ -2,79 +2,118 @@
 <html lang="my">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>Trading Psychology Deep Quiz</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 
 body{
-font-family: "Noto Sans Myanmar", sans-serif;
-background: linear-gradient(135deg,#1f1c2c,#928dab);
+font-family:'Noto Sans Myanmar',sans-serif;
+background:linear-gradient(135deg,#141E30,#243B55);
 display:flex;
 justify-content:center;
 align-items:center;
+flex-direction:column;
 height:100vh;
 margin:0;
 color:white;
-flex-direction:column;
 }
 
-.container{
-text-align:center;
-}
-
-.flashcard{
-width:340px;
-height:260px;
-background:rgba(255,255,255,0.1);
-backdrop-filter: blur(10px);
-border-radius:20px;
-padding:20px;
-box-shadow:0 8px 25px rgba(0,0,0,0.4);
+.musicBtn{
+position:absolute;
+top:20px;
+right:20px;
+background:rgba(255,255,255,0.15);
+border:none;
+padding:10px 16px;
+border-radius:12px;
 cursor:pointer;
-transition: transform 0.6s;
+color:white;
+backdrop-filter:blur(10px);
+}
+
+.cardContainer{
+perspective:1200px;
+}
+
+.card{
+width:380px;
+height:280px;
+position:relative;
+transform-style:preserve-3d;
+transition:transform .7s;
+}
+
+.card.flip{
+transform:rotateY(180deg);
+}
+
+.side{
+position:absolute;
+width:100%;
+height:100%;
+backface-visibility:hidden;
+background:rgba(255,255,255,0.1);
+border-radius:22px;
+padding:25px;
+box-shadow:0 15px 40px rgba(0,0,0,.4);
+backdrop-filter:blur(12px);
+}
+
+.back{
+transform:rotateY(180deg);
+}
+
+.question{
+font-size:20px;
+margin-bottom:20px;
+line-height:1.4;
 }
 
 .answers{
-display:flex;
-justify-content:space-between;
-margin-top:20px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
 }
 
 .answers button{
-flex:1;
-margin:4px;
-padding:10px;
-border:none;
-border-radius:10px;
 background:linear-gradient(45deg,#00c6ff,#0072ff);
+border:none;
+padding:12px;
+border-radius:12px;
 color:white;
-font-weight:bold;
+font-size:14px;
 cursor:pointer;
+transition:.2s;
+}
+
+.answers button:hover{
+transform:scale(1.05);
 }
 
 .result{
-margin-top:15px;
-font-weight:bold;
 font-size:18px;
+margin-top:20px;
+text-align:center;
 }
 
-.next{
+.nextBtn{
 margin-top:15px;
 padding:10px 20px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:#00ffb3;
-color:black;
 font-weight:bold;
 cursor:pointer;
 }
 
 footer{
-position:fixed;
+position:absolute;
 bottom:10px;
-font-size:14px;
-opacity:0.8;
+opacity:.8;
 }
 
 </style>
@@ -82,32 +121,38 @@ opacity:0.8;
 
 <body>
 
-<div class="container">
+<button class="musicBtn" onclick="toggleMusic()">🎵 Music</button>
 
-<div class="flashcard" id="card">
-<div id="question">Flash Card ကို Tap လုပ်ပြီး Quiz စပါ</div>
+<div class="cardContainer">
 
-<div class="answers" id="answers" style="display:none">
-<button onclick="selectAnswer(0)">A</button>
-<button onclick="selectAnswer(1)">B</button>
-<button onclick="selectAnswer(2)">C</button>
-<button onclick="selectAnswer(3)">D</button>
+<div class="card" id="card">
+
+<div class="side front">
+<div class="question" id="question">
+Flash Card ကို Tap လုပ်ပြီး Trading Psychology Quiz စပါ
+</div>
+<div class="answers" id="answers"></div>
 </div>
 
+<div class="side back">
 <div class="result" id="result"></div>
-
-<button class="next" id="nextBtn" onclick="nextQuestion()" style="display:none">Next</button>
+<button class="nextBtn" onclick="nextQuestion()">Next</button>
+</div>
 
 </div>
 
 </div>
 
 <footer>
-📢 Telegram - @fxkaram
+📢 Telegram — @fxkaram
 </footer>
 
-<audio id="tapSound">
-<source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
+<audio id="tap" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+<audio id="correct" src="https://www.soundjay.com/buttons/sounds/button-4.mp3"></audio>
+<audio id="wrong" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+
+<audio id="music" loop>
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8a2bce3c1.mp3">
 </audio>
 
 <script>
@@ -116,7 +161,7 @@ const quiz=[
 
 {
 q:"Loss တစ်ခုပြီးတိုင်း revenge trade လုပ်ချင်လာတာဟာ ဘာကိုပြသသလဲ?",
-a:["စိတ်ရှည်မှု","စိတ်အလိုလိုက်ခြင်း","Discipline","Risk management"],
+a:["စိတ်ရှည်မှု","Emotion control မရှိခြင်း","Discipline","Professional mindset"],
 c:1
 },
 
@@ -127,64 +172,63 @@ c:1
 },
 
 {
-q:"Plan မရှိဘဲ trade ဝင်ခြင်းကို psychology အရဘာခေါ်လဲ?",
-a:["Random impulse","Calculated risk","Smart entry","Institutional trading"],
+q:"Stop loss မတင်ပဲ trade ဝင်တာဟာဘာလဲ?",
+a:["Hope trading","Confidence","Smart entry","Precision"],
 c:0
 },
 
 {
-q:"Winning streak ၅ခုဆက်တိုက်ပြီး lot size တိုးချင်လာခြင်းဟာဘာလဲ?",
+q:"Winning streak ပြီး lot size တိုးချင်လာတာဟာဘာလဲ?",
 a:["Confidence","Overconfidence","Discipline","Logic"],
 c:1
 },
 
 {
-q:"Stop loss မတင်ပဲ trade ဝင်တာဟာဘာကိုပြသသလဲ?",
-a:["Fear","Risk control","Hope trading","Patience"],
-c:2
+q:"Trade plan မရှိဘဲ entry ဝင်ခြင်းကိုဘာခေါ်လဲ?",
+a:["Impulse trading","Calculated trading","Smart money","Institutional entry"],
+c:0
 },
 
 {
-q:"Trader တစ်ယောက် profitable ဖြစ်ဖို့အရေးကြီးဆုံး habit ကဘာလဲ?",
-a:["Indicators","Consistency","Big lot","Signal group"],
+q:"Loss ကို accept မလုပ်နိုင်ခြင်းကဘာဖြစ်စေသလဲ?",
+a:["Account growth","Revenge trading","Precision","Calm"],
 c:1
 },
 
 {
-q:"Loss ကို accept မလုပ်နိုင်ခြင်းကဘာကိုဖြစ်စေသလဲ?",
-a:["Account growth","Revenge trading","Calm mindset","Precision"],
-c:1
-},
-
-{
-q:"Trade မရှိတဲ့နေ့မှာ patience ထိန်းနိုင်ခြင်းဟာဘာလဲ?",
-a:["Weakness","Professional mindset","Fear","Random thinking"],
+q:"Trade မရှိတဲ့နေ့ patience ထိန်းနိုင်ခြင်းဟာဘာလဲ?",
+a:["Weakness","Professional discipline","Fear","Random thinking"],
 c:1
 },
 
 {
 q:"Market ကို prove လုပ်ချင်တဲ့စိတ်ကဘာဖြစ်စေသလဲ?",
-a:["Objectivity","Ego trading","Discipline","Focus"],
+a:["Objectivity","Ego trading","Focus","Calm mind"],
 c:1
 },
 
 {
-q:"Trading psychology master ဖြစ်ဖို့ အရေးကြီးဆုံးအရာကဘာလဲ?",
-a:["Indicators","Mind control","Broker","News"],
+q:"Consistent trader ဖြစ်ဖို့အရေးကြီးဆုံးအရာကဘာလဲ?",
+a:["Indicators","Mind discipline","Signal group","News"],
 c:1
+},
+
+{
+q:"Trading psychology master ဖြစ်ဖို့အရေးကြီးဆုံး skill?",
+a:["Mind control","Indicators","Broker","Spread"],
+c:0
 }
 
 ]
 
-let index=0
+let i=0
 let score=0
 let started=false
 
 const card=document.getElementById("card")
-const question=document.getElementById("question")
-const answers=document.getElementById("answers")
-const result=document.getElementById("result")
-const nextBtn=document.getElementById("nextBtn")
+const q=document.getElementById("question")
+const ans=document.getElementById("answers")
+const res=document.getElementById("result")
 
 card.onclick=function(){
 
@@ -197,81 +241,108 @@ loadQuestion()
 
 function loadQuestion(){
 
-question.innerText=quiz[index].q
+document.getElementById("tap").play()
 
-answers.style.display="flex"
+q.innerText=quiz[i].q
 
-const btns=answers.children
+ans.innerHTML=""
 
-btns[0].innerText="A. "+quiz[index].a[0]
-btns[1].innerText="B. "+quiz[index].a[1]
-btns[2].innerText="C. "+quiz[index].a[2]
-btns[3].innerText="D. "+quiz[index].a[3]
+quiz[i].a.forEach((choice,index)=>{
 
-result.innerText=""
-nextBtn.style.display="none"
+let btn=document.createElement("button")
+
+btn.innerText=choice
+
+btn.onclick=()=>selectAnswer(index)
+
+ans.appendChild(btn)
+
+})
 
 }
 
-function selectAnswer(i){
+function selectAnswer(x){
 
-document.getElementById("tapSound").play()
+card.classList.add("flip")
 
-if(i===quiz[index].c){
+if(x===quiz[i].c){
 
-result.innerText="✅ မှန်ပါတယ်"
 score++
+res.innerHTML="✅ မှန်ပါတယ်"
+
+document.getElementById("correct").play()
 
 }else{
 
-result.innerText="❌ မှားပါတယ် — အဖြေမှန်: "+quiz[index].a[quiz[index].c]
+res.innerHTML="❌ မှားပါတယ်<br><br>အဖြေမှန် → "+quiz[i].a[quiz[i].c]
+
+document.getElementById("wrong").play()
 
 }
-
-nextBtn.style.display="inline-block"
 
 }
 
 function nextQuestion(){
 
-index++
+card.classList.remove("flip")
 
-if(index<quiz.length){
+i++
+
+if(i<quiz.length){
 
 loadQuestion()
 
 }else{
 
-showScore()
+showResult()
 
 }
 
 }
 
-function showScore(){
+function showResult(){
 
-question.innerHTML="Quiz ပြီးပါပြီ<br><br>Total Score: "+score+"/10"
+let personality=""
 
-answers.style.display="none"
-nextBtn.style.display="none"
+if(score<=3){
 
-let advice=""
+personality="😵 Emotional Trader<br><br>Fear & Revenge Trading ကိုထိန်းဖို့လိုပါတယ်"
 
-if(score<=4){
+}else if(score<=6){
 
-advice="သင့် Trading Psychology ကိုပြန်လေ့လာသင့်ပါတယ်။ Emotion control မရှိသေးပါ။"
+personality="⚖ Developing Trader<br><br>Mind discipline တိုးလာနေပါတယ်"
 
-}else if(score<=7){
+}else if(score<=8){
 
-advice="Good Trader mindset ရှိလာနေပါပြီ။ Discipline ကိုပိုတိုးပါ။"
+personality="🧠 Smart Trader<br><br>Professional psychology နီးပါးရှိပါတယ်"
 
 }else{
 
-advice="Excellent mindset 🔥 Professional Trader psychology နီးပါးပါပဲ။"
+personality="👑 Elite Trader Mindset<br><br>Institutional level psychology 🔥"
 
 }
 
-result.innerText=advice
+q.innerHTML="Total Score: "+score+"/10"
+
+ans.innerHTML=""
+
+res.innerHTML=personality
+
+}
+
+function toggleMusic(){
+
+let m=document.getElementById("music")
+
+if(m.paused){
+
+m.play()
+
+}else{
+
+m.pause()
+
+}
 
 }
 
