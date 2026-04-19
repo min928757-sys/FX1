@@ -6,34 +6,42 @@
     <title>Fx Karam - ICT Academy</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --gold: #f0b90b; --bg: #0d1117; --card: #1c2128; --border: #30363d; --text: #adbac7; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; user-select: none; scroll-behavior: smooth; }
+        :root { --gold: #f0b90b; --bg: #0d1117; --card: #1c2128; --border: #30363d; }
+        body { background-color: var(--bg); color: #adbac7; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; user-select: none; scroll-behavior: smooth; }
         
-        header { background: var(--card); padding: 15px; text-align: center; border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        /* Sticky Header */
+        header { background: var(--card); padding: 15px; text-align: center; border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 100; }
         header h1 { color: var(--gold); margin: 0; font-size: 18px; text-transform: uppercase; }
 
-        /* Navigation Menu */
-        .nav-menu { padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #22272e; margin: 15px; border-radius: 12px; border: 1px solid var(--border); }
-        .nav-label { font-size: 13px; font-weight: bold; color: var(--gold); margin-bottom: 5px; opacity: 0.8; }
-        .nav-group { display: flex; gap: 8px; flex-wrap: wrap; }
-        .nav-btn { background: var(--card); border: 1px solid var(--border); color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; transition: 0.2s; }
-        .nav-btn:active { background: var(--gold); color: black; }
+        /* Clean Navigation Table */
+        .nav-container { padding: 15px; background: #22272e; margin: 15px; border-radius: 12px; border: 1px solid var(--border); }
+        .nav-label { font-size: 12px; color: var(--gold); margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
+        .nav-links { display: flex; flex-direction: column; gap: 10px; }
+        .section-btn { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            color: white; 
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-size: 14px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-btn:active { background: #2d333b; border-color: var(--gold); }
+        .section-btn::after { content: '→'; color: var(--gold); }
 
         /* Content Sections */
-        .section-header { margin: 25px 15px 10px; padding-left: 10px; border-left: 4px solid var(--gold); }
-        .section-header h2 { margin: 0; font-size: 20px; color: white; }
-        .section-header p { margin: 5px 0 0; font-size: 14px; color: #768390; }
-
-        /* Flash Card */
-        .container { padding: 15px; display: flex; flex-direction: column; gap: 20px; }
-        .flash-card { background: var(--card); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .card-top { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); }
-        .card-top span { font-size: 12px; font-weight: bold; color: var(--gold); }
+        .section-title { margin: 30px 15px 15px; padding-left: 12px; border-left: 4px solid var(--gold); }
+        .section-title h2 { margin: 0; font-size: 22px; color: white; }
         
+        .container { padding: 0 15px 20px; display: flex; flex-direction: column; gap: 20px; }
+        .flash-card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .flash-card img { width: 100%; height: auto; display: block; }
-        .card-bottom { padding: 12px; text-align: center; font-size: 12px; border-top: 1px solid var(--border); color: #545d68; }
+        .card-info { padding: 10px; font-size: 11px; text-align: center; color: #545d68; border-top: 1px solid var(--border); }
 
-        footer { text-align: center; padding: 40px; color: #444c56; font-size: 11px; }
+        footer { text-align: center; padding: 50px 20px; color: #444c56; font-size: 11px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -42,69 +50,49 @@
         <h1>Fx Karam Academy</h1>
     </header>
 
-    <div class="nav-menu">
-        <div>
-            <div class="nav-label">ENTRY SETUPS</div>
-            <div class="nav-group" id="nav-entry"></div>
-        </div>
-        <div style="margin-top: 10px;">
-            <div class="nav-label">JUDAS SWING</div>
-            <div class="nav-group" id="nav-judas"></div>
+    <div class="nav-container">
+        <div class="nav-label">Course Chapters</div>
+        <div class="nav-links">
+            <a href="#entry-setups" class="section-btn">Entry Setups Section</a>
+            <a href="#judas-swing" class="section-btn">Judas Swing Section</a>
         </div>
     </div>
 
-    <div class="section-header">
+    <div id="entry-setups" class="section-title">
         <h2>Entry Setups</h2>
-        <p>Advanced ICT Trading Strategies</p>
     </div>
-    <div class="container" id="entry-content"></div>
+    <div class="container" id="entry-list"></div>
 
-    <div class="section-header" id="judas-section">
+    <div id="judas-swing" class="section-title">
         <h2>Judas Swing</h2>
-        <p>Market Manipulation Tactics</p>
     </div>
-    <div class="container" id="judas-content"></div>
+    <div class="container" id="judas-list"></div>
 
     <footer>
-        DESIGNED FOR FX KARAM STUDENTS<br>
-        © 2026 PROTECTED CONTENT
+        STUDENT EXCLUSIVE CONTENT<br>
+        © 2026 FX KARAM TRADING ACADEMY
     </footer>
 
     <script>
-        const entryPages = [1, 2, 3, 4, 5, 6];
+        // ဒီနေရာမှာ နောက်ပိုင်း ပုံတွေထပ်တိုးချင်ရင် နံပါတ်လေးတွေ ထပ်ထည့်ရုံပါပဲ
+        const entryPages = [1, 2, 3, 4, 5, 6]; 
         const judasPages = [7, 8, 9, 10];
 
-        const renderContent = (pages, containerId, navId) => {
+        const generateCards = (pages, containerId) => {
             const container = document.getElementById(containerId);
-            const nav = document.getElementById(navId);
-
-            pages.forEach(i => {
-                // Create Nav Button
-                const btn = document.createElement('a');
-                btn.className = 'nav-btn';
-                btn.innerText = `P. ${i}`;
-                btn.href = `#page-${i}`;
-                nav.appendChild(btn);
-
-                // Create Flash Card
+            pages.forEach(num => {
                 const card = document.createElement('div');
                 card.className = 'flash-card';
-                card.id = `page-${i}`;
                 card.innerHTML = `
-                    <div class="card-top">
-                        <span>LEARNING MODULE</span>
-                        <span>PAGE ${i}</span>
-                    </div>
-                    <img src="${i}.jpg" loading="lazy">
-                    <div class="card-bottom">FX KARAM - ICT CONCEPT</div>
+                    <img src="${num}.jpg" loading="lazy">
+                    <div class="card-info">FX KARAM - ICT MODULES</div>
                 `;
                 container.appendChild(card);
             });
         };
 
-        // Render both sections
-        renderContent(entryPages, 'entry-content', 'nav-entry');
-        renderContent(judasPages, 'judas-content', 'nav-judas');
+        generateCards(entryPages, 'entry-list');
+        generateCards(judasPages, 'judas-list');
 
         const tg = window.Telegram.WebApp;
         tg.expand();
