@@ -3,114 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fx Karam - Academy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+    <title>Fx Karam Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --gold: #f0b90b; --bg: #0b0e11; --card: #1c2128; --border: rgba(240, 185, 11, 0.3); }
-        body { background-color: var(--bg); color: #adbac7; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; overflow-x: hidden; scroll-behavior: smooth; }
+        :root { --gold: #f0b90b; --bg: #0b0e11; --card-bg: #1c2128; --border: rgba(240, 185, 11, 0.3); }
+        body { background-color: var(--bg); color: #adbac7; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
         
         header { 
-            background: rgba(28, 33, 40, 0.95); padding: 15px; text-align: center; 
-            border-bottom: 1px solid var(--gold); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+            background: #1c2128; padding: 12px; text-align: center; 
+            border-bottom: 1px solid var(--gold); position: sticky; top: 0; z-index: 1000;
         }
-        header h1 { color: var(--gold); margin: 0; font-size: 16px; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+        header h1 { color: var(--gold); margin: 0; font-size: 14px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
 
-        .wrapper { padding: 30px 20px; display: flex; flex-direction: column; gap: 60px; align-items: center; }
-        .section-container { width: 100%; max-width: 350px; }
+        /* Horizontal Grid for Titles */
+        .chapter-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* ၃ ခု တစ်တန်း */
+            gap: 10px; 
+            padding: 15px;
+        }
+
+        .section-box { display: flex; flex-direction: column; align-items: center; }
         
-        .section-title { 
-            color: white; font-size: 13px; font-family: 'Orbitron', sans-serif; 
-            margin-bottom: 25px; display: flex; align-items: center; gap: 8px; letter-spacing: 1px;
+        .section-label { 
+            font-family: 'Orbitron', sans-serif; font-size: 8px; color: var(--gold); 
+            margin-bottom: 8px; text-align: center; white-space: nowrap;
         }
-        .section-title::before { content: ''; width: 3px; height: 14px; background: var(--gold); display: inline-block; }
 
-        /* Initial Stack Look: Optimized for Hook Visibility */
-        .stack { position: relative; width: 100%; height: 200px; cursor: pointer; transition: all 0.5s ease; }
+        /* Compact Pro Stack Look */
+        .stack { 
+            position: relative; width: 100%; aspect-ratio: 3/4; 
+            cursor: pointer; perspective: 1000px;
+        }
         
         .card { 
             position: absolute; width: 100%; height: 100%; 
-            background: var(--card); border-radius: 12px; 
+            background: var(--card-bg); border-radius: 6px; 
             border: 1px solid var(--border); overflow: hidden; 
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-            transform-origin: bottom center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Initial View: Slide cards down to show 2/3 of the background hooks */
-        /* calc(var(--i) * 40px) က ပုံတွေကို အောက်ဘက် 40px စီ တွန်းချပေးမှာပါ */
-        .card:nth-child(1) { z-index: 10; transform: translateY(80px); }
-        .card:nth-child(2) { z-index: 9; transform: translateY(40px) scale(0.96); opacity: 0.8; }
-        .card:nth-child(3) { z-index: 8; transform: translateY(0px) scale(0.92); opacity: 0.5; }
+        /* Stacked State: တစ်ခုနဲ့တစ်ခု အရမ်းကပ်ပြီး ထပ်နေတဲ့ပုံစံ */
+        .card:nth-child(1) { z-index: 3; transform: translate(0, 0); }
+        .card:nth-child(2) { z-index: 2; transform: translate(4px, -4px); opacity: 0.8; }
+        .card:nth-child(3) { z-index: 1; transform: translate(8px, -8px); opacity: 0.5; }
 
-        /* Active Expand State */
-        .stack.active { height: auto; margin-bottom: 30px; padding-top: 0px; }
-        .stack.active .card { 
-            position: relative; margin-bottom: 12px; 
-            transform: translateY(0) scale(1) !important; 
-            opacity: 1 !important; height: auto;
-            z-index: 20;
+        /* Expanded View: Full Screen Overlay */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000;
+            display: none; flex-direction: column; padding: 20px;
+            overflow-y: auto; box-sizing: border-box;
+        }
+        .overlay.active { display: flex; }
+        
+        .close-btn { 
+            align-self: flex-end; color: var(--gold); font-family: 'Orbitron'; 
+            padding: 10px; font-size: 12px; cursor: pointer;
         }
 
-        /* Animation Timing */
-        .stack.active .card { transition-delay: calc(var(--i) * 0.08s); }
+        .expanded-img { width: 100%; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border); }
 
-        .btn-expand {
-            position: absolute; bottom: -20px; right: 0;
-            background: var(--gold); color: black;
-            padding: 4px 12px; border-radius: 4px;
-            font-size: 10px; font-weight: bold; z-index: 15;
-            font-family: 'Orbitron', sans-serif;
-        }
-        .stack.active .btn-expand { display: none; }
-
-        footer { text-align: center; padding: 50px; color: #444c56; font-size: 10px; font-family: 'Orbitron', sans-serif; }
+        footer { text-align: center; padding: 20px; color: #444c56; font-size: 9px; font-family: 'Orbitron'; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>FX KARAM ACADEMY</h1>
-    </header>
+    <header><h1>FX KARAM ACADEMY</h1></header>
 
-    <div class="wrapper">
-        <div class="section-container">
-            <div class="section-title">ENTRY SETUPS</div>
-            <div class="stack" onclick="this.classList.toggle('active')" id="entry-stack">
-                <div class="btn-expand">EXPAND COURSE</div>
+    <div class="chapter-grid">
+        <div class="section-box">
+            <div class="section-label">ENTRY SETUPS</div>
+            <div class="stack" onclick="openChapter('entry')">
+                <div class="card"><img src="1.jpg"></div>
+                <div class="card"><img src="2.jpg"></div>
+                <div class="card"><img src="3.jpg"></div>
             </div>
         </div>
 
-        <div class="section-container">
-            <div class="section-title" style="margin-top: 20px;">JUDAS SWING</div>
-            <div class="stack" onclick="this.classList.toggle('active')" id="judas-stack">
-                <div class="btn-expand">EXPAND COURSE</div>
+        <div class="section-box">
+            <div class="section-label">JUDAS SWING</div>
+            <div class="stack" onclick="openChapter('judas')">
+                <div class="card"><img src="7.jpg"></div>
+                <div class="card"><img src="8.jpg"></div>
+                <div class="card"><img src="9.jpg"></div>
+            </div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-label">FUTURE TOPIC</div>
+            <div class="stack">
+                <div class="card" style="display:flex; align-items:center; justify-content:center; background:#111;">
+                    <span style="font-size:20px; color:#333;">+</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <footer>TERMINAL ACCESS v3.0</footer>
+    <div id="viewer" class="overlay">
+        <div class="close-btn" onclick="closeChapter()">CLOSE [X]</div>
+        <div id="viewer-content"></div>
+    </div>
+
+    <footer>TERMINAL v4.0</footer>
 
     <script>
-        const entryPages = [1, 2, 3, 4, 5, 6];
-        const judasPages = [7, 8, 9, 10];
+        const chapters = {
+            'entry': [1, 2, 3, 4, 5, 6],
+            'judas': [7, 8, 9, 10]
+        };
 
-        const loadCards = (pages, containerId) => {
-            const container = document.getElementById(containerId);
-            // Reverse လုပ်လိုက်တာက ပထမဆုံးပုံကို အပေါ်ဆုံးရောက်စေဖို့ပါ
-            pages.forEach((num, index) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.setProperty('--i', index); 
-                card.innerHTML = `<img src="${num}.jpg" alt="Lesson ${num}">`;
-                container.appendChild(card);
+        function openChapter(id) {
+            const content = document.getElementById('viewer-content');
+            content.innerHTML = '';
+            chapters[id].forEach(num => {
+                const img = document.createElement('img');
+                img.src = `${num}.jpg`;
+                img.className = 'expanded-img';
+                content.appendChild(img);
             });
+            document.getElementById('viewer').classList.add('active');
         }
 
-        loadCards(entryPages, 'entry-stack');
-        loadCards(judasPages, 'judas-stack');
+        function closeChapter() {
+            document.getElementById('viewer').classList.remove('active');
+        }
 
         const tg = window.Telegram.WebApp;
         tg.expand();
