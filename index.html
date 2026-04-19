@@ -1,217 +1,28 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Trading Psychology - FXKARAM</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fx Karam - ICT Course</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --glass: rgba(255, 255, 255, 0.12);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --correct: #00e676;
-            --wrong: #ff1744;
+        body { margin: 0; padding: 0; background-color: #0d1117; overflow: hidden; }
+        /* PDF ကို ဖုန်း Screen အပြည့်ပြရန် */
+        iframe {
+            width: 100vw;
+            height: 100vh;
+            border: none;
         }
-
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Pyidaungsu', sans-serif;
-            background: radial-gradient(circle at center, #1a2a6c, #b21f1f, #fdbb2d);
-            background-attachment: fixed;
-            height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            color: white; overflow: hidden;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            position: absolute; top: 15px; width: 90%;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        .btn-music {
-            background: var(--glass); border: 1px solid var(--glass-border);
-            color: white; padding: 8px 15px; border-radius: 20px;
-            backdrop-filter: blur(10px); font-size: 14px;
-        }
-
-        /* Flash Card */
-        .quiz-container { width: 92%; max-width: 400px; z-index: 10; }
-
-        .card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px; padding: 30px 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-            text-align: center; position: relative;
-            min-height: 380px; display: flex; flex-direction: column;
-            justify-content: center; transition: 0.3s;
-        }
-
-        h2 { font-size: 1.25rem; line-height: 1.6; margin-bottom: 20px; }
-
-        /* Layers Management */
-        .tap-layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.1); border-radius: 30px; z-index: 5;
-            transition: 0.4s;
-        }
-
-        .tap-layer i { font-size: 3rem; margin-bottom: 10px; opacity: 0.8; }
-
-        .hidden { opacity: 0; pointer-events: none; transform: scale(0.9); }
-
-        /* Options Grid */
-        .options-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-            width: 100%; margin-top: 10px;
-        }
-
-        .option-btn {
-            background: var(--glass); border: 1px solid var(--glass-border);
-            color: white; padding: 18px 10px; border-radius: 15px;
-            font-size: 14px; transition: 0.2s; font-weight: 500;
-        }
-
-        /* Result & Feedback */
-        .correct { background: var(--correct) !important; color: #000; font-weight: bold; }
-        .wrong { background: var(--wrong) !important; box-shadow: 0 0 15px var(--wrong); }
-        .shake { animation: shake 0.4s; }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        /* Footer */
-        footer { position: absolute; bottom: 20px; font-size: 14px; }
-        footer a { color: #4fc3f7; text-decoration: none; display: flex; align-items: center; gap: 8px; }
-
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div id="q-count" style="opacity: 0.8;">Q: 1/10</div>
-        <button class="btn-music" onclick="toggleMusic()">
-            <i id="music-icon" class="fas fa-play"></i> Music
-        </button>
-    </div>
-
-    <div class="quiz-container">
-        <div class="card" id="quiz-card">
-            <div class="tap-layer" id="tap-layer" onclick="showQuiz()">
-                <i class="fas fa-hand-pointer"></i>
-                <p>မေးခွန်းဖတ်ပြီး အဖြေရွေးရန် နှိပ်ပါ</p>
-            </div>
-
-            <div id="quiz-body">
-                <h2 id="question-text">Loading...</h2>
-                <div class="options-grid" id="options-container">
-                    <button class="option-btn" onclick="checkAns(0)">A</button>
-                    <button class="option-btn" onclick="checkAns(1)">B</button>
-                    <button class="option-btn" onclick="checkAns(2)">C</button>
-                    <button class="option-btn" onclick="checkAns(3)">D</button>
-                </div>
-                <div id="status-text" style="margin-top:15px; min-height:20px; font-weight:bold;"></div>
-            </div>
-
-            <div id="result-layer" style="display:none;">
-                <h2 id="final-msg">ဂုဏ်ယူပါတယ်!</h2>
-                <div id="final-score" style="font-size: 3.5rem; margin-bottom: 10px;">0</div>
-                <p id="advice" style="font-size: 0.9rem; padding: 0 10px; color: #ddd;"></p>
-                <button class="option-btn" style="width:80%; margin-top:20px; background: white; color: black;" onclick="location.reload()">ပြန်ဖြေမည်</button>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <a href="https://t.me/fxkaram" target="_blank">
-            <i class="fab fa-telegram"></i> @fxkaram
-        </a>
-    </footer>
-
-    <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-    <audio id="tap-sound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <iframe src="course.pdf#toolbar=0&navpanes=0"></iframe>
 
     <script>
-        const quizData = [
-            { q: "Trading မှာ အရှုံးပေါ်တဲ့အခါ သင့်စိတ်ထဲမှာ အဓိက ဘယ်လိုခံစားရသလဲ?", a: 0, ops: ["Review လုပ်သည်", "ချက်ချင်းပြန်ဝင်သည်", "အရမ်းဒေါသထွက်သည်", "စိတ်ဓာတ်ကျသည်"] },
-            { q: "Daily Goal ပြည့်သွားရင် ဘာလုပ်သင့်သလဲ?", a: 2, ops: ["ဆက်လုပ်မည်", "Lot တင်မည်", "နားလိုက်မည်", "Target တိုးမည်"] },
-            { q: "အမြတ်ရနေတဲ့ Trade ကို စောပိတ်မိခြင်းက ဘာကြောင့်လဲ?", a: 1, ops: ["ကျွမ်းကျင်လို့", "ကြောက်စိတ်ကြောင့်", "လောဘကြောင့်", "News ကြောင့်"] },
-            { q: "Revenge Trading က သင့်ကို ဘာဖြစ်စေသလဲ?", a: 0, ops: ["ပိုရှုံးစေသည်", "အမြတ်ပြန်ရစေသည်", "ပျော်ရွှင်စေသည်", "ဘာမှမဖြစ်ပါ"] },
-            { q: "Trade မဝင်ခင် စိတ်လှုပ်ရှားနေရင်?", a: 3, ops: ["Lot တင်ဝင်ပါ", "ချက်ချင်းဝင်ပါ", "သူများကိုမေးပါ", "မဝင်ဘဲနားပါ"] },
-            { q: "Trading Plan မရှိဘဲ Trade လုပ်ခြင်းသည်?", a: 0, ops: ["လောင်းကစား", "ရင်းနှီးမြှုပ်နှံမှု", "အလုပ်အကိုင်", "ဝါသနာ"] },
-            { q: "အရှုံးကို လက်မခံနိုင်ခြင်းသည်?", a: 1, ops: ["ကောင်းပါသည်", "Ego ကြီးခြင်း", "တော်ခြင်း", "မှန်ကန်ခြင်း"] },
-            { q: "စိတ်ရှည်ခြင်း (Patience) သည် Trading တွင်?", a: 2, ops: ["မလိုအပ်ပါ", "အားနည်းချက်", "အဓိကသော့ချက်", "ဒုတိယနေရာ"] },
-            { q: "FOMO ဖြစ်လာရင် ဘာလုပ်မလဲ?", a: 0, ops: ["Chart ပိတ်နားပါ", "လိုက်ဝင်ပါ", "Lot လျှော့ပါ", "ဒေါသထွက်ပါ"] },
-            { q: "အောင်မြင်တဲ့ Trader တစ်ယောက်မှာ ရှိရမှာက?", a: 1, ops: ["ငွေအမြောက်အမြား", "စိတ်ဓာတ်ထိန်းချုပ်မှု", "High-end PC", "Signal group"] }
-        ];
-
-        let currentIdx = 0; let score = 0;
-        const music = document.getElementById('bg-music');
-        const tapSnd = document.getElementById('tap-sound');
-
-        function showQuiz() {
-            tapSnd.currentTime = 0; tapSnd.play();
-            document.getElementById('tap-layer').classList.add('hidden');
-        }
-
-        function loadQuestion() {
-            document.getElementById('q-count').innerText = `Q: ${currentIdx + 1}/10`;
-            document.getElementById('question-text').innerText = quizData[currentIdx].q;
-            const btns = document.querySelectorAll('.option-btn');
-            quizData[currentIdx].ops.forEach((txt, i) => {
-                btns[i].innerText = txt;
-                btns[i].className = 'option-btn';
-            });
-            document.getElementById('tap-layer').classList.remove('hidden');
-            document.getElementById('status-text').innerText = "";
-        }
-
-        function checkAns(idx) {
-            tapSnd.currentTime = 0; tapSnd.play();
-            const correct = quizData[currentIdx].a;
-            const btns = document.querySelectorAll('.option-btn');
-            const card = document.getElementById('quiz-card');
-
-            if (idx === correct) {
-                score++;
-                btns[idx].classList.add('correct');
-                document.getElementById('status-text').innerHTML = "မှန်ကန်ပါတယ် ✅";
-            } else {
-                btns[idx].classList.add('wrong');
-                btns[correct].classList.add('correct');
-                card.classList.add('shake');
-                document.getElementById('status-text').innerHTML = "မှားယွင်းပါတယ် ❌";
-            }
-
-            setTimeout(() => {
-                card.classList.remove('shake');
-                currentIdx++;
-                if (currentIdx < quizData.length) loadQuestion();
-                else showResult();
-            }, 1200);
-        }
-
-        function showResult() {
-            document.getElementById('quiz-body').style.display = 'none';
-            document.getElementById('result-layer').style.display = 'block';
-            document.getElementById('final-score').innerText = `${score}/10`;
-            let msg = score > 7 ? "Excellent! Mindset ကောင်းမွန်ပါတယ်။" : "နောင်တမရပါနဲ့၊ Psychology ကို ပိုလေ့ကျင့်ပါ။";
-            document.getElementById('advice').innerText = msg;
-        }
-
-        function toggleMusic() {
-            const icon = document.getElementById('music-icon');
-            if (music.paused) { music.play(); icon.className = "fas fa-pause"; }
-            else { music.pause(); icon.className = "fas fa-play"; }
-        }
-
-        loadQuestion();
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
     </script>
 </body>
 </html>
