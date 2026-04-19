@@ -3,26 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fx Karam - ICT Course</title>
+    <title>Fx Karam Academy</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { margin: 0; padding: 0; background-color: #0d1117; overflow: hidden; }
-        /* PDF ကို ဖုန်း Screen အပြည့်ပြရန် */
-        iframe {
-            width: 100vw;
-            height: 100vh;
-            border: none;
-        }
+        iframe { width: 100vw; height: 100vh; border: none; }
     </style>
 </head>
 <body>
-
-    <iframe src="course.pdf#toolbar=0&navpanes=0"></iframe>
+    <iframe src="course.pdf.pdf#toolbar=0"></iframe>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.ready();
     </script>
 </body>
 </html>
