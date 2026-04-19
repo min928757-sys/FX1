@@ -5,49 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fx Karam - ICT Course</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <style>
-        body { margin: 0; background-color: #0d1117; display: flex; flex-direction: column; align-items: center; }
-        #pdf-container { width: 100%; max-width: 800px; }
-        canvas { width: 100% !important; height: auto !important; margin-bottom: 10px; border-bottom: 2px solid #30363d; }
-        .loading { color: #f0b90b; text-align: center; margin-top: 50px; font-family: sans-serif; }
+        :root { --gold: #f0b90b; --bg: #0d1117; --border: #30363d; }
+        body { background-color: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 0; user-select: none; }
+        .container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .trading-page { width: 100%; max-width: 600px; margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        header { text-align: center; padding: 25px; background: #161b22; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+        header h1 { color: var(--gold); margin: 0; font-size: 22px; }
     </style>
 </head>
-<body>
-    <div id="loading" class="loading">Loading Course Content...</div>
-    <div id="pdf-container"></div>
+<body oncontextmenu="return false;">
+
+    <header>
+        <h1>Fx Karam Academy</h1>
+    </header>
+
+    <div class="container" id="gallery">
+        </div>
 
     <script>
-        const url = 'course.pdf.pdf'; // သင့် PDF ဖိုင်နာမည်
-        const pdfjsLib = window['pdfjs-dist/build/pdf'];
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        // သင့်မှာ ပုံ ၁၀ ပုံ ရှိတာမို့ ၁၀ လို့ ထည့်ထားပါတယ်
+        const totalImages = 10; 
+        const gallery = document.getElementById('gallery');
 
-        const container = document.getElementById('pdf-container');
-        const loading = document.getElementById('loading');
-
-        pdfjsLib.getDocument(url).promise.then(pdf => {
-            loading.style.display = 'none';
-            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                pdf.getPage(pageNum).then(page => {
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    const viewport = page.getViewport({ scale: 2 }); // ကြည်လင်အောင် scale 2 ထားခြင်း
-
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    const renderContext = { canvasContext: context, viewport: viewport };
-                    page.render(renderContext);
-                    container.appendChild(canvas);
-                });
-            }
-        }).catch(err => {
-            loading.innerText = "Error loading PDF. Please check file name.";
-            console.error(err);
-        });
+        for (let i = 1; i <= totalImages; i++) {
+            const img = document.createElement('img');
+            // ပုံတွေက အပြင်မှာပဲ ရှိနေတာမို့ images/ ထည့်စရာမလိုတော့ပါဘူး
+            img.src = `${i}.jpg`; 
+            img.className = 'trading-page';
+            img.loading = 'lazy';
+            gallery.appendChild(img);
+        }
 
         const tg = window.Telegram.WebApp;
         tg.expand();
+        tg.ready();
     </script>
 </body>
 </html>
