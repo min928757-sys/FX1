@@ -3,35 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fx Karam Academy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>FX KARAM EDUCATION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --gold: #f0b90b; --bg: #0b0e11; --card-bg: #1c2128; --border: rgba(240, 185, 11, 0.3); }
-        body { background-color: var(--bg); color: #adbac7; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
+        :root { --gold: #f0b90b; --bg: #0b0e11; --card-bg: #1c2128; --border: rgba(240, 185, 11, 0.25); --text-gray: #9ca3af; }
+        
+        /* Font All Change to Modern Professional Sans-Serif */
+        body { 
+            background-color: var(--bg); color: #e5e7eb; 
+            font-family: 'Inter', 'Poppins', sans-serif; 
+            margin: 0; padding: 0; user-select: none; 
+            -webkit-font-smoothing: antialiased;
+        }
         
         header { 
-            background: #1c2128; padding: 12px; text-align: center; 
+            background: #1c2128; padding: 16px; text-align: center; 
             border-bottom: 1px solid var(--gold); position: sticky; top: 0; z-index: 1000;
         }
-        header h1 { color: var(--gold); margin: 0; font-size: 14px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        header h1 { 
+            color: var(--gold); margin: 0; font-size: 15px; 
+            font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+        }
 
-        /* Horizontal Grid for Titles */
+        /* 3-Column Grid for Horizontal Look */
         .chapter-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); /* ၃ ခု တစ်တန်း */
-            gap: 10px; 
-            padding: 15px;
+            display: grid; grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; padding: 20px 15px;
         }
 
         .section-box { display: flex; flex-direction: column; align-items: center; }
         
         .section-label { 
-            font-family: 'Orbitron', sans-serif; font-size: 8px; color: var(--gold); 
-            margin-bottom: 8px; text-align: center; white-space: nowrap;
+            font-size: 9px; font-weight: 600; color: var(--gold); 
+            margin-bottom: 10px; text-align: center; letter-spacing: 0.5px;
+            text-transform: uppercase; opacity: 0.9;
         }
 
-        /* Compact Pro Stack Look */
+        /* Compact Stacked Deck Look */
         .stack { 
             position: relative; width: 100%; aspect-ratio: 3/4; 
             cursor: pointer; perspective: 1000px;
@@ -39,41 +48,54 @@
         
         .card { 
             position: absolute; width: 100%; height: 100%; 
-            background: var(--card-bg); border-radius: 6px; 
+            background: var(--card-bg); border-radius: 8px; 
             border: 1px solid var(--border); overflow: hidden; 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
         }
 
         .card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Stacked State: တစ်ခုနဲ့တစ်ခု အရမ်းကပ်ပြီး ထပ်နေတဲ့ပုံစံ */
+        /* Pro Stacked Effect */
         .card:nth-child(1) { z-index: 3; transform: translate(0, 0); }
-        .card:nth-child(2) { z-index: 2; transform: translate(4px, -4px); opacity: 0.8; }
-        .card:nth-child(3) { z-index: 1; transform: translate(8px, -8px); opacity: 0.5; }
+        .card:nth-child(2) { z-index: 2; transform: translate(5px, -5px); opacity: 0.7; }
+        .card:nth-child(3) { z-index: 1; transform: translate(10px, -10px); opacity: 0.4; }
 
-        /* Expanded View: Full Screen Overlay */
+        /* Overlay Viewer */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 2000;
-            display: none; flex-direction: column; padding: 20px;
-            overflow-y: auto; box-sizing: border-box;
+            background: rgba(11, 14, 17, 0.98); z-index: 2000;
+            display: none; flex-direction: column; padding: 0;
+            overflow-y: auto;
         }
         .overlay.active { display: flex; }
         
-        .close-btn { 
-            align-self: flex-end; color: var(--gold); font-family: 'Orbitron'; 
-            padding: 10px; font-size: 12px; cursor: pointer;
+        .overlay-header {
+            padding: 15px; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; background: var(--bg); z-index: 10;
         }
+        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; }
 
-        .expanded-img { width: 100%; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 15px; }
+        .expanded-img { width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        footer { text-align: center; padding: 20px; color: #444c56; font-size: 9px; font-family: 'Orbitron'; }
+        /* Stylish Footer */
+        footer { 
+            text-align: center; padding: 40px 20px; 
+            margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-brand { 
+            color: var(--gold); font-size: 13px; font-weight: 700; 
+            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px;
+        }
+        .footer-tag { color: var(--text-gray); font-size: 10px; letter-spacing: 0.5px; }
+
     </style>
 </head>
 <body>
 
-    <header><h1>FX KARAM ACADEMY</h1></header>
+    <header><h1>FX KARAM EDUCATION</h1></header>
 
     <div class="chapter-grid">
         <div class="section-box">
@@ -95,21 +117,27 @@
         </div>
 
         <div class="section-box">
-            <div class="section-label">FUTURE TOPIC</div>
+            <div class="section-label">NEW COURSE</div>
             <div class="stack">
-                <div class="card" style="display:flex; align-items:center; justify-content:center; background:#111;">
-                    <span style="font-size:20px; color:#333;">+</span>
+                <div class="card" style="display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.02);">
+                    <span style="font-size:18px; color:#2d333b;">+</span>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="viewer" class="overlay">
-        <div class="close-btn" onclick="closeChapter()">CLOSE [X]</div>
-        <div id="viewer-content"></div>
+        <div class="overlay-header">
+            <span style="color:white; font-size:12px; font-weight:600;">LEARNING MODULE</span>
+            <div class="close-btn" onclick="closeChapter()">CLOSE [X]</div>
+        </div>
+        <div class="viewer-scroll" id="viewer-content"></div>
     </div>
 
-    <footer>TERMINAL v4.0</footer>
+    <footer>
+        <div class="footer-brand">FX KARAM EDUCATION</div>
+        <div class="footer-tag">THE PREMIER ICT TRADING ACADEMY</div>
+    </footer>
 
     <script>
         const chapters = {
@@ -127,10 +155,12 @@
                 content.appendChild(img);
             });
             document.getElementById('viewer').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Stop body scrolling
         }
 
         function closeChapter() {
             document.getElementById('viewer').classList.remove('active');
+            document.body.style.overflow = 'auto'; // Resume body scrolling
         }
 
         const tg = window.Telegram.WebApp;
