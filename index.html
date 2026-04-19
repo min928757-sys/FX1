@@ -3,15 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fx Karam - ICT Course</title>
+    <title>Fx Karam - ICT Academy</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --gold: #f0b90b; --bg: #0d1117; --border: #30363d; }
-        body { background-color: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 0; user-select: none; }
-        .container { display: flex; flex-direction: column; align-items: center; padding: 15px; }
-        .trading-page { width: 100%; max-width: 600px; margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        header { text-align: center; padding: 25px; background: #161b22; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
-        header h1 { color: var(--gold); margin: 0; font-size: 22px; }
+        :root { --gold: #f0b90b; --bg: #0d1117; --card: #1c2128; --border: #30363d; --text: #adbac7; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
+        /* Header */
+        header { background: var(--card); padding: 20px; text-align: center; border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 100; }
+        header h1 { color: var(--gold); margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* မာတိကာ Table of Contents */
+        .toc-container { padding: 15px; background: #22272e; margin: 15px; border-radius: 12px; border: 1px solid var(--border); }
+        .toc-title { color: var(--gold); font-weight: bold; margin-bottom: 10px; display: block; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .toc-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; list-style: none; padding: 0; margin: 0; }
+        .toc-item { background: var(--card); border: 1px solid var(--border); color: var(--gold); text-align: center; padding: 8px 0; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; }
+        .toc-item:active { background: var(--gold); color: black; }
+
+        /* Flash Card Style */
+        .container { padding: 15px; display: flex; flex-direction: column; gap: 25px; }
+        .flash-card { background: var(--card); border-radius: 15px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.4); transition: transform 0.2s; }
+        .card-header { padding: 10px 15px; background: rgba(240, 185, 11, 0.1); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .card-header span { color: var(--gold); font-weight: bold; font-size: 14px; }
+        
+        .flash-card img { width: 100%; height: auto; display: block; border-bottom: 1px solid var(--border); }
+        .card-footer { padding: 12px; text-align: center; font-size: 13px; color: #768390; }
+
+        footer { text-align: center; padding: 40px 20px; color: #545d68; font-size: 12px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -20,21 +38,49 @@
         <h1>Fx Karam Academy</h1>
     </header>
 
-    <div class="container" id="gallery">
+    <div class="toc-container">
+        <span class="toc-title">Quick Navigation</span>
+        <div class="toc-list" id="toc">
+            </div>
+    </div>
+
+    <div class="container" id="main-content">
         </div>
 
-    <script>
-        // သင့်မှာ ပုံ ၁၀ ပုံ ရှိတာမို့ ၁၀ လို့ ထည့်ထားပါတယ်
-        const totalImages = 10; 
-        const gallery = document.getElementById('gallery');
+    <footer>
+        © 2026 Fx Karam. All Rights Reserved.<br>
+        Market Analysis & ICT Concepts
+    </footer>
 
-        for (let i = 1; i <= totalImages; i++) {
-            const img = document.createElement('img');
-            // ပုံတွေက အပြင်မှာပဲ ရှိနေတာမို့ images/ ထည့်စရာမလိုတော့ပါဘူး
-            img.src = `${i}.jpg`; 
-            img.className = 'trading-page';
-            img.loading = 'lazy';
-            gallery.appendChild(img);
+    <script>
+        const totalPages = 10;
+        const mainContent = document.getElementById('main-content');
+        const toc = document.getElementById('toc');
+
+        for (let i = 1; i <= totalPages; i++) {
+            // ၁။ မာတိကာ ခလုတ်များ ဖန်တီးခြင်း
+            const tocBtn = document.createElement('a');
+            tocBtn.className = 'toc-item';
+            tocBtn.innerText = i;
+            tocBtn.href = `#card-${i}`;
+            toc.appendChild(tocBtn);
+
+            // ၂။ Flash Cards များ ဖန်တီးခြင်း
+            const card = document.createElement('div');
+            card.className = 'flash-card';
+            card.id = `card-${i}`;
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <span>Lesson Section</span>
+                    <span>#${i}</span>
+                </div>
+                <img src="${i}.jpg" loading="lazy" alt="ICT Lesson ${i}">
+                <div class="card-footer">
+                    FX KARAM - SMART MONEY CONCEPTS
+                </div>
+            `;
+            mainContent.appendChild(card);
         }
 
         const tg = window.Telegram.WebApp;
