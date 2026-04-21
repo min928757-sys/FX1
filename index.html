@@ -9,10 +9,9 @@
     <style>
         :root { --gold: #f0b90b; --bg: #0b0e11; --card-bg: #1c2128; --border: rgba(240, 185, 11, 0.25); --text-gray: #9ca3af; }
         
-        /* Font All Change to Modern Professional Sans-Serif */
         body { 
             background-color: var(--bg); color: #e5e7eb; 
-            font-family: 'Inter', 'Poppins', sans-serif; 
+            font-family: 'Inter', sans-serif; 
             margin: 0; padding: 0; user-select: none; 
             -webkit-font-smoothing: antialiased;
         }
@@ -24,23 +23,24 @@
         header h1 { 
             color: var(--gold); margin: 0; font-size: 15px; 
             font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* 3-Column Grid for Horizontal Look */
+        /* 3-Column Grid Layout */
         .chapter-grid { 
             display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; padding: 20px 15px;
+            gap: 12px; padding: 25px 15px;
         }
 
         .section-box { display: flex; flex-direction: column; align-items: center; }
         
         .section-label { 
-            font-size: 9px; font-weight: 600; color: var(--gold); 
-            margin-bottom: 10px; text-align: center; letter-spacing: 0.5px;
-            text-transform: uppercase; opacity: 0.9;
+            font-size: 8px; font-weight: 700; color: var(--gold); 
+            margin-bottom: 12px; text-align: center; letter-spacing: 0.8px;
+            text-transform: uppercase; height: 20px; display: flex; align-items: center;
         }
 
-        /* Compact Stacked Deck Look */
+        /* Pro Stacked Deck Look */
         .stack { 
             position: relative; width: 100%; aspect-ratio: 3/4; 
             cursor: pointer; perspective: 1000px;
@@ -51,22 +51,21 @@
             background: var(--card-bg); border-radius: 8px; 
             border: 1px solid var(--border); overflow: hidden; 
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Pro Stacked Effect */
+        /* Stacking Effect */
         .card:nth-child(1) { z-index: 3; transform: translate(0, 0); }
-        .card:nth-child(2) { z-index: 2; transform: translate(5px, -5px); opacity: 0.7; }
-        .card:nth-child(3) { z-index: 1; transform: translate(10px, -10px); opacity: 0.4; }
+        .card:nth-child(2) { z-index: 2; transform: translate(4px, -4px); opacity: 0.7; }
+        .card:nth-child(3) { z-index: 1; transform: translate(8px, -8px); opacity: 0.4; }
 
         /* Overlay Viewer */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(11, 14, 17, 0.98); z-index: 2000;
-            display: none; flex-direction: column; padding: 0;
-            overflow-y: auto;
+            display: none; flex-direction: column;
         }
         .overlay.active { display: flex; }
         
@@ -75,22 +74,22 @@
             align-items: center; border-bottom: 1px solid var(--border);
             position: sticky; top: 0; background: var(--bg); z-index: 10;
         }
-        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; }
+        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; font-family: 'Poppins'; }
 
-        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 15px; }
-        .expanded-img { width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+        .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 5px 20px rgba(0,0,0,0.6); }
 
         /* Stylish Footer */
         footer { 
-            text-align: center; padding: 40px 20px; 
-            margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center; padding: 50px 20px; 
+            margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05);
         }
         .footer-brand { 
-            color: var(--gold); font-size: 13px; font-weight: 700; 
-            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px;
+            color: var(--gold); font-size: 14px; font-weight: 700; 
+            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
         }
-        .footer-tag { color: var(--text-gray); font-size: 10px; letter-spacing: 0.5px; }
-
+        .footer-tag { color: var(--text-gray); font-size: 10px; letter-spacing: 1px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -101,34 +100,34 @@
         <div class="section-box">
             <div class="section-label">ENTRY SETUPS</div>
             <div class="stack" onclick="openChapter('entry')">
-                <div class="card"><img src="1.jpg"></div>
-                <div class="card"><img src="2.jpg"></div>
-                <div class="card"><img src="3.jpg"></div>
+                <div class="card"><img src="Entry Setups - 1.png"></div>
+                <div class="card"><img src="Entry Setups - 2.png"></div>
+                <div class="card"><img src="Entry Setups - 3.png"></div>
             </div>
         </div>
 
         <div class="section-box">
-            <div class="section-label">JUDAS SWING</div>
-            <div class="stack" onclick="openChapter('judas')">
-                <div class="card"><img src="7.jpg"></div>
-                <div class="card"><img src="8.jpg"></div>
-                <div class="card"><img src="9.jpg"></div>
+            <div class="section-label">CYPHER</div>
+            <div class="stack" onclick="openChapter('cypher')">
+                <div class="card"><img src="Cypher Pattern - 1.png"></div>
+                <div class="card"><img src="Cypher Pattern - 2.png"></div>
+                <div class="card"><img src="Cypher Pattern - 3.png"></div>
             </div>
         </div>
 
         <div class="section-box">
-            <div class="section-label">NEW COURSE</div>
-            <div class="stack">
-                <div class="card" style="display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.02);">
-                    <span style="font-size:18px; color:#2d333b;">+</span>
-                </div>
+            <div class="section-label">LIQUIDITY</div>
+            <div class="stack" onclick="openChapter('liquidity')">
+                <div class="card"><img src="Buyside Liquidity - 1.png"></div>
+                <div class="card"><img src="Buyside Liquidity - 2.png"></div>
+                <div class="card"><img src="Buyside Liquidity - 3.png"></div>
             </div>
         </div>
     </div>
 
     <div id="viewer" class="overlay">
         <div class="overlay-header">
-            <span style="color:white; font-size:12px; font-weight:600;">LEARNING MODULE</span>
+            <span id="module-title" style="color:white; font-size:12px; font-weight:600; text-transform:uppercase;">LEARNING MODULE</span>
             <div class="close-btn" onclick="closeChapter()">CLOSE [X]</div>
         </div>
         <div class="viewer-scroll" id="viewer-content"></div>
@@ -140,27 +139,34 @@
     </footer>
 
     <script>
+        // GitHub ပေါ်ရှိ ပုံနာမည်အတိအကျများ
         const chapters = {
-            'entry': [1, 2, 3, 4, 5, 6],
-            'judas': [7, 8, 9, 10]
+            'entry': ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'],
+            'cypher': ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'],
+            'liquidity': ['Buyside Liquidity - 1.png', 'Buyside Liquidity - 2.png', 'Buyside Liquidity - 3.png', 'Buyside Liquidity - 4.png']
         };
 
         function openChapter(id) {
             const content = document.getElementById('viewer-content');
+            const title = document.getElementById('module-title');
             content.innerHTML = '';
-            chapters[id].forEach(num => {
+            title.innerText = id.replace('-', ' ') + " MODULE";
+            
+            chapters[id].forEach(fileName => {
                 const img = document.createElement('img');
-                img.src = `${num}.jpg`;
+                img.src = fileName;
                 img.className = 'expanded-img';
+                img.loading = 'lazy'; // Performance အတွက်
                 content.appendChild(img);
             });
+            
             document.getElementById('viewer').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Stop body scrolling
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeChapter() {
             document.getElementById('viewer').classList.remove('active');
-            document.body.style.overflow = 'auto'; // Resume body scrolling
+            document.body.style.overflow = 'auto'; 
         }
 
         const tg = window.Telegram.WebApp;
