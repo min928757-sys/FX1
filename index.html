@@ -16,92 +16,74 @@
         }
 
         body { 
-            background-color: var(--bg); 
-            color: #ffffff; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; padding: 0; 
-            user-select: none;
+            background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; user-select: none;
             background-image: radial-gradient(circle at 50% -20%, #1c2128, #0b0e11);
         }
 
         header { 
-            background: rgba(28, 33, 40, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 20px; text-align: center; 
-            border-bottom: 1px solid var(--border);
+            background: rgba(28, 33, 40, 0.85); backdrop-filter: blur(10px);
+            padding: 15px 20px; text-align: center; border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
         }
 
         header h1 { 
-            color: var(--gold); margin: 0; font-size: 14px; 
-            font-weight: 700; letter-spacing: 2px;
-            font-family: 'Poppins'; flex-grow: 1;
+            color: var(--gold); margin: 0; font-size: 14px; font-weight: 700; 
+            letter-spacing: 2px; font-family: 'Poppins'; flex-grow: 1;
         }
 
-        /* Music Button Design */
+        /* Music Button */
         #music-btn {
             background: var(--glass); border: 1px solid var(--gold);
-            color: var(--gold); border-radius: 50%;
-            width: 35px; height: 35px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; transition: 0.3s;
-            box-shadow: 0 0 10px var(--border);
+            color: var(--gold); border-radius: 50%; width: 38px; height: 38px; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 16px; transition: 0.3s; box-shadow: 0 0 10px var(--border);
         }
-        #music-btn.playing { box-shadow: 0 0 15px var(--gold-glow); animation: pulse 2s infinite; }
+        #music-btn.playing { animation: pulse 2s infinite; border-color: #fff; color: #fff; }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(240, 185, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(240, 185, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(240, 185, 11, 0); } }
 
-        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding: 30px 15px; }
+        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 25px 12px; }
 
-        /* Glassmorphism Section */
         .section-box { 
-            background: var(--glass);
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: center;
+            background: var(--glass); backdrop-filter: blur(5px);
+            border: 1px solid var(--border); border-radius: 12px; padding: 10px;
+            transition: 0.3s ease; text-align: center;
         }
-        .section-box:active { transform: scale(0.95); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
+        .section-box:active { transform: scale(0.95); border-color: var(--gold); }
 
-        .section-label { 
-            font-size: 8px; font-weight: 700; color: var(--gold); 
-            margin-bottom: 10px; letter-spacing: 0.5px;
-        }
+        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.5px; }
 
         .stack { position: relative; width: 100%; aspect-ratio: 3/4; }
-        .card { 
-            position: absolute; width: 100%; height: 100%; 
-            border-radius: 8px; overflow: hidden; 
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+        .card { position: absolute; width: 100%; height: 100%; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
         .card img { width: 100%; height: 100%; object-fit: cover; }
         .card:nth-child(1) { z-index: 3; }
         .card:nth-child(2) { z-index: 2; transform: translate(3px, 3px); opacity: 0.5; }
 
-        /* Overlay Viewer */
         .overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(11, 14, 17, 0.98); z-index: 2000; 
-            display: none; flex-direction: column; 
-            backdrop-filter: blur(15px);
+            display: none; flex-direction: column; backdrop-filter: blur(15px);
         }
         .overlay.active { display: flex; }
         .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
         .close-btn { color: var(--gold); font-size: 12px; font-weight: 700; cursor: pointer; }
         .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-        .expanded-img { width: 100%; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .expanded-img { width: 100%; border-radius: 10px; border: 1px solid var(--border); }
 
-        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-gray); }
+        /* Hidden YouTube Player */
+        #youtube-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); font-size: 10px; color: var(--gold); opacity: 0.6; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div style="width: 35px;"></div> <h1>FX KARAM ACADEMY</h1>
-        <button id="music-btn" onclick="toggleMusic()">🎵</button>
+        <div style="width: 38px;"></div>
+        <h1>FX KARAM ACADEMY</h1>
+        <button id="music-btn" onclick="handleMusicClick()">🎵</button>
     </header>
 
     <div class="chapter-grid" id="main-grid"></div>
@@ -114,11 +96,9 @@
         <div class="viewer-scroll" id="viewer-content"></div>
     </div>
 
-    <audio id="bg-music" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
+    <div id="youtube-player"></div>
 
-    <footer>FX KARAM EDUCATION • THE PREMIER ACADEMY</footer>
+    <footer>FX KARAM EDUCATION • PREMIER ICT ACADEMY</footer>
 
     <script>
         const lessons = [
@@ -165,19 +145,42 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Music Logic
-        const music = document.getElementById('bg-music');
-        const mBtn = document.getElementById('music-btn');
+        // --- YouTube Music Integration ---
+        var player;
+        var isPlaying = false;
+        
+        // YouTube API Load
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
-                mBtn.innerText = "⏸";
-                mBtn.classList.add('playing');
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'WSSIIC58Fsc', // ပေးထားသော Video ID
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'WSSIIC58Fsc'
+                }
+            });
+        }
+
+        function handleMusicClick() {
+            const btn = document.getElementById('music-btn');
+            if (!isPlaying) {
+                player.playVideo();
+                btn.innerText = "⏸";
+                btn.classList.add('playing');
+                isPlaying = true;
             } else {
-                music.pause();
-                mBtn.innerText = "🎵";
-                mBtn.classList.remove('playing');
+                player.pauseVideo();
+                btn.innerText = "🎵";
+                btn.classList.remove('playing');
+                isPlaying = false;
             }
         }
 
