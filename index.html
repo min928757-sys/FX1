@@ -3,58 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FX KARAM EDUCATION</title>
+    <title>FX KARAM ACADEMY</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --gold: #f0b90b; --bg: #0b0e11; --card-bg: #1c2128; --border: rgba(240, 185, 11, 0.25); --text-gray: #9ca3af; }
-        body { background-color: var(--bg); color: #e5e7eb; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
-        header { background: #1c2128; padding: 16px; text-align: center; border-bottom: 1px solid var(--gold); position: sticky; top: 0; z-index: 1000; }
-        header h1 { color: var(--gold); margin: 0; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Poppins'; }
-        
-        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 12px; padding: 25px 15px; }
-        .section-box { display: flex; flex-direction: column; align-items: center; }
-        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 10px; text-align: center; text-transform: uppercase; height: 20px; }
+        :root { 
+            --gold: #f0b90b; 
+            --gold-glow: rgba(240, 185, 11, 0.5);
+            --bg: #0b0e11; 
+            --glass: rgba(28, 33, 40, 0.7);
+            --border: rgba(240, 185, 11, 0.2); 
+        }
 
-        .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; }
-        .card { position: absolute; width: 100%; height: 100%; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        body { 
+            background-color: var(--bg); 
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; 
+            user-select: none;
+            background-image: radial-gradient(circle at 50% -20%, #1c2128, #0b0e11);
+        }
+
+        header { 
+            background: rgba(28, 33, 40, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 20px; text-align: center; 
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        header h1 { 
+            color: var(--gold); margin: 0; font-size: 14px; 
+            font-weight: 700; letter-spacing: 2px;
+            font-family: 'Poppins'; flex-grow: 1;
+        }
+
+        /* Music Button Design */
+        #music-btn {
+            background: var(--glass); border: 1px solid var(--gold);
+            color: var(--gold); border-radius: 50%;
+            width: 35px; height: 35px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; transition: 0.3s;
+            box-shadow: 0 0 10px var(--border);
+        }
+        #music-btn.playing { box-shadow: 0 0 15px var(--gold-glow); animation: pulse 2s infinite; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding: 30px 15px; }
+
+        /* Glassmorphism Section */
+        .section-box { 
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+        }
+        .section-box:active { transform: scale(0.95); border-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
+
+        .section-label { 
+            font-size: 8px; font-weight: 700; color: var(--gold); 
+            margin-bottom: 10px; letter-spacing: 0.5px;
+        }
+
+        .stack { position: relative; width: 100%; aspect-ratio: 3/4; }
+        .card { 
+            position: absolute; width: 100%; height: 100%; 
+            border-radius: 8px; overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.05);
+        }
         .card img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Stack Layers */
-        .card:nth-child(1) { z-index: 3; transform: translate(0, 0); }
-        .card:nth-child(2) { z-index: 2; transform: translate(4px, -4px); opacity: 0.7; }
-        .card:nth-child(3) { z-index: 1; transform: translate(8px, -8px); opacity: 0.4; }
+        .card:nth-child(1) { z-index: 3; }
+        .card:nth-child(2) { z-index: 2; transform: translate(3px, 3px); opacity: 0.5; }
 
-        /* Viewer Overlay */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 17, 0.98); z-index: 2000; display: none; flex-direction: column; }
+        /* Overlay Viewer */
+        .overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(11, 14, 17, 0.98); z-index: 2000; 
+            display: none; flex-direction: column; 
+            backdrop-filter: blur(15px);
+        }
         .overlay.active { display: flex; }
-        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); }
-        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; padding: 5px; }
-        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; scroll-behavior: smooth; }
-        .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-        
-        footer { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-brand { color: var(--gold); font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-family: 'Poppins'; }
+        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
+        .close-btn { color: var(--gold); font-size: 12px; font-weight: 700; cursor: pointer; }
+        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+        .expanded-img { width: 100%; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-gray); }
     </style>
 </head>
 <body>
 
-    <header><h1>FX KARAM EDUCATION</h1></header>
+    <header>
+        <div style="width: 35px;"></div> <h1>FX KARAM ACADEMY</h1>
+        <button id="music-btn" onclick="toggleMusic()">🎵</button>
+    </header>
 
     <div class="chapter-grid" id="main-grid"></div>
 
     <div id="viewer" class="overlay">
         <div class="overlay-header">
-            <span id="module-title" style="color:white; font-size:11px; font-weight:600; text-transform:uppercase;">LEARNING MODULE</span>
+            <span id="module-title" style="color:white; font-size:11px; font-weight:600;">MODULE</span>
             <div class="close-btn" onclick="closeChapter()">CLOSE [X]</div>
         </div>
         <div class="viewer-scroll" id="viewer-content"></div>
     </div>
 
-    <footer><div class="footer-brand">FX KARAM EDUCATION</div></footer>
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <footer>FX KARAM EDUCATION • THE PREMIER ACADEMY</footer>
 
     <script>
-        // Weekly ကို ဖယ်ရှားပြီး ကျန်ရှိနေသော သင်ခန်းစာများ
         const lessons = [
             { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
             { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
@@ -65,7 +131,6 @@
         ];
 
         const grid = document.getElementById('main-grid');
-
         lessons.forEach((lesson, index) => {
             const box = document.createElement('div');
             box.className = 'section-box';
@@ -74,7 +139,6 @@
                 <div class="stack" onclick="openChapter(${index})">
                     <div class="card"><img src="${lesson.images[0]}"></div>
                     <div class="card"><img src="${lesson.images[1] || lesson.images[0]}"></div>
-                    <div class="card"><img src="${lesson.images[2] || lesson.images[0]}"></div>
                 </div>
             `;
             grid.appendChild(box);
@@ -83,24 +147,38 @@
         function openChapter(index) {
             const lesson = lessons[index];
             const content = document.getElementById('viewer-content');
-            document.getElementById('module-title').innerText = lesson.title + " MODULE";
+            document.getElementById('module-title').innerText = lesson.title.toUpperCase();
             content.innerHTML = '';
-            
             lesson.images.forEach(imgSrc => {
                 const img = document.createElement('img');
                 img.src = imgSrc;
                 img.className = 'expanded-img';
                 content.appendChild(img);
             });
-            
             document.getElementById('viewer').classList.add('active');
-            content.scrollTop = 0; // အမြဲတမ်း ပထမဆုံးပုံကနေ စပြရန်
+            content.scrollTop = 0;
             document.body.style.overflow = 'hidden';
         }
 
         function closeChapter() {
             document.getElementById('viewer').classList.remove('active');
             document.body.style.overflow = 'auto';
+        }
+
+        // Music Logic
+        const music = document.getElementById('bg-music');
+        const mBtn = document.getElementById('music-btn');
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                mBtn.innerText = "⏸";
+                mBtn.classList.add('playing');
+            } else {
+                music.pause();
+                mBtn.innerText = "🎵";
+                mBtn.classList.remove('playing');
+            }
         }
 
         window.Telegram.WebApp.ready();
