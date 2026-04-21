@@ -8,126 +8,67 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root { --gold: #f0b90b; --bg: #0b0e11; --card-bg: #1c2128; --border: rgba(240, 185, 11, 0.25); --text-gray: #9ca3af; }
-        
-        body { 
-            background-color: var(--bg); color: #e5e7eb; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; padding: 0; user-select: none; 
-            -webkit-font-smoothing: antialiased;
-        }
+        body { background-color: var(--bg); color: #e5e7eb; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
         
         header { 
             background: #1c2128; padding: 16px; text-align: center; 
             border-bottom: 1px solid var(--gold); position: sticky; top: 0; z-index: 1000;
         }
-        header h1 { 
-            color: var(--gold); margin: 0; font-size: 15px; 
-            font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-            font-family: 'Poppins', sans-serif;
-        }
+        header h1 { color: var(--gold); margin: 0; font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Poppins'; }
 
-        /* 3-Column Grid Layout */
+        /* အတန်းလိုက် ဆင်းသွားစေရန် Grid ကို ပြင်ဆင်ခြင်း */
         .chapter-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; padding: 25px 15px;
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* ၃ ခု တစ်တန်း */
+            gap: 20px 12px; /* အပေါ်အောက် ၂၀px ခွာမည် */
+            padding: 25px 15px;
         }
 
         .section-box { display: flex; flex-direction: column; align-items: center; }
         
         .section-label { 
             font-size: 8px; font-weight: 700; color: var(--gold); 
-            margin-bottom: 12px; text-align: center; letter-spacing: 0.8px;
-            text-transform: uppercase; height: 20px; display: flex; align-items: center;
+            margin-bottom: 10px; text-align: center; letter-spacing: 0.5px;
+            text-transform: uppercase; height: 24px; display: flex; align-items: center;
         }
 
-        /* Pro Stacked Deck Look */
-        .stack { 
-            position: relative; width: 100%; aspect-ratio: 3/4; 
-            cursor: pointer; perspective: 1000px;
-        }
+        .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; }
         
         .card { 
             position: absolute; width: 100%; height: 100%; 
             background: var(--card-bg); border-radius: 8px; 
             border: 1px solid var(--border); overflow: hidden; 
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-
         .card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Stacking Effect */
+        /* Stack Look */
         .card:nth-child(1) { z-index: 3; transform: translate(0, 0); }
         .card:nth-child(2) { z-index: 2; transform: translate(4px, -4px); opacity: 0.7; }
         .card:nth-child(3) { z-index: 1; transform: translate(8px, -8px); opacity: 0.4; }
 
-        /* Overlay Viewer */
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(11, 14, 17, 0.98); z-index: 2000;
-            display: none; flex-direction: column;
-        }
+        /* Overlay */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 17, 0.98); z-index: 2000; display: none; flex-direction: column; }
         .overlay.active { display: flex; }
-        
-        .overlay-header {
-            padding: 15px; display: flex; justify-content: space-between;
-            align-items: center; border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; background: var(--bg); z-index: 10;
-        }
-        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; font-family: 'Poppins'; }
-
+        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); }
+        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; }
         .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
-        .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 5px 20px rgba(0,0,0,0.6); }
+        .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
 
-        /* Stylish Footer */
-        footer { 
-            text-align: center; padding: 50px 20px; 
-            margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .footer-brand { 
-            color: var(--gold); font-size: 14px; font-weight: 700; 
-            letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
-            font-family: 'Poppins', sans-serif;
-        }
-        .footer-tag { color: var(--text-gray); font-size: 10px; letter-spacing: 1px; font-weight: 500; }
+        footer { text-align: center; padding: 50px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-brand { color: var(--gold); font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-family: 'Poppins'; }
     </style>
 </head>
 <body>
 
     <header><h1>FX KARAM EDUCATION</h1></header>
 
-    <div class="chapter-grid">
-        <div class="section-box">
-            <div class="section-label">ENTRY SETUPS</div>
-            <div class="stack" onclick="openChapter('entry')">
-                <div class="card"><img src="Entry Setups - 1.png"></div>
-                <div class="card"><img src="Entry Setups - 2.png"></div>
-                <div class="card"><img src="Entry Setups - 3.png"></div>
-            </div>
+    <div class="chapter-grid" id="main-grid">
         </div>
-
-        <div class="section-box">
-            <div class="section-label">CYPHER</div>
-            <div class="stack" onclick="openChapter('cypher')">
-                <div class="card"><img src="Cypher Pattern - 1.png"></div>
-                <div class="card"><img src="Cypher Pattern - 2.png"></div>
-                <div class="card"><img src="Cypher Pattern - 3.png"></div>
-            </div>
-        </div>
-
-        <div class="section-box">
-            <div class="section-label">LIQUIDITY</div>
-            <div class="stack" onclick="openChapter('liquidity')">
-                <div class="card"><img src="Buyside Liquidity - 1.png"></div>
-                <div class="card"><img src="Buyside Liquidity - 2.png"></div>
-                <div class="card"><img src="Buyside Liquidity - 3.png"></div>
-            </div>
-        </div>
-    </div>
 
     <div id="viewer" class="overlay">
         <div class="overlay-header">
-            <span id="module-title" style="color:white; font-size:12px; font-weight:600; text-transform:uppercase;">LEARNING MODULE</span>
+            <span id="module-title" style="color:white; font-size:12px; font-weight:600;">LEARNING MODULE</span>
             <div class="close-btn" onclick="closeChapter()">CLOSE [X]</div>
         </div>
         <div class="viewer-scroll" id="viewer-content"></div>
@@ -135,43 +76,60 @@
 
     <footer>
         <div class="footer-brand">FX KARAM EDUCATION</div>
-        <div class="footer-tag">THE PREMIER ICT TRADING ACADEMY</div>
     </footer>
 
     <script>
-        // GitHub ပေါ်ရှိ ပုံနာမည်အတိအကျများ
-        const chapters = {
-            'entry': ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'],
-            'cypher': ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'],
-            'liquidity': ['Buyside Liquidity - 1.png', 'Buyside Liquidity - 2.png', 'Buyside Liquidity - 3.png', 'Buyside Liquidity - 4.png']
-        };
+        // GitHub ပုံနာမည်များအတိုင်း စုစည်းထားသော Data
+        const lessons = [
+            { title: 'Entry Setups', prefix: 'Entry Setups', count: 6 },
+            { title: 'Cypher', prefix: 'Cypher Pattern', count: 5 },
+            { title: 'Liquidity', prefix: 'Buyside Liquidity', count: 4 },
+            { title: 'Gartley', prefix: 'Gartley Pattern', count: 5 },
+            { title: 'London High', prefix: 'London High', count: 4 },
+            { title: 'OCL', prefix: 'OCL', count: 4 },
+            { title: 'PDH', prefix: 'PDH', count: 4 },
+            { title: 'SMT', prefix: 'SMT', count: 4 },
+            { title: 'Weekly', prefix: 'W', count: 4 }
+        ];
 
-        function openChapter(id) {
+        const grid = document.getElementById('main-grid');
+
+        // ပုံတွေကို Grid ထဲ အလိုအလျောက် စီပေးမည့် function
+        lessons.forEach(lesson => {
+            const box = document.createElement('div');
+            box.className = 'section-box';
+            box.innerHTML = `
+                <div class="section-label">${lesson.title}</div>
+                <div class="stack" onclick="openChapter('${lesson.prefix}', ${lesson.count})">
+                    <div class="card"><img src="${lesson.prefix} - 1.png"></div>
+                    <div class="card"><img src="${lesson.prefix} - 2.png"></div>
+                    <div class="card"><img src="${lesson.prefix} - 3.png"></div>
+                </div>
+            `;
+            grid.appendChild(box);
+        });
+
+        function openChapter(prefix, count) {
             const content = document.getElementById('viewer-content');
-            const title = document.getElementById('module-title');
+            document.getElementById('module-title').innerText = prefix.toUpperCase();
             content.innerHTML = '';
-            title.innerText = id.replace('-', ' ') + " MODULE";
             
-            chapters[id].forEach(fileName => {
+            for (let i = 1; i <= count; i++) {
                 const img = document.createElement('img');
-                img.src = fileName;
+                img.src = `${prefix} - ${i}.png`;
                 img.className = 'expanded-img';
-                img.loading = 'lazy'; // Performance အတွက်
                 content.appendChild(img);
-            });
-            
+            }
             document.getElementById('viewer').classList.add('active');
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
         }
 
         function closeChapter() {
             document.getElementById('viewer').classList.remove('active');
-            document.body.style.overflow = 'auto'; 
+            document.body.style.overflow = 'auto';
         }
 
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
+        window.Telegram.WebApp.ready();
     </script>
 </body>
 </html>
