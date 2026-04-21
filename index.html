@@ -14,23 +14,27 @@
         
         .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 12px; padding: 25px 15px; }
         .section-box { display: flex; flex-direction: column; align-items: center; }
-        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 10px; text-align: center; text-transform: uppercase; }
+        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 10px; text-align: center; text-transform: uppercase; height: 20px; }
 
         .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; }
         .card { position: absolute; width: 100%; height: 100%; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .card img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Stack Layers */
         .card:nth-child(1) { z-index: 3; transform: translate(0, 0); }
         .card:nth-child(2) { z-index: 2; transform: translate(4px, -4px); opacity: 0.7; }
         .card:nth-child(3) { z-index: 1; transform: translate(8px, -8px); opacity: 0.4; }
 
+        /* Viewer Overlay */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 17, 0.98); z-index: 2000; display: none; flex-direction: column; }
         .overlay.active { display: flex; }
         .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); }
-        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; }
-        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+        .close-btn { color: var(--gold); font-weight: 600; font-size: 12px; cursor: pointer; padding: 5px; }
+        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; scroll-behavior: smooth; }
         .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-        footer { text-align: center; padding: 50px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .footer-brand { color: var(--gold); font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-family: 'Poppins'; }
+        
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-brand { color: var(--gold); font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-family: 'Poppins'; }
     </style>
 </head>
 <body>
@@ -41,7 +45,7 @@
 
     <div id="viewer" class="overlay">
         <div class="overlay-header">
-            <span id="module-title" style="color:white; font-size:12px; font-weight:600;">LEARNING MODULE</span>
+            <span id="module-title" style="color:white; font-size:11px; font-weight:600; text-transform:uppercase;">LEARNING MODULE</span>
             <div class="close-btn" onclick="closeChapter()">CLOSE [X]</div>
         </div>
         <div class="viewer-scroll" id="viewer-content"></div>
@@ -50,15 +54,12 @@
     <footer><div class="footer-brand">FX KARAM EDUCATION</div></footer>
 
     <script>
-        // ပုံတွေကို ရှေ့နောက်မညီမှာ စိုးလို့ အစဉ်လိုက် တိတိကျကျ စာရင်းလုပ်ထားခြင်း
+        // Weekly ကို ဖယ်ရှားပြီး ကျန်ရှိနေသော သင်ခန်းစာများ
         const lessons = [
-            { title: 'Liquidity', images: ['Buyside Liquidity - 1.png', 'Buyside Liquidity - 2.png', 'Buyside Liquidity - 3.png', 'Buyside Liquidity - 4.png'] },
-            { title: 'London High', images: ['London High - 1.png', 'London High - 3.png', 'London High - 4.png'] },
-            { title: 'PDH', images: ['PDH - 1.png', 'PDH - 2.png', 'PDH - 3.png', 'PDH - 4.png'] },
-            { title: 'Weekly', images: ['W - 1.png', 'W - 2.png', 'W - 3.png', 'W - 4.png'] },
             { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
             { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
             { title: 'Gartley', images: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png', 'Gartley Pattern - 3.png', 'Gartley Pattern - 4.png', 'Gartley Pattern - 5.png'] },
+            { title: 'Inducement', images: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png', 'Inducement - 10Apr26 - 3.png', 'Inducement - 10Apr26 - 4.png', 'Inducement - 10Apr26 - 5.png'] },
             { title: 'OCL', images: ['OCL - 1.png', 'OCL - 2.png', 'OCL - 3.png', 'OCL - 4.png'] },
             { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] }
         ];
@@ -82,7 +83,7 @@
         function openChapter(index) {
             const lesson = lessons[index];
             const content = document.getElementById('viewer-content');
-            document.getElementById('module-title').innerText = lesson.title.toUpperCase();
+            document.getElementById('module-title').innerText = lesson.title + " MODULE";
             content.innerHTML = '';
             
             lesson.images.forEach(imgSrc => {
@@ -91,7 +92,9 @@
                 img.className = 'expanded-img';
                 content.appendChild(img);
             });
+            
             document.getElementById('viewer').classList.add('active');
+            content.scrollTop = 0; // အမြဲတမ်း ပထမဆုံးပုံကနေ စပြရန်
             document.body.style.overflow = 'hidden';
         }
 
