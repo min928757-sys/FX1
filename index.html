@@ -53,7 +53,7 @@
         }
         .section-box:active { transform: scale(0.95); border-color: var(--gold); }
 
-        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.5px; }
+        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.5px; height: 18px; overflow: hidden; }
 
         .stack { position: relative; width: 100%; aspect-ratio: 3/4; }
         .card { position: absolute; width: 100%; height: 100%; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
@@ -101,17 +101,33 @@
     <footer>FX KARAM EDUCATION • PREMIER ICT ACADEMY</footer>
 
     <script>
+        // Updated lessons with new entries
         const lessons = [
             { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
             { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
             { title: 'Gartley', images: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png', 'Gartley Pattern - 3.png', 'Gartley Pattern - 4.png', 'Gartley Pattern - 5.png'] },
             { title: 'Inducement', images: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png', 'Inducement - 10Apr26 - 3.png', 'Inducement - 10Apr26 - 4.png', 'Inducement - 10Apr26 - 5.png'] },
             { title: 'OCL', images: ['OCL - 1.png', 'OCL - 2.png', 'OCL - 3.png', 'OCL - 4.png'] },
-            { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] }
+            { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] },
+            // New Modules added here
+            { title: 'Market Mech', prefix: 'Market Mechanics', count: 6 },
+            { title: 'Quasimodo', prefix: 'Quasimodo', count: 4 }
         ];
 
+        // Process new modules format
+        const finalLessons = lessons.map(lesson => {
+            if (lesson.prefix && lesson.count) {
+                const images = [];
+                for (let i = 1; i <= lesson.count; i++) {
+                    images.push(`${lesson.prefix} - ${i}.png`);
+                }
+                return { title: lesson.title, images: images };
+            }
+            return lesson;
+        });
+
         const grid = document.getElementById('main-grid');
-        lessons.forEach((lesson, index) => {
+        finalLessons.forEach((lesson, index) => {
             const box = document.createElement('div');
             box.className = 'section-box';
             box.innerHTML = `
@@ -125,7 +141,7 @@
         });
 
         function openChapter(index) {
-            const lesson = lessons[index];
+            const lesson = finalLessons[index];
             const content = document.getElementById('viewer-content');
             document.getElementById('module-title').innerText = lesson.title.toUpperCase();
             content.innerHTML = '';
@@ -149,7 +165,6 @@
         var player;
         var isPlaying = false;
         
-        // YouTube API Load
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -159,7 +174,7 @@
             player = new YT.Player('youtube-player', {
                 height: '0',
                 width: '0',
-                videoId: 'WSSIIC58Fsc', // ပေးထားသော Video ID
+                videoId: 'WSSIIC58Fsc',
                 playerVars: {
                     'autoplay': 0,
                     'controls': 0,
@@ -172,12 +187,12 @@
         function handleMusicClick() {
             const btn = document.getElementById('music-btn');
             if (!isPlaying) {
-                player.playVideo();
+                if(player && player.playVideo) player.playVideo();
                 btn.innerText = "⏸";
                 btn.classList.add('playing');
                 isPlaying = true;
             } else {
-                player.pauseVideo();
+                if(player && player.pauseVideo) player.pauseVideo();
                 btn.innerText = "🎵";
                 btn.classList.remove('playing');
                 isPlaying = false;
