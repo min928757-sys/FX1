@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FX KARAM ACADEMY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Poppins:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root { 
             --gold: #f0b90b; 
-            --gold-glow: rgba(240, 185, 11, 0.5);
+            --gold-glow: rgba(240, 185, 11, 0.6);
             --bg: #0b0e11; 
             --glass: rgba(28, 33, 40, 0.7);
             --border: rgba(240, 185, 11, 0.2); 
+            --gradient: linear-gradient(90deg, #f0b90b, #fff, #f0b90b);
         }
 
         body { 
@@ -23,14 +24,23 @@
 
         header { 
             background: rgba(28, 33, 40, 0.85); backdrop-filter: blur(10px);
-            padding: 15px 20px; text-align: center; border-bottom: 1px solid var(--border);
+            padding: 20px; text-align: center; border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
         }
 
+        /* Gradient & Special Font Title */
         header h1 { 
-            color: var(--gold); margin: 0; font-size: 14px; font-weight: 700; 
-            letter-spacing: 2px; font-family: 'Poppins'; flex-grow: 1;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 13px; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px var(--gold-glow));
+            flex-grow: 1; margin: 0;
         }
 
         #music-btn {
@@ -73,7 +83,7 @@
 
         #youtube-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
-        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); font-size: 10px; color: var(--gold); opacity: 0.6; letter-spacing: 1px; }
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); font-size: 11px; color: var(--gold); opacity: 0.8; font-weight: 600; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -96,7 +106,7 @@
 
     <div id="youtube-player"></div>
 
-    <footer>FX KARAM EDUCATION • PREMIER ICT ACADEMY</footer>
+    <footer>FX KARAM EDUCATION</footer>
 
     <script>
         const lessons = [
@@ -108,9 +118,11 @@
             { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] },
             { title: 'Market Mech', prefix: 'Market Mechanics', count: 6 },
             { title: 'Quasimodo', prefix: 'Quasimodo', count: 4 },
-            // New Modules added
             { title: 'OTE Setup', prefix: 'OTE Setup', count: 4 },
-            { title: 'Equal High', prefix: 'Equal High', count: 4 }
+            { title: 'Equal High', prefix: 'Equal High', count: 4 },
+            // New Modules added from your request
+            { title: 'Risk Management', prefix: 'Risk Management', count: 4 },
+            { title: 'Moving Average', prefix: 'Moving Average', count: 5 }
         ];
 
         const finalLessons = lessons.map(lesson => {
