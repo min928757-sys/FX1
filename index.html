@@ -15,7 +15,7 @@
 
         .hidden { display: none !important; }
 
-        /* Video & Quiz Section */
+        /* Video Section */
         .video-module { padding: 15px; background: rgba(28,33,40,0.5); }
         .nav-container { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 12px; scrollbar-width: none; }
         .nav-btn { background: #334155; color: #fff; padding: 6px 12px; border-radius: 5px; border: none; font-size: 11px; flex-shrink: 0; }
@@ -23,29 +23,36 @@
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--gold); margin-bottom: 15px; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        .quiz-btn { background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; border: none; padding: 12px; border-radius: 8px; font-weight: 700; width: 100%; font-size: 12px; margin-bottom: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3); }
+        .quiz-btn { background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; border: none; padding: 12px; border-radius: 8px; font-weight: 700; width: 100%; font-size: 12px; cursor: pointer; }
 
-        /* Chapter Cards Section (Bottom) */
+        /* Leaderboard UI */
+        .leaderboard-section { padding: 15px; background: rgba(28,33,40,0.4); border-radius: 10px; margin-top: 15px; border: 1px solid var(--border); }
+        .lb-title { color: var(--gold); font-size: 10px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; border-left: 3px solid var(--gold); padding-left: 8px; }
+        .lb-row { display: flex; justify-content: space-between; font-size: 11px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .lb-id { color: #888; font-family: monospace; margin-left: 5px; }
+
+        /* Chapter Cards */
         .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 10px; }
-        .section-box { text-align: center; }
-        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
         .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; }
-        .card-back { position: absolute; width: 90%; height: 90%; right: 0; top: 0; background: var(--bg); border: 1px solid var(--gold); border-radius: 5px; opacity: 0.3; z-index: 1; }
-        .card-front { position: absolute; width: 92%; height: 92%; left: 0; bottom: 0; border-radius: 5px; overflow: hidden; border: 1.5px solid var(--gold); z-index: 2; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
+        .card-back { position: absolute; width: 90%; height: 90%; right: 0; top: 0; background: var(--bg); border: 1px solid var(--gold); border-radius: 5px; opacity: 0.3; }
+        .card-front { position: absolute; width: 92%; height: 92%; left: 0; bottom: 0; border-radius: 5px; overflow: hidden; border: 1.5px solid var(--gold); z-index: 2; }
         .card-front img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Overlays */
+        /* Overlay */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
         .overlay.active { display: flex; }
-        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); background: #1c2128; }
-        .viewer-scroll { padding: 15px; overflow-y: auto; flex-grow: 1; }
+        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
         
-        /* Quiz Specific UI */
-        .quiz-card { background: #1c2128; padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .quiz-option { background: #2d333b; padding: 12px; border-radius: 8px; margin-top: 10px; cursor: pointer; border: 1px solid transparent; font-size: 14px; transition: 0.3s; }
-        .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; }
+        /* Quiz Gameplay UI */
+        .quiz-body { padding: 25px; text-align: center; }
+        .q-text { font-size: 16px; font-weight: 600; margin-bottom: 25px; line-height: 1.4; color: #fff; }
+        .opt-list { display: flex; flex-direction: column; gap: 12px; }
+        .opt-btn { background: #2d333b; padding: 15px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .opt-btn.correct { background: #059669 !important; border-color: #34d399; }
+        .opt-btn.wrong { background: #dc2626 !important; border-color: #f87171; }
+        .next-btn { margin-top: 30px; background: var(--gold); color: black; border: none; padding: 12px; border-radius: 8px; font-weight: 700; display: none; width: 100%; }
         
-        footer { text-align: center; padding: 20px; font-size: 9px; color: var(--gold); opacity: 0.5; }
+        footer { text-align: center; padding: 20px; font-size: 9px; color: var(--gold); opacity: 0.4; }
     </style>
 </head>
 <body>
@@ -70,7 +77,12 @@
             <div class="video-container">
                 <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
             </div>
-            <button class="quiz-btn" onclick="startQuiz()">✍️ Take Lesson Quiz</button>
+            <button class="quiz-btn" onclick="openQuiz()">✍️ Take Lesson Quiz</button>
+
+            <div class="leaderboard-section">
+                <div class="lb-title">🏆 Top Traders Ranking</div>
+                <div id="lb-list"></div>
+            </div>
         </div>
 
         <div class="chapter-grid" id="main-grid"></div>
@@ -78,10 +90,15 @@
 
     <div id="quiz-overlay" class="overlay">
         <div class="overlay-header">
-            <span id="quiz-title" style="color:var(--gold); font-weight:700;">QUIZ</span>
-            <div style="color: #ff4d4d; cursor: pointer; font-weight: bold;" onclick="closeQuiz()">[ EXIT ]</div>
+            <span id="quiz-title-text" style="color:var(--gold); font-weight:700; font-size: 11px;"></span>
+            <div style="color: #ff4d4d; cursor: pointer; font-size: 11px;" onclick="closeQuiz()">[ EXIT ]</div>
         </div>
-        <div class="viewer-scroll" id="quiz-content"></div>
+        <div class="quiz-body">
+            <div id="question-text" class="q-text"></div>
+            <div id="options-container" class="opt-list"></div>
+            <div id="feedback-text" style="margin-top: 15px; font-weight: bold; font-size: 13px;"></div>
+            <button id="next-btn" class="next-btn" onclick="nextQuestion()">NEXT QUESTION</button>
+        </div>
     </div>
 
     <div id="viewer" class="overlay">
@@ -89,140 +106,213 @@
             <span id="module-title" style="color:white; font-size:11px; font-weight:700;"></span>
             <div style="color: var(--gold); cursor: pointer;" onclick="closeChapter()">[ CLOSE ]</div>
         </div>
-        <div class="viewer-scroll" id="viewer-content"></div>
+        <div class="viewer-scroll" id="viewer-content" style="padding: 15px; overflow-y: auto;"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, updateDoc, collection, query, orderBy, limit, increment, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { 
-            apiKey: "AIzaSyA5wJhY38C5GMgxjJuGDDejtIje36MvBok", 
-            authDomain: "trading-app-69b9d.firebaseapp.com", 
-            projectId: "trading-app-69b9d", 
-            storageBucket: "trading-app-69b9d.appspot.com", 
-            messagingSenderId: "573273662231", 
-            appId: "1:573273662231:web:fbbbc6876711e612190829" 
-        };
+        const firebaseConfig = { apiKey: "AIzaSyA5wJhY38C5GMgxjJuGDDejtIje36MvBok", authDomain: "trading-app-69b9d.firebaseapp.com", projectId: "trading-app-69b9d", storageBucket: "trading-app-69b9d.appspot.com", messagingSenderId: "573273662231", appId: "1:573273662231:web:fbbbc6876711e612190829" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const tg = window.Telegram.WebApp;
 
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
+        let myFirstName = tg.initDataUnsafe?.user?.first_name || "Unknown";
         document.getElementById('user-id-display').innerText = "ID: " + myUserId;
 
         const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
         let currentLesson = 1;
+        let currentQIndex = 0;
+        let answered = false;
 
-        // Lesson 1 to 7 အထိ Quiz မေးခွန်းများ
+        // Lesson 1 to 7 (5 Questions Each)
         const allQuizzes = {
             1: [
-                { q: "Market Structure မှာ Higher High (HH) ဖြစ်ပေါ်ပြီးနောက် ဘာကို စောင့်ကြည့်ရမလဲ?", a: ["Higher Low", "Lower Low", "Equal High"], c: 0 },
-                { q: "Uptrend တစ်ခု ပျက်ပြယ်သွားပြီလို့ ဘယ်အချိန်မှာ သတ်မှတ်မလဲ?", a: ["HH ထပ်မလုပ်နိုင်တော့ရင်", "Higher Low (HL) ကို ချိုးဆင်းသွားရင် (BOS)", "RSI 70 ကျော်ရင်"], c: 1 }
+                { q: "Market Structure မှာ Trendline ကောင်းတစ်ခုဖြစ်ဖို့ အနည်းဆုံး Point ဘယ်နှစ်ခုထိရမလဲ?", a: ["1 ခု", "2 ခု", "3 ခု"], c: 1 },
+                { q: "Higher High ကိုကျော်ပြီး Close ဖြစ်သွားတာကို ဘာလို့ခေါ်လဲ?", a: ["BOS", "CHoCH", "FVG"], c: 0 },
+                { q: "Downtrend မှာ ဈေးက ဘာတွေလုပ်လေ့ရှိသလဲ?", a: ["HH and HL", "LH and LL", "Equal Highs"], c: 1 },
+                { q: "CHoCH ဖြစ်တာက ဘာကို သတိပေးတာလဲ?", a: ["Trend ဆက်သွားမယ်", "Trend ပြောင်းတော့မယ်", "ဈေးနားတော့မယ်"], c: 1 },
+                { q: "Market Structure မှာ အရေးအကြီးဆုံးက ဘာလဲ?", a: ["Indicator", "Price Action", "News"], c: 1 }
             ],
             2: [
-                { q: "Order Block (OB) ဆိုတာ ဘာလဲ?", a: ["Institutional အရောင်းအဝယ် အများအပြားရှိခဲ့တဲ့ နေရာ", "Indicator တစ်ခု", "သတင်းထွက်တဲ့အချိန်"], c: 0 },
-                { q: "ဘယ်လို OB မျိုးက ပိုပြီး အလုပ်လုပ်နိုင်စွမ်း (Probability) မြင့်သလဲ?", a: ["Imbalance (FVG) ကျန်ခဲ့တဲ့ OB", "သေးငယ်တဲ့ OB", "အရောင်တူတူပဲရှိတဲ့ OB"], c: 0 }
+                { q: "Order Block က ဘယ်သူတွေ Order ထည့်တဲ့နေရာလဲ?", a: ["Retailers", "Big Banks", "News Traders"], c: 1 },
+                { q: "Bullish Order Block ဆိုတာ ဘာလဲ?", a: ["အနီရောင်ဖယောင်းတိုင်", "နောက်ဆုံးအရောင်း Candle", "နောက်ဆုံးအဝယ် Candle"], c: 1 },
+                { q: "Mitigated OB ဆိုတာ ဘာလဲ?", a: ["ဈေးပြန်မထိရသေးတဲ့ OB", "ဈေးပြန်ထိပြီးသား OB", "အသစ်ဖြစ်တဲ့ OB"], c: 1 },
+                { q: "OB တစ်ခုမှာ ဘာရှိရင် ပိုအားကောင်းသလဲ?", a: ["RSI 70", "Imbalance / FVG", "Support Line"], c: 1 },
+                { q: "Order Block ကို ဘယ် Timeframe မှာ ကြည့်တာ အကောင်းဆုံးလဲ?", a: ["M1 Only", "HTF (H4/Daily)", "ဘယ်ဟာမဆို"], c: 1 }
             ],
             3: [
-                { q: "Retail Traders တွေရဲ့ Stop Loss တွေကို အကြီးစား အဖွဲ့အစည်းတွေက ဘယ်လိုခေါ်သလဲ?", a: ["Profit", "Liquidity", "Support"], c: 1 },
-                { q: "Liquidity Sweep ဖြစ်ပြီးရင် Market က ဘာဖြစ်လေ့ရှိသလဲ?", a: ["Trend ပြောင်းပြန်လှန်ခြင်း (Reversal)", "Market ပိတ်သွားခြင်း", "Side-way သွားခြင်း"], c: 0 }
+                { q: "Liquidity ဆိုတာ Trading မှာ ဘာကို ဆိုလိုတာလဲ?", a: ["Stop Loss တွေရှိတဲ့နေရာ", "ဈေးအတက်အကျ", "Indicator တစ်ခု"], c: 0 },
+                { q: "Equal Highs/Lows တွေရဲ့ အနောက်မှာ ဘာတွေရှိသလဲ?", a: ["No Orders", "Liquidity (Money)", "Support/Resistance"], c: 1 },
+                { q: "Market က Liquidity ကို ဘာလို့ Sweep လုပ်ရတာလဲ?", a: ["Orders တွေယူဖို့", "Trend ပြောင်းဖို့", "News ကြောင့်"], c: 0 },
+                { q: "Buy Side Liquidity (BSL) က ဘယ်မှာရှိတတ်သလဲ?", a: ["HH အပေါ်မှာ", "LL အောက်မှာ", "Midpoint မှာ"], c: 0 },
+                { q: "Liquidity Sweep ဖြစ်ပြီးတာနဲ့ ဘာကို စောင့်ကြည့်ရမလဲ?", a: ["BOS/CHoCH", "Trendline", "Volume"], c: 0 }
             ],
             4: [
-                { q: "Fair Value Gap (FVG) ဆိုတာ ဘာလဲ?", a: ["Candle ၃ ခုကြားရှိသော ကွာဟချက်", "Trend Line ချိုးခြင်း", "သတင်းကြောင့်ဖြစ်သော Gap"], c: 0 },
-                { q: "FVG က Market မှာ ဘယ်လို အခန်းကဏ္ဍက ပါသလဲ?", a: ["Magnet (ဆွဲငင်အား) အဖြစ် ပြန်ဖြည့်တင်းခြင်း", "အမြဲတမ်း ပြန်မဖြည့်ခြင်း", "ဘာမှမလုပ်ခြင်း"], c: 0 }
+                { q: "Fair Value Gap (FVG) က Candle ဘယ်နှစ်ခုကြားမှာ ဖြစ်တာလဲ?", a: ["2 ခု", "3 ခု", "4 ခု"], c: 1 },
+                { q: "FVG က Market မှာ ဘယ်လို အလုပ်လုပ်သလဲ?", a: ["Magnet (သံလိုက်) လို ဆွဲယူတယ်", "ဘာမှမလုပ်ဘူး", "Wall လို တားဆီးတယ်"], c: 0 },
+                { q: "FVG ကို တခြားဘယ်လိုခေါ်သေးလဲ?", a: ["Imbalance", "OB", "BOS"], c: 0 },
+                { q: "FVG ပြန်ဖြည့်တာကို ဘာလို့ခေါ်သလဲ?", a: ["Rebalance", "Mitigation", "Sweep"], c: 0 },
+                { q: "FVG အားလုံး ပြန်ဖြည့်စရာ လိုသလား?", a: ["အမြဲဖြည့်တယ်", "မလိုအပ်ဘူး", "၅၀ ရာခိုင်နှုန်းပဲ ဖြည့်တယ်"], c: 1 }
             ],
             5: [
-                { q: "Multi-Timeframe Analysis မှာ ဘယ်ကို အရင်ကြည့်ရမလဲ?", a: ["Higher Timeframe (HTF)", "Lower Timeframe (LTF)", "နှစ်သက်ရာ"], c: 0 },
-                { q: "LTF မှာ ဘာကို ရှာဖွေရမလဲ?", a: ["Daily Bias", "Entry Confirmation (CHoCH)", "Economic News"], c: 1 }
+                { q: "Multi-Timeframe Analysis မှာ ဘယ်ကို အရင်ကြည့်ရမလဲ?", a: ["M1", "H4 or Daily", "M15"], c: 1 },
+                { q: "Entry ကို ဘယ်မှာ ရှာရမလဲ?", a: ["LTF (Lower Timeframe)", "HTF Only", "News Channel"], c: 0 },
+                { q: "HTF က ဘာကို ပြတာလဲ?", a: ["Entry Point", "Daily Bias / Direction", "Stop Loss"], c: 1 },
+                { q: "Timeframe တွေ အကုန်လုံး Direction တူနေရင် ဘာဖြစ်မလဲ?", a: ["High Probability", "Low Probability", "Risk များတယ်"], c: 0 },
+                { q: "M15 BOS ဖြစ်တာက H4 မှာ ဘာဖြစ်နိုင်သလဲ?", a: ["Trend ပြောင်းတာ", "Retracement", "ဘာမှမဟုတ်ပါ"], c: 1 }
             ],
             6: [
-                { q: "Risk Management အရ အမြဲတမ်း ဘယ်လောက် Risk ယူသင့်သလဲ?", a: ["1-2%", "10-20%", "50%"], c: 0 },
-                { q: "Trading မှာ အမြတ်ရဖို့ ဘာက အဓိကကျသလဲ?", a: ["Win Rate မြင့်ဖို့", "Risk to Reward (RR) ကောင်းဖို့", "Indicator အများကြီးသုံးဖို့"], c: 1 }
+                { q: "Risk Management အရ အမြတ်နဲ့ အရှုံး အချိုး (RR) အနည်းဆုံး ဘယ်လောက်ထားသင့်သလဲ?", a: ["1:1", "1:2", "1:0.5"], c: 1 },
+                { q: "Capital ရဲ့ ဘယ်နှစ်ရာခိုင်နှုန်းပဲ Risk ယူသင့်သလဲ?", a: ["1% to 2%", "10%", "50%"], c: 0 },
+                { q: "Trade တစ်ခုမှာ Stop Loss မပါရင် ဘာဖြစ်မလဲ?", a: ["Account ပြုတ်နိုင်တယ်", "အမြတ်များမယ်", "ပိုစိတ်ချရတယ်"], c: 0 },
+                { q: "Win Rate ၄၀% နဲ့ အမြတ်ထွက်နိုင်သလား?", a: ["မရနိုင်ဘူး", "RR ကောင်းရင် ရနိုင်တယ်", "အမြဲရှုံးမယ်"], c: 1 },
+                { q: "Risk Management က ဘာအတွက်လဲ?", a: ["အမြတ်များဖို့", "ဈေးကွက်မှာ ရေရှည်ရပ်တည်ဖို့", "မြန်မြန်ချမ်းသာဖို့"], c: 1 }
             ],
             7: [
-                { q: "Trading Psychology အရ ရှုံးနိမ့်မှုကို ဘယ်လိုမြင်သင့်သလဲ?", a: ["စိတ်ပျက်စရာ", "သင်ခန်းစာယူစရာ Business Cost", "ကံမကောင်းခြင်း"], c: 1 }
+                { q: "Trading Psychology မှာ အဆိုးဆုံး ရန်သူက ဘာလဲ?", a: ["Fear (ကြောက်စိတ်)", "Greed (လောဘ)", "အပေါ်က ၂ ခုလုံး"], c: 2 },
+                { q: "Trade တစ်ခု ရှုံးသွားရင် ဘာလုပ်သင့်သလဲ?", a: ["ချက်ချင်း ပြန်လိုက်ဆွဲမယ်", "အေးအေးဆေးဆေး ပြန်သုံးသပ်မယ်", "ဖုန်းပိတ်ထားမယ်"], c: 1 },
+                { q: "Trading ဆိုတာ ဘာလဲ?", a: ["လောင်းကစား", "Probability Game", "ကံစမ်းမဲ"], c: 1 },
+                { q: "Overtrading ဘာကြောင့် ဖြစ်ရတာလဲ?", a: ["လောဘနဲ့ စိတ်မရှည်မှု", "ဗဟုသုတများလို့", "အရင်းနှီးများလို့"], c: 0 },
+                { q: "Professional Trader တစ်ယောက်မှာ ဘာရှိရမလဲ?", a: ["စိတ်ရှည်မှုနဲ့ စည်းကမ်း", "Holy Grail Indicator", "Luck"], c: 0 }
             ]
         };
 
-        const cardLessons = [
-            { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
-            { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
-            { title: 'Gartley', images: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png', 'Gartley Pattern - 3.png', 'Gartley Pattern - 4.png', 'Gartley Pattern - 5.png'] },
-            { title: 'Inducement', images: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png', 'Inducement - 10Apr26 - 3.png', 'Inducement - 10Apr26 - 4.png', 'Inducement - 10Apr26 - 5.png'] },
-            { title: 'OCL', images: ['OCL - 1.png', 'OCL - 2.png', 'OCL - 3.png', 'OCL - 4.png'] },
-            { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] },
-            { title: 'Market Mech', images: ['Market Mechanics - 1.png', 'Market Mechanics - 2.png', 'Market Mechanics - 3.png', 'Market Mechanics - 4.png', 'Market Mechanics - 5.png', 'Market Mechanics - 6.png'] },
-            { title: 'Quasimodo', images: ['Quasimodo - 1.png', 'Quasimodo - 2.png', 'Quasimodo - 3.png', 'Quasimodo - 4.png'] },
-            { title: 'OTE Setup', images: ['OTE Setup - 1.png', 'OTE Setup - 2.png', 'OTE Setup - 3.png', 'OTE Setup - 4.png'] },
-            { title: 'Equal High', images: ['Equal High - 1.png', 'Equal High - 2.png', 'Equal High - 3.png', 'Equal High - 4.png'] },
-            { title: 'Risk MGMT', images: ['Risk Management - 1.png', 'Risk Management - 2.png', 'Risk Management - 3.png', 'Risk Management - 4.png'] },
-            { title: 'M-Average', images: ['Moving Average - 1.png', 'Moving Average - 2.png', 'Moving Average - 3.png', 'Moving Average - 4.png', 'Moving Average - 5.png'] }
-        ];
-
-        window.showLesson = (num) => {
-            currentLesson = num;
-            document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-l' + num).classList.add('active');
+        // --- Quiz Engine ---
+        window.openQuiz = () => {
+            currentQIndex = 0;
+            loadQuestion();
+            document.getElementById('quiz-overlay').classList.add('active');
         };
 
-        window.startQuiz = () => {
-            const quizContent = document.getElementById('quiz-content');
+        function loadQuestion() {
+            answered = false;
             const questions = allQuizzes[currentLesson];
-            if(!questions) return tg.showAlert("Coming Soon!");
-            
-            document.getElementById('quiz-title').innerText = "LESSON " + currentLesson + " QUIZ";
-            quizContent.innerHTML = '';
-            
-            questions.forEach((item, qIdx) => {
-                const card = document.createElement('div');
-                card.className = 'quiz-card';
-                card.innerHTML = `<p style="margin-top:0; font-weight:600; color:#fff;">${qIdx + 1}. ${item.q}</p>`;
-                item.a.forEach((opt, oIdx) => {
-                    const btn = document.createElement('div');
-                    btn.className = 'quiz-option';
-                    btn.innerText = opt;
-                    btn.onclick = () => {
-                        if(oIdx === item.c) { btn.style.backgroundColor = '#059669'; btn.style.color = 'white'; tg.HapticFeedback.notificationOccurred('success'); }
-                        else { btn.style.backgroundColor = '#dc2626'; btn.style.color = 'white'; tg.HapticFeedback.notificationOccurred('error'); }
-                    };
-                    card.appendChild(btn);
-                });
-                quizContent.appendChild(card);
+            const data = questions[currentQIndex];
+            document.getElementById('quiz-title-text').innerText = `LESSON ${currentLesson} QUIZ (${currentQIndex + 1}/5)`;
+            document.getElementById('question-text').innerText = data.q;
+            document.getElementById('feedback-text').innerText = "";
+            document.getElementById('next-btn').style.display = "none";
+            const container = document.getElementById('options-container');
+            container.innerHTML = "";
+            data.a.forEach((opt, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx, data.c, btn);
+                container.appendChild(btn);
             });
-            document.getElementById('quiz-overlay').classList.add('active');
+        }
+
+        async function checkAnswer(idx, correct, btn) {
+            if (answered) return;
+            answered = true;
+            const options = document.querySelectorAll('.opt-btn');
+            if (idx === correct) {
+                btn.classList.add('correct');
+                document.getElementById('feedback-text').innerHTML = "<span style='color:#34d399;'>✅ အဖြေမှန်ပါတယ် ဆရာကြီး!</span>";
+                tg.HapticFeedback.notificationOccurred('success');
+                // အမှတ်ပေါင်းခြင်း
+                await updateDoc(doc(db, "users", myUserId), { score: increment(10), name: myFirstName });
+            } else {
+                btn.classList.add('wrong');
+                options[correct].classList.add('correct');
+                document.getElementById('feedback-text').innerHTML = `<span style='color:#f87171;'>❌ မှားသွားပါတယ်။ အဖြေမှန်က "${options[correct].innerText}" ပါ။</span>`;
+                tg.HapticFeedback.notificationOccurred('error');
+            }
+            document.getElementById('next-btn').style.display = "block";
+        }
+
+        window.nextQuestion = () => {
+            currentQIndex++;
+            if (currentQIndex < 5) loadQuestion();
+            else { tg.showAlert("ဂုဏ်ယူပါတယ် ဆရာကြီး! ဒီ Lesson ရဲ့ Quiz အောင်မြင်ပါပြီ။"); closeQuiz(); }
         };
 
         window.closeQuiz = () => document.getElementById('quiz-overlay').classList.remove('active');
 
-        // Cards Logic
+        // --- Leaderboard Logic (Star format ID) ---
+        function updateLeaderboard() {
+            const q = query(collection(db, "users"), orderBy("score", "desc"), limit(10));
+            onSnapshot(q, (snap) => {
+                const lb = document.getElementById('lb-list');
+                lb.innerHTML = "";
+                let i = 1;
+                snap.forEach(d => {
+                    const data = d.data();
+                    const id = d.id;
+                    const maskedId = id.length > 3 ? id.slice(0, -3) + "***" : id;
+                    lb.innerHTML += `
+                        <div class="lb-row">
+                            <span><b>${i}.</b> ${data.name || 'Trader'} <span class="lb-id">(${maskedId})</span></span>
+                            <b style="color:var(--gold)">${data.score || 0} pts</b>
+                        </div>`;
+                    i++;
+                });
+            });
+        }
+
+        // --- Navigation & Initial ---
+        window.showLesson = (num) => {
+            currentLesson = num;
+            document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-l' + num).classList.add('active');
+        };
+
+        // Chapter Images
+        const cardData = [
+            { t: 'Entry Setups', i: ['Entry Setups - 1.png', 'Entry Setups - 2.png'] },
+            { t: 'Cypher', i: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png'] },
+            { t: 'Gartley', i: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png'] },
+            { t: 'Inducement', i: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png'] },
+            { t: 'OCL', i: ['OCL - 1.png', 'OCL - 2.png'] },
+            { t: 'SMT', i: ['SMT - 1.png', 'SMT - 2.png'] },
+            { t: 'Market Mech', i: ['Market Mechanics - 1.png', 'Market Mechanics - 2.png'] },
+            { t: 'Quasimodo', i: ['Quasimodo - 1.png', 'Quasimodo - 2.png'] },
+            { t: 'OTE Setup', i: ['OTE Setup - 1.png', 'OTE Setup - 2.png'] },
+            { t: 'Equal High', i: ['Equal High - 1.png', 'Equal High - 2.png'] },
+            { t: 'Risk MGMT', i: ['Risk Management - 1.png', 'Risk Management - 2.png'] },
+            { t: 'M-Average', i: ['Moving Average - 1.png', 'Moving Average - 2.png'] }
+        ];
+
         const grid = document.getElementById('main-grid');
-        cardLessons.forEach((lesson, index) => {
-            const box = document.createElement('div');
-            box.className = 'section-box';
-            box.innerHTML = `<div class="section-label">${lesson.title}</div><div class="stack" onclick="openChapter(${index})"><div class="card-back"></div><div class="card-front"><img src="${lesson.images[0]}" loading="lazy"></div></div>`;
-            grid.appendChild(box);
+        cardData.forEach((c, idx) => {
+            grid.innerHTML += `
+                <div class="section-box">
+                    <div class="section-label">${c.t}</div>
+                    <div class="stack" onclick="openChapter(${idx})">
+                        <div class="card-back"></div>
+                        <div class="card-front"><img src="${c.i[0]}"></div>
+                    </div>
+                </div>`;
         });
 
-        window.openChapter = (index) => {
-            const lesson = cardLessons[index];
+        window.openChapter = (idx) => {
+            const data = cardData[idx];
+            document.getElementById('module-title').innerText = data.t.toUpperCase();
             const content = document.getElementById('viewer-content');
-            document.getElementById('module-title').innerText = lesson.title.toUpperCase();
-            content.innerHTML = '';
-            lesson.images.forEach(img => {
-                const i = document.createElement('img'); i.src = img; i.className = 'expanded-img'; content.appendChild(i);
+            content.innerHTML = "";
+            data.i.forEach(img => {
+                content.innerHTML += `<img src="${img}" style="width:100%; border-radius:8px; margin-bottom:12px; border:1px solid var(--border);">`;
             });
             document.getElementById('viewer').classList.add('active');
         };
         window.closeChapter = () => document.getElementById('viewer').classList.remove('active');
 
-        onSnapshot(doc(db, "users", myUserId), (docSnap) => {
-            if (docSnap.exists() && docSnap.data().is_approved === true) {
-                document.getElementById('unlocked-section').classList.remove('hidden');
-                showLesson(1);
-            }
-        });
+        // Check Access & Setup
+        if (myUserId !== "Guest") {
+            const userRef = doc(db, "users", myUserId);
+            onSnapshot(userRef, (s) => {
+                if (s.exists() && s.data().is_approved === true) {
+                    document.getElementById('unlocked-section').classList.remove('hidden');
+                    showLesson(1);
+                    updateLeaderboard();
+                }
+            });
+        }
     </script>
 </body>
 </html>
