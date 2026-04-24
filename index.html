@@ -4,82 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FX KARAM ACADEMY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Poppins:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { 
-            --gold: #f0b90b; 
-            --gold-glow: rgba(240, 185, 11, 0.6);
-            --bg: #0b0e11; 
-            --glass: rgba(28, 33, 40, 0.7);
-            --border: rgba(240, 185, 11, 0.2); 
-        }
-
-        body { 
-            background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; 
-            margin: 0; padding: 0; user-select: none;
-        }
-
-        header { 
-            background: rgba(28, 33, 40, 0.85); backdrop-filter: blur(10px);
-            padding: 15px; text-align: center; border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-
-        header h1 { 
-            font-family: 'Syncopate', sans-serif; font-size: 11px; font-weight: 700;
-            background: linear-gradient(90deg, #f0b90b, #fff, #f0b90b);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
+        :root { --gold: #f0b90b; --bg: #0b0e11; --glass: rgba(28, 33, 40, 0.7); --border: rgba(240, 185, 11, 0.2); }
+        body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
+        
+        header { background: rgba(28, 33, 40, 0.85); backdrop-filter: blur(10px); padding: 15px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-family: 'Syncopate', sans-serif; font-size: 11px; background: linear-gradient(90deg, #f0b90b, #fff, #f0b90b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
         .hidden { display: none !important; }
 
-        /* Video Section */
+        /* Video & Quiz Section */
         .video-module { padding: 15px; background: rgba(28,33,40,0.5); }
         .nav-container { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 12px; scrollbar-width: none; }
-        .nav-btn { background: #334155; color: #fff; padding: 6px 12px; border-radius: 5px; border: none; font-size: 11px; }
+        .nav-btn { background: #334155; color: #fff; padding: 6px 12px; border-radius: 5px; border: none; font-size: 11px; flex-shrink: 0; }
         .nav-btn.active { background: var(--gold); color: black; font-weight: bold; }
-        
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--gold); margin-bottom: 15px; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        /* Quiz Button */
-        .quiz-btn { 
-            background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; 
-            border: none; padding: 12px; border-radius: 8px; font-weight: 700; 
-            width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px;
-            box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3); margin-bottom: 10px;
-        }
+        .quiz-btn { background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; border: none; padding: 12px; border-radius: 8px; font-weight: 700; width: 100%; font-size: 12px; margin-bottom: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3); }
 
-        /* Chapter Grid (Clean UI) */
+        /* Chapter Cards Section (Bottom) */
         .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 10px; }
         .section-box { text-align: center; }
-        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; }
-        
+        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
         .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; }
-        /* နောက်ကပုံ (Shadow/Back card) */
-        .card-back { 
-            position: absolute; width: 90%; height: 90%; right: 0; top: 0;
-            background: var(--bg); border: 1px solid var(--gold); border-radius: 5px; 
-            opacity: 0.3; z-index: 1;
-        }
-        /* ရှေ့ဆုံးပုံ (Main card) */
-        .card-front { 
-            position: absolute; width: 92%; height: 92%; left: 0; bottom: 0;
-            border-radius: 5px; overflow: hidden; border: 1.5px solid var(--gold);
-            z-index: 2; box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-        }
+        .card-back { position: absolute; width: 90%; height: 90%; right: 0; top: 0; background: var(--bg); border: 1px solid var(--gold); border-radius: 5px; opacity: 0.3; z-index: 1; }
+        .card-front { position: absolute; width: 92%; height: 92%; left: 0; bottom: 0; border-radius: 5px; overflow: hidden; border: 1.5px solid var(--gold); z-index: 2; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
         .card-front img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Overlay Viewer */
+        /* Overlays */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
         .overlay.active { display: flex; }
-        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
-        .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
-        .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-
+        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); background: #1c2128; }
+        .viewer-scroll { padding: 15px; overflow-y: auto; flex-grow: 1; }
+        
+        /* Quiz Specific UI */
+        .quiz-card { background: #1c2128; padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px; }
+        .quiz-option { background: #2d333b; padding: 12px; border-radius: 8px; margin-top: 10px; cursor: pointer; border: 1px solid transparent; font-size: 14px; transition: 0.3s; }
+        .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; }
+        
         footer { text-align: center; padding: 20px; font-size: 9px; color: var(--gold); opacity: 0.5; }
     </style>
 </head>
@@ -105,10 +70,18 @@
             <div class="video-container">
                 <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
             </div>
-            <button class="quiz-btn" onclick="openQuiz()">✍️ Take Lesson Quiz</button>
+            <button class="quiz-btn" onclick="startQuiz()">✍️ Take Lesson Quiz</button>
         </div>
 
         <div class="chapter-grid" id="main-grid"></div>
+    </div>
+
+    <div id="quiz-overlay" class="overlay">
+        <div class="overlay-header">
+            <span id="quiz-title" style="color:var(--gold); font-weight:700;">QUIZ</span>
+            <div style="color: #ff4d4d; cursor: pointer; font-weight: bold;" onclick="closeQuiz()">[ EXIT ]</div>
+        </div>
+        <div class="viewer-scroll" id="quiz-content"></div>
     </div>
 
     <div id="viewer" class="overlay">
@@ -119,30 +92,59 @@
         <div class="viewer-scroll" id="viewer-content"></div>
     </div>
 
-    <footer>© 2026 FX KARAM ACADEMY</footer>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA5wJhY38C5GMgxjJuGDDejtIje36MvBok",
-            authDomain: "trading-app-69b9d.firebaseapp.com",
-            projectId: "trading-app-69b9d",
-            storageBucket: "trading-app-69b9d.appspot.com",
-            messagingSenderId: "573273662231",
-            appId: "1:573273662231:web:fbbbc6876711e612190829"
+        const firebaseConfig = { 
+            apiKey: "AIzaSyA5wJhY38C5GMgxjJuGDDejtIje36MvBok", 
+            authDomain: "trading-app-69b9d.firebaseapp.com", 
+            projectId: "trading-app-69b9d", 
+            storageBucket: "trading-app-69b9d.appspot.com", 
+            messagingSenderId: "573273662231", 
+            appId: "1:573273662231:web:fbbbc6876711e612190829" 
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const tg = window.Telegram.WebApp;
-        tg.ready();
 
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
         document.getElementById('user-id-display').innerText = "ID: " + myUserId;
 
-        // GitHub အမည်များအတိုင်း စစ်ဆေးပြင်ဆင်ထားသော Data
+        const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
+        let currentLesson = 1;
+
+        // Lesson 1 to 7 အထိ Quiz မေးခွန်းများ
+        const allQuizzes = {
+            1: [
+                { q: "Market Structure မှာ Higher High (HH) ဖြစ်ပေါ်ပြီးနောက် ဘာကို စောင့်ကြည့်ရမလဲ?", a: ["Higher Low", "Lower Low", "Equal High"], c: 0 },
+                { q: "Uptrend တစ်ခု ပျက်ပြယ်သွားပြီလို့ ဘယ်အချိန်မှာ သတ်မှတ်မလဲ?", a: ["HH ထပ်မလုပ်နိုင်တော့ရင်", "Higher Low (HL) ကို ချိုးဆင်းသွားရင် (BOS)", "RSI 70 ကျော်ရင်"], c: 1 }
+            ],
+            2: [
+                { q: "Order Block (OB) ဆိုတာ ဘာလဲ?", a: ["Institutional အရောင်းအဝယ် အများအပြားရှိခဲ့တဲ့ နေရာ", "Indicator တစ်ခု", "သတင်းထွက်တဲ့အချိန်"], c: 0 },
+                { q: "ဘယ်လို OB မျိုးက ပိုပြီး အလုပ်လုပ်နိုင်စွမ်း (Probability) မြင့်သလဲ?", a: ["Imbalance (FVG) ကျန်ခဲ့တဲ့ OB", "သေးငယ်တဲ့ OB", "အရောင်တူတူပဲရှိတဲ့ OB"], c: 0 }
+            ],
+            3: [
+                { q: "Retail Traders တွေရဲ့ Stop Loss တွေကို အကြီးစား အဖွဲ့အစည်းတွေက ဘယ်လိုခေါ်သလဲ?", a: ["Profit", "Liquidity", "Support"], c: 1 },
+                { q: "Liquidity Sweep ဖြစ်ပြီးရင် Market က ဘာဖြစ်လေ့ရှိသလဲ?", a: ["Trend ပြောင်းပြန်လှန်ခြင်း (Reversal)", "Market ပိတ်သွားခြင်း", "Side-way သွားခြင်း"], c: 0 }
+            ],
+            4: [
+                { q: "Fair Value Gap (FVG) ဆိုတာ ဘာလဲ?", a: ["Candle ၃ ခုကြားရှိသော ကွာဟချက်", "Trend Line ချိုးခြင်း", "သတင်းကြောင့်ဖြစ်သော Gap"], c: 0 },
+                { q: "FVG က Market မှာ ဘယ်လို အခန်းကဏ္ဍက ပါသလဲ?", a: ["Magnet (ဆွဲငင်အား) အဖြစ် ပြန်ဖြည့်တင်းခြင်း", "အမြဲတမ်း ပြန်မဖြည့်ခြင်း", "ဘာမှမလုပ်ခြင်း"], c: 0 }
+            ],
+            5: [
+                { q: "Multi-Timeframe Analysis မှာ ဘယ်ကို အရင်ကြည့်ရမလဲ?", a: ["Higher Timeframe (HTF)", "Lower Timeframe (LTF)", "နှစ်သက်ရာ"], c: 0 },
+                { q: "LTF မှာ ဘာကို ရှာဖွေရမလဲ?", a: ["Daily Bias", "Entry Confirmation (CHoCH)", "Economic News"], c: 1 }
+            ],
+            6: [
+                { q: "Risk Management အရ အမြဲတမ်း ဘယ်လောက် Risk ယူသင့်သလဲ?", a: ["1-2%", "10-20%", "50%"], c: 0 },
+                { q: "Trading မှာ အမြတ်ရဖို့ ဘာက အဓိကကျသလဲ?", a: ["Win Rate မြင့်ဖို့", "Risk to Reward (RR) ကောင်းဖို့", "Indicator အများကြီးသုံးဖို့"], c: 1 }
+            ],
+            7: [
+                { q: "Trading Psychology အရ ရှုံးနိမ့်မှုကို ဘယ်လိုမြင်သင့်သလဲ?", a: ["စိတ်ပျက်စရာ", "သင်ခန်းစာယူစရာ Business Cost", "ကံမကောင်းခြင်း"], c: 1 }
+            ]
+        };
+
         const cardLessons = [
             { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
             { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
@@ -158,16 +160,48 @@
             { title: 'M-Average', images: ['Moving Average - 1.png', 'Moving Average - 2.png', 'Moving Average - 3.png', 'Moving Average - 4.png', 'Moving Average - 5.png'] }
         ];
 
+        window.showLesson = (num) => {
+            currentLesson = num;
+            document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-l' + num).classList.add('active');
+        };
+
+        window.startQuiz = () => {
+            const quizContent = document.getElementById('quiz-content');
+            const questions = allQuizzes[currentLesson];
+            if(!questions) return tg.showAlert("Coming Soon!");
+            
+            document.getElementById('quiz-title').innerText = "LESSON " + currentLesson + " QUIZ";
+            quizContent.innerHTML = '';
+            
+            questions.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.innerHTML = `<p style="margin-top:0; font-weight:600; color:#fff;">${qIdx + 1}. ${item.q}</p>`;
+                item.a.forEach((opt, oIdx) => {
+                    const btn = document.createElement('div');
+                    btn.className = 'quiz-option';
+                    btn.innerText = opt;
+                    btn.onclick = () => {
+                        if(oIdx === item.c) { btn.style.backgroundColor = '#059669'; btn.style.color = 'white'; tg.HapticFeedback.notificationOccurred('success'); }
+                        else { btn.style.backgroundColor = '#dc2626'; btn.style.color = 'white'; tg.HapticFeedback.notificationOccurred('error'); }
+                    };
+                    card.appendChild(btn);
+                });
+                quizContent.appendChild(card);
+            });
+            document.getElementById('quiz-overlay').classList.add('active');
+        };
+
+        window.closeQuiz = () => document.getElementById('quiz-overlay').classList.remove('active');
+
+        // Cards Logic
         const grid = document.getElementById('main-grid');
         cardLessons.forEach((lesson, index) => {
             const box = document.createElement('div');
             box.className = 'section-box';
-            box.innerHTML = `
-                <div class="section-label">${lesson.title}</div>
-                <div class="stack" onclick="openChapter(${index})">
-                    <div class="card-back"></div>
-                    <div class="card-front"><img src="${lesson.images[0]}" alt="${lesson.title}"></div>
-                </div>`;
+            box.innerHTML = `<div class="section-label">${lesson.title}</div><div class="stack" onclick="openChapter(${index})"><div class="card-back"></div><div class="card-front"><img src="${lesson.images[0]}" loading="lazy"></div></div>`;
             grid.appendChild(box);
         });
 
@@ -176,27 +210,12 @@
             const content = document.getElementById('viewer-content');
             document.getElementById('module-title').innerText = lesson.title.toUpperCase();
             content.innerHTML = '';
-            lesson.images.forEach(imgSrc => {
-                const img = document.createElement('img');
-                img.src = imgSrc;
-                img.className = 'expanded-img';
-                content.appendChild(img);
+            lesson.images.forEach(img => {
+                const i = document.createElement('img'); i.src = img; i.className = 'expanded-img'; content.appendChild(i);
             });
             document.getElementById('viewer').classList.add('active');
         };
-
         window.closeChapter = () => document.getElementById('viewer').classList.remove('active');
-
-        const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
-        window.showLesson = (num) => {
-            document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-l' + num).classList.add('active');
-        };
-
-        window.openQuiz = () => {
-            tg.openLink('https://fxkaram.github.io/quiz-app/'); // ဆရာကြီးရဲ့ Quiz link ထည့်ရန်
-        };
 
         onSnapshot(doc(db, "users", myUserId), (docSnap) => {
             if (docSnap.exists() && docSnap.data().is_approved === true) {
