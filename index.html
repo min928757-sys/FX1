@@ -33,7 +33,6 @@
             letter-spacing: 2px; font-family: 'Poppins'; flex-grow: 1;
         }
 
-        /* Music Button */
         #music-btn {
             background: var(--glass); border: 1px solid var(--gold);
             color: var(--gold); border-radius: 50%; width: 38px; height: 38px; 
@@ -53,7 +52,7 @@
         }
         .section-box:active { transform: scale(0.95); border-color: var(--gold); }
 
-        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.5px; height: 18px; overflow: hidden; }
+        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; letter-spacing: 0.5px; height: 18px; overflow: hidden; text-transform: uppercase; }
 
         .stack { position: relative; width: 100%; aspect-ratio: 3/4; }
         .card { position: absolute; width: 100%; height: 100%; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
@@ -72,7 +71,6 @@
         .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
         .expanded-img { width: 100%; border-radius: 10px; border: 1px solid var(--border); }
 
-        /* Hidden YouTube Player */
         #youtube-player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
         footer { text-align: center; padding: 40px; border-top: 1px solid var(--border); font-size: 10px; color: var(--gold); opacity: 0.6; letter-spacing: 1px; }
@@ -101,7 +99,6 @@
     <footer>FX KARAM EDUCATION • PREMIER ICT ACADEMY</footer>
 
     <script>
-        // Updated lessons with new entries
         const lessons = [
             { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
             { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
@@ -109,12 +106,13 @@
             { title: 'Inducement', images: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png', 'Inducement - 10Apr26 - 3.png', 'Inducement - 10Apr26 - 4.png', 'Inducement - 10Apr26 - 5.png'] },
             { title: 'OCL', images: ['OCL - 1.png', 'OCL - 2.png', 'OCL - 3.png', 'OCL - 4.png'] },
             { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] },
-            // New Modules added here
             { title: 'Market Mech', prefix: 'Market Mechanics', count: 6 },
-            { title: 'Quasimodo', prefix: 'Quasimodo', count: 4 }
+            { title: 'Quasimodo', prefix: 'Quasimodo', count: 4 },
+            // New Modules added
+            { title: 'OTE Setup', prefix: 'OTE Setup', count: 4 },
+            { title: 'Equal High', prefix: 'Equal High', count: 4 }
         ];
 
-        // Process new modules format
         const finalLessons = lessons.map(lesson => {
             if (lesson.prefix && lesson.count) {
                 const images = [];
@@ -161,7 +159,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // --- YouTube Music Integration ---
         var player;
         var isPlaying = false;
         
@@ -172,15 +169,8 @@
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
-                videoId: 'WSSIIC58Fsc',
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': 'WSSIIC58Fsc'
-                }
+                height: '0', width: '0', videoId: 'WSSIIC58Fsc',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'WSSIIC58Fsc' }
             });
         }
 
@@ -188,17 +178,14 @@
             const btn = document.getElementById('music-btn');
             if (!isPlaying) {
                 if(player && player.playVideo) player.playVideo();
-                btn.innerText = "⏸";
-                btn.classList.add('playing');
+                btn.innerText = "⏸"; btn.classList.add('playing');
                 isPlaying = true;
             } else {
                 if(player && player.pauseVideo) player.pauseVideo();
-                btn.innerText = "🎵";
-                btn.classList.remove('playing');
+                btn.innerText = "🎵"; btn.classList.remove('playing');
                 isPlaying = false;
             }
         }
-
         window.Telegram.WebApp.ready();
     </script>
 </body>
