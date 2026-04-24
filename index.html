@@ -13,13 +13,11 @@
             --bg: #0b0e11; 
             --glass: rgba(28, 33, 40, 0.7);
             --border: rgba(240, 185, 11, 0.2); 
-            --primary: #38bdf8;
         }
 
         body { 
             background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; 
             margin: 0; padding: 0; user-select: none;
-            background-image: radial-gradient(circle at 50% -20%, #1c2128, #0b0e11);
         }
 
         header { 
@@ -31,59 +29,67 @@
 
         header h1 { 
             font-family: 'Syncopate', sans-serif; font-size: 11px; font-weight: 700;
-            letter-spacing: 2px; text-transform: uppercase;
             background: linear-gradient(90deg, #f0b90b, #fff, #f0b90b);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 5px var(--gold-glow)); flex-grow: 1; margin: 0;
+            margin: 0;
         }
 
         .hidden { display: none !important; }
 
-        /* Locked Section */
-        #locked-section { text-align: center; padding: 50px 20px; }
-        .status-box { background-color: #f59e0b; color: white; padding: 15px; border-radius: 8px; font-weight: bold; margin-bottom: 20px; }
-        .buy-btn { background: var(--gold); color: black; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
-
-        /* Video Section (Now at Top) */
-        .video-module { padding: 15px; background: rgba(28,33,40,0.5); border-bottom: 1px solid var(--border); }
-        .nav-container { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 15px; scrollbar-width: none; }
-        .nav-btn { background: #334155; color: #fff; padding: 8px 15px; border-radius: 5px; border: none; font-size: 11px; cursor: pointer; }
+        /* Video Section */
+        .video-module { padding: 15px; background: rgba(28,33,40,0.5); }
+        .nav-container { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 12px; scrollbar-width: none; }
+        .nav-btn { background: #334155; color: #fff; padding: 6px 12px; border-radius: 5px; border: none; font-size: 11px; }
         .nav-btn.active { background: var(--gold); color: black; font-weight: bold; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--gold); }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--gold); margin-bottom: 15px; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-        /* Grid & Cards (Now at Bottom) */
-        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px 10px; }
-        .section-box { background: var(--glass); border: 1px solid var(--border); border-radius: 10px; padding: 8px; text-align: center; }
-        .section-label { font-size: 7px; font-weight: 700; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+        /* Quiz Button */
+        .quiz-btn { 
+            background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; 
+            border: none; padding: 12px; border-radius: 8px; font-weight: 700; 
+            width: 100%; cursor: pointer; text-transform: uppercase; font-size: 12px;
+            box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3); margin-bottom: 10px;
+        }
+
+        /* Chapter Grid (Clean UI) */
+        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 10px; }
+        .section-box { text-align: center; }
+        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 8px; text-transform: uppercase; }
+        
         .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; }
-        .card { position: absolute; width: 100%; height: 100%; border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .card img { width: 100%; height: 100%; object-fit: cover; }
-        .card:nth-child(2) { transform: translate(2px, 2px); opacity: 0.4; }
+        /* နောက်ကပုံ (Shadow/Back card) */
+        .card-back { 
+            position: absolute; width: 90%; height: 90%; right: 0; top: 0;
+            background: var(--bg); border: 1px solid var(--gold); border-radius: 5px; 
+            opacity: 0.3; z-index: 1;
+        }
+        /* ရှေ့ဆုံးပုံ (Main card) */
+        .card-front { 
+            position: absolute; width: 92%; height: 92%; left: 0; bottom: 0;
+            border-radius: 5px; overflow: hidden; border: 1.5px solid var(--gold);
+            z-index: 2; box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+        }
+        .card-front img { width: 100%; height: 100%; object-fit: cover; }
 
         /* Overlay Viewer */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 14, 17, 0.98); z-index: 2000; display: none; flex-direction: column; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
         .overlay.active { display: flex; }
-        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--bg); }
+        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
         .viewer-scroll { padding: 15px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
         .expanded-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
 
-        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border); font-size: 9px; color: var(--gold); opacity: 0.6; letter-spacing: 1px; }
+        footer { text-align: center; padding: 20px; font-size: 9px; color: var(--gold); opacity: 0.5; }
     </style>
 </head>
 <body>
 
     <header>
-        <div style="width: 38px;"></div>
+        <div style="width: 40px;"></div>
         <h1>FX KARAM ACADEMY</h1>
-        <div style="color: var(--gold); font-size: 9px; font-weight: bold;" id="user-id-display">...</div>
+        <div id="user-id-display" style="color: var(--gold); font-size: 9px; font-weight: bold;">ID: ...</div>
     </header>
-
-    <div id="locked-section">
-        <div class="status-box">ACCESS REQUIRED (FX KARAM)</div>
-        <p style="font-size: 13px;">KPay: <b>09456507877</b></p>
-        <button class="buy-btn" onclick="window.Telegram.WebApp.openTelegramLink('https://t.me/+cbvtPsUU2gExYmY1')">📸 SEND SCREENSHOT</button>
-    </div>
 
     <div id="unlocked-section" class="hidden">
         <div class="video-module">
@@ -96,10 +102,10 @@
                 <button class="nav-btn" id="btn-l6" onclick="showLesson(6)">L-6</button>
                 <button class="nav-btn" id="btn-l7" onclick="showLesson(7)">L-7</button>
             </div>
-            <div id="lesson-view">
-                <h4 id="lesson-title" style="color:var(--gold); font-size: 12px; margin: 10px 0;">Lesson 1: Market Structure</h4>
-                <div class="video-container"><iframe id="video-frame" src="https://www.youtube.com/embed/jyad4g6F8FU" frameborder="0" allowfullscreen></iframe></div>
+            <div class="video-container">
+                <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
             </div>
+            <button class="quiz-btn" onclick="openQuiz()">✍️ Take Lesson Quiz</button>
         </div>
 
         <div class="chapter-grid" id="main-grid"></div>
@@ -107,13 +113,13 @@
 
     <div id="viewer" class="overlay">
         <div class="overlay-header">
-            <span id="module-title" style="color:white; font-size:10px; font-weight:700;">MODULE</span>
-            <div style="color: var(--gold); cursor: pointer; font-size: 12px;" onclick="closeChapter()">[ CLOSE ]</div>
+            <span id="module-title" style="color:white; font-size:11px; font-weight:700;"></span>
+            <div style="color: var(--gold); cursor: pointer;" onclick="closeChapter()">[ CLOSE ]</div>
         </div>
         <div class="viewer-scroll" id="viewer-content"></div>
     </div>
 
-    <footer>FX KARAM EDUCATION</footer>
+    <footer>© 2026 FX KARAM ACADEMY</footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -131,25 +137,25 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
+        tg.ready();
 
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
         document.getElementById('user-id-display').innerText = "ID: " + myUserId;
 
-        // 12 POST CARDS DATA
+        // GitHub အမည်များအတိုင်း စစ်ဆေးပြင်ဆင်ထားသော Data
         const cardLessons = [
-            { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png'] },
-            { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png'] },
-            { title: 'Gartley', images: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png', 'Gartley Pattern - 3.png'] },
-            { title: 'Inducement', images: ['Inducement - 1.png', 'Inducement - 2.png', 'Inducement - 3.png'] },
-            { title: 'OCL', images: ['OCL - 1.png', 'OCL - 2.png'] },
-            { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png'] },
-            { title: 'Market Mech', images: ['Market Mech - 1.png', 'Market Mech - 2.png'] },
-            { title: 'Quasimodo', images: ['Quasimodo - 1.png', 'Quasimodo - 2.png'] },
-            { title: 'OTE Setup', images: ['OTE Setup - 1.png', 'OTE Setup - 2.png'] },
-            { title: 'Equal High', images: ['Equal High - 1.png', 'Equal High - 2.png'] },
-            { title: 'Risk MGMT', images: ['Risk Management - 1.png', 'Risk Management - 2.png'] },
-            { title: 'Trendline', images: ['Trendline - 1.png', 'Trendline - 2.png'] }
+            { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
+            { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
+            { title: 'Gartley', images: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png', 'Gartley Pattern - 3.png', 'Gartley Pattern - 4.png', 'Gartley Pattern - 5.png'] },
+            { title: 'Inducement', images: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png', 'Inducement - 10Apr26 - 3.png', 'Inducement - 10Apr26 - 4.png', 'Inducement - 10Apr26 - 5.png'] },
+            { title: 'OCL', images: ['OCL - 1.png', 'OCL - 2.png', 'OCL - 3.png', 'OCL - 4.png'] },
+            { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] },
+            { title: 'Market Mech', images: ['Market Mechanics - 1.png', 'Market Mechanics - 2.png', 'Market Mechanics - 3.png', 'Market Mechanics - 4.png', 'Market Mechanics - 5.png', 'Market Mechanics - 6.png'] },
+            { title: 'Quasimodo', images: ['Quasimodo - 1.png', 'Quasimodo - 2.png', 'Quasimodo - 3.png', 'Quasimodo - 4.png'] },
+            { title: 'OTE Setup', images: ['OTE Setup - 1.png', 'OTE Setup - 2.png', 'OTE Setup - 3.png', 'OTE Setup - 4.png'] },
+            { title: 'Equal High', images: ['Equal High - 1.png', 'Equal High - 2.png', 'Equal High - 3.png', 'Equal High - 4.png'] },
+            { title: 'Risk MGMT', images: ['Risk Management - 1.png', 'Risk Management - 2.png', 'Risk Management - 3.png', 'Risk Management - 4.png'] },
+            { title: 'M-Average', images: ['Moving Average - 1.png', 'Moving Average - 2.png', 'Moving Average - 3.png', 'Moving Average - 4.png', 'Moving Average - 5.png'] }
         ];
 
         const grid = document.getElementById('main-grid');
@@ -159,8 +165,8 @@
             box.innerHTML = `
                 <div class="section-label">${lesson.title}</div>
                 <div class="stack" onclick="openChapter(${index})">
-                    <div class="card"><img src="${lesson.images[0]}"></div>
-                    <div class="card"><img src="${lesson.images[1] || lesson.images[0]}"></div>
+                    <div class="card-back"></div>
+                    <div class="card-front"><img src="${lesson.images[0]}" alt="${lesson.title}"></div>
                 </div>`;
             grid.appendChild(box);
         });
@@ -182,24 +188,22 @@
         window.closeChapter = () => document.getElementById('viewer').classList.remove('active');
 
         const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
-        const titles = { 1:"Market Structure", 2:"Order Blocks", 3:"Liquidity", 4:"Fair Value Gaps", 5:"Timeframe Correlation", 6:"Risk Management", 7:"Trading Psychology" };
-
         window.showLesson = (num) => {
-            document.getElementById('lesson-title').innerText = "Lesson " + num + ": " + titles[num];
             document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-l' + num).classList.add('active');
         };
 
-        if (myUserId !== "Guest") {
-            onSnapshot(doc(db, "users", myUserId), (docSnap) => {
-                if (docSnap.exists() && docSnap.data().is_approved === true) {
-                    document.getElementById('locked-section').classList.add('hidden');
-                    document.getElementById('unlocked-section').classList.remove('hidden');
-                    showLesson(1);
-                }
-            });
-        }
+        window.openQuiz = () => {
+            tg.openLink('https://fxkaram.github.io/quiz-app/'); // ဆရာကြီးရဲ့ Quiz link ထည့်ရန်
+        };
+
+        onSnapshot(doc(db, "users", myUserId), (docSnap) => {
+            if (docSnap.exists() && docSnap.data().is_approved === true) {
+                document.getElementById('unlocked-section').classList.remove('hidden');
+                showLesson(1);
+            }
+        });
     </script>
 </body>
 </html>
