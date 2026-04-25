@@ -2,44 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FX KARAM ACADEMY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --gold: #f0b90b; --bg: #0b0e11; --border: rgba(240, 185, 11, 0.2); }
-        body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
-        header { background: rgba(28, 33, 40, 0.85); backdrop-filter: blur(10px); padding: 12px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
-        header h1 { font-family: 'Syncopate', sans-serif; font-size: 10px; background: linear-gradient(90deg, #f0b90b, #fff, #f0b90b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        :root { --gold: #f0b90b; --bg: #0b0e11; --card: #1c2128; --border: rgba(240, 185, 11, 0.2); }
+        body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+        
+        header { background: rgba(28, 33, 40, 0.95); backdrop-filter: blur(10px); padding: 15px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { font-family: 'Syncopate', sans-serif; font-size: 11px; background: linear-gradient(90deg, #f0b90b, #fff, #f0b90b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; letter-spacing: 1px; }
+
         .hidden { display: none !important; }
-        .video-module { padding: 12px; background: rgba(28,33,40,0.5); border-bottom: 1px solid var(--border); }
-        .nav-container { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 5px; }
-        .nav-btn { background: #1c2128; color: #888; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border); font-size: 10px; font-weight: bold; flex-shrink: 0; }
-        .nav-btn.active { background: var(--gold); color: black; border-color: var(--gold); }
-        .video-wrapper { width: 95%; max-width: 500px; margin: 0 auto 10px auto; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--gold); }
+
+        /* Video Section */
+        .video-section { padding: 15px; background: var(--card); border-bottom: 1px solid var(--border); }
+        .nav-wrapper { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 5px; scrollbar-width: none; }
+        .nav-wrapper::-webkit-scrollbar { display: none; }
+        .nav-btn { background: #2d333b; color: #888; padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 800; flex-shrink: 0; cursor: pointer; transition: 0.2s; }
+        .nav-btn.active { background: var(--gold); color: black; border-color: var(--gold); box-shadow: 0 0 10px rgba(240, 185, 11, 0.3); }
+        
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--gold); background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .action-btns { display: flex; flex-direction: column; gap: 8px; max-width: 500px; margin: 0 auto; }
-        .quiz-btn { background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 11px; border: none; cursor: pointer; text-transform: uppercase; }
-        .lb-toggle-btn { background: #2d333b; color: var(--gold); padding: 10px; border-radius: 6px; font-weight: 700; font-size: 10px; border: 1px solid var(--gold); cursor: pointer; }
-        .leaderboard-container { margin: 15px auto; max-width: 500px; background: #161b22; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; display: none; }
-        .leaderboard-container.active { display: block; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        th { background: #21262d; color: var(--gold); padding: 12px; text-align: left; }
-        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 15px; }
-        .section-box { text-align: center; }
-        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; }
-        .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; border: 1.5px solid var(--gold); border-radius: 5px; overflow: hidden; }
-        .stack img { width: 100%; height: 100%; object-fit: cover; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
-        .overlay.active { display: flex; }
-        .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); background: #1c2128; }
-        .quiz-body { padding: 25px; text-align: center; }
-        .opt-btn { background: #2d333b; padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 10px; cursor: pointer; text-align: left; font-size: 14px; }
-        .opt-btn.correct { background: #059669 !important; border-color: #34d399; }
-        .opt-btn.wrong { background: #dc2626 !important; border-color: #f87171; }
-        .next-btn { margin-top: 20px; background: var(--gold); color: black; border: none; padding: 14px; border-radius: 8px; font-weight: 700; width: 100%; display: none; }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .action-btn { padding: 14px; border-radius: 10px; font-weight: 800; font-size: 11px; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+        .quiz-trigger { background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; }
+        .lb-trigger { background: #2d333b; color: var(--gold); border: 1px solid var(--gold); }
+
+        /* Grid Section */
+        .grid-title { padding: 25px 15px 10px; font-size: 11px; color: var(--gold); font-weight: 800; letter-spacing: 1px; }
+        .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px 30px; }
+        .card-box { text-align: center; }
+        .card-label { font-size: 9px; font-weight: 700; color: #888; margin-bottom: 8px; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+        .card-thumb { width: 100%; aspect-ratio: 3/4; border-radius: 8px; border: 1.2px solid var(--border); overflow: hidden; background: #161b22; transition: 0.2s; }
+        .card-thumb:active { transform: scale(0.95); border-color: var(--gold); }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Fullscreen Overlay Style */
+        .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
+        .overlay.active { display: flex; animation: slideIn 0.25s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .ov-header { padding: 18px; display: flex; justify-content: space-between; align-items: center; background: var(--card); border-bottom: 1px solid var(--border); }
+        .ov-body { flex: 1; padding: 20px; overflow-y: auto; }
+
+        /* Quiz Layout */
+        .q-text { font-size: 19px; line-height: 1.6; margin-bottom: 30px; font-weight: 600; color: #fff; }
+        .opt-list { display: flex; flex-direction: column; gap: 14px; }
+        .opt-item { background: #2d333b; padding: 18px; border-radius: 12px; border: 1.5px solid var(--border); font-size: 15px; font-weight: 500; transition: 0.2s; }
+        .opt-item.correct { background: #059669 !important; border-color: #34d399; color: white; }
+        .opt-item.wrong { background: #dc2626 !important; border-color: #f87171; color: white; }
+        
+        .next-btn { margin-top: 35px; background: var(--gold); color: black; border: none; padding: 18px; border-radius: 12px; font-weight: 800; width: 100%; font-size: 14px; }
+
+        /* Ranking Table */
+        .lb-table { width: 100%; border-collapse: collapse; }
+        .lb-table th { color: var(--gold); text-align: left; padding: 15px; font-size: 11px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+        .lb-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 14px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -47,58 +67,58 @@
     <header>
         <div style="width: 40px;"></div>
         <h1>FX KARAM ACADEMY</h1>
-        <div id="user-id-display" style="color: var(--gold); font-size: 9px; font-weight: bold;">...</div>
+        <div id="user-display" style="color: var(--gold); font-size: 10px; font-weight: 900;">...</div>
     </header>
 
-    <div id="unlocked-section" class="hidden">
-        <div class="video-module">
-            <div class="nav-container">
-                <button class="nav-btn active" id="btn-l1" onclick="showLesson(1)">L-1</button>
-                <button class="nav-btn" id="btn-l2" onclick="showLesson(2)">L-2</button>
-                <button class="nav-btn" id="btn-l3" onclick="showLesson(3)">L-3</button>
-                <button class="nav-btn" id="btn-l4" onclick="showLesson(4)">L-4</button>
-                <button class="nav-btn" id="btn-l5" onclick="showLesson(5)">L-5</button>
-                <button class="nav-btn" id="btn-l6" onclick="showLesson(6)">L-6</button>
-                <button class="nav-btn" id="btn-l7" onclick="showLesson(7)">L-7</button>
+    <div id="app-content" class="hidden">
+        <div class="video-section">
+            <div class="nav-wrapper" id="nav-tabs"></div>
+            
+            <div class="video-container">
+                <iframe id="main-video" src="" frameborder="0" allowfullscreen></iframe>
             </div>
-            <div class="video-wrapper">
-                <div class="video-container">
-                    <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
-                </div>
-            </div>
-            <div class="action-btns">
-                <button class="quiz-btn" id="dynamic-quiz-btn" onclick="openQuiz()">✍️ LESSON 1 QUIZ</button>
-                <button class="lb-toggle-btn" onclick="toggleLeaderboard()">🏆 SHOW LEADERBOARD</button>
-            </div>
-            <div id="leaderboard-ui" class="leaderboard-container">
-                <table>
-                    <thead><tr><th style="width:40px">#</th><th>TRADER</th><th style="text-align:right">POINTS</th></tr></thead>
-                    <tbody id="lb-table-body"></tbody>
-                </table>
+
+            <div class="btn-group">
+                <button class="action-btn quiz-trigger" id="quiz-btn-label" onclick="startQuiz()">✍️ START QUIZ</button>
+                <button class="action-btn lb-trigger" onclick="openLeaderboard()">🏆 RANKING</button>
             </div>
         </div>
-        <div class="chapter-grid" id="main-grid"></div>
+
+        <div class="grid-title">EDUCATIONAL CARDS</div>
+        <div class="chapter-grid" id="card-grid"></div>
     </div>
 
-    <div id="quiz-overlay" class="overlay">
-        <div class="overlay-header">
-            <span id="quiz-header-title" style="color:var(--gold); font-weight:700; font-size: 11px;"></span>
-            <div style="color: #ff4d4d; cursor: pointer; font-size: 11px; font-weight:bold" onclick="closeQuiz()">[ EXIT ]</div>
+    <div id="quiz-ov" class="overlay">
+        <div class="ov-header">
+            <span id="quiz-title" style="color: var(--gold); font-weight: 800; font-size: 13px;"></span>
+            <div style="color: #ff4d4d; font-weight: 800; font-size: 13px; cursor: pointer; padding: 5px;" onclick="closeQuiz()">EXIT</div>
         </div>
-        <div class="quiz-body">
-            <div id="question-text" style="font-size: 18px; margin-bottom: 20px; text-align: left;"></div>
-            <div id="options-container" style="display: flex; flex-direction: column;"></div>
-            <div id="feedback-text" style="margin-top: 15px; font-weight: bold;"></div>
-            <button id="next-btn" class="next-btn" onclick="nextQuestion()">NEXT QUESTION</button>
+        <div class="ov-body">
+            <div class="q-text" id="q-text"></div>
+            <div class="opt-list" id="opt-container"></div>
+            <button id="next-btn" class="next-btn hidden" onclick="handleNext()">NEXT QUESTION</button>
         </div>
     </div>
 
-    <div id="viewer" class="overlay">
-        <div class="overlay-header">
-            <span id="module-title" style="color:white; font-size:11px; font-weight:700;"></span>
-            <div style="color: var(--gold); cursor: pointer;" onclick="closeChapter()">[ CLOSE ]</div>
+    <div id="lb-ov" class="overlay">
+        <div class="ov-header">
+            <span style="color: var(--gold); font-weight: 800;">TOP 10 TRADERS</span>
+            <div style="color: #888; font-weight: 700; cursor: pointer;" onclick="closeLeaderboard()">CLOSE</div>
         </div>
-        <div class="viewer-scroll" id="viewer-content" style="padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;"></div>
+        <div class="ov-body">
+            <table class="lb-table">
+                <thead><tr><th>RANK</th><th>TRADER</th><th style="text-align:right">SCORE</th></tr></thead>
+                <tbody id="lb-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="viewer-ov" class="overlay">
+        <div class="ov-header">
+            <span id="viewer-title" style="font-weight: 800; color: #fff;"></span>
+            <div style="color: var(--gold); font-weight: 700; cursor: pointer;" onclick="closeViewer()">CLOSE</div>
+        </div>
+        <div class="ov-body" id="viewer-content"></div>
     </div>
 
     <script type="module">
@@ -109,180 +129,182 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const tg = window.Telegram.WebApp;
+        tg.expand();
 
-        let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
-        let myName = tg.initDataUnsafe?.user?.first_name || "Trader";
-        document.getElementById('user-id-display').innerText = "ID: " + myUserId;
+        let userId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
+        let userName = tg.initDataUnsafe?.user?.first_name || "Trader";
+        document.getElementById('user-display').innerText = "ID: " + userId;
 
-        const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
-        let currentLesson = 1;
-        let currentQIndex = 0;
-        let answered = false;
-
-        // 35 QUESTIONS (5 per lesson)
-        const allQuizzes = {
-            1: [
-                { q: "၁။ Uptrend မှာ Previous High ကို ဖောက်ထွက်သွားတာကို ဘယ်လိုခေါ်သလဲ?", a: ["BOS", "CHoCH", "Liquidity"], correct: 0 },
-                { q: "၂။ Downtrend တစ်ခုမှာ ဘယ်လို Structure မျိုးရှိသလဲ?", a: ["HH & HL", "LH & LL", "Equal High"], correct: 1 },
-                { q: "၃။ Trend ပြောင်းလဲမှုကို ပထမဆုံးပြသတဲ့ လက္ခဏာက ဘာလဲ?", a: ["BOS", "CHoCH", "Order Block"], correct: 1 },
-                { q: "၄။ Uptrend မှာ ခေတ္တပြန်ဆင်းလာတဲ့ အနိမ့်ပိုင်းကို ဘယ်လိုခေါ်သလဲ?", a: ["Lower Low", "Higher Low", "Market Gap"], correct: 1 },
-                { q: "၅။ 'Higher High' တွေ ဆက်တိုက်ဖြစ်နေတာက ဘယ်လို Market လဲ?", a: ["Bearish", "Bullish", "Sideways"], correct: 1 }
-            ],
-            2: [
-                { q: "၁။ Order Block ဆိုတာ ဘာလဲ?", a: ["အရောင်တူ Candle များ", "နောက်ဆုံးဖြစ်ပေါ်ခဲ့တဲ့ ဆန့်ကျင်ဘက် Candle", "Market Gap"], correct: 1 },
-                { q: "၂။ Bullish Order Block ကို ဘယ်နေရာမှာ ရှာရမလဲ?", a: ["ဈေးမတက်ခင် နောက်ဆုံးကျခဲ့တဲ့ အနီရောင် Candle", "ဈေးမကျခင် နောက်ဆုံးတက်ခဲ့တဲ့ အစိမ်းရောင် Candle", "Chart ရဲ့ အလယ်"], correct: 0 },
-                { q: "၃။ Bearish Order Block ဆိုတာ ဘယ်လိုနေရာမျိုးလဲ?", a: ["Demand Zone", "Supply Zone", "Sideways"], correct: 1 },
-                { q: "၄။ Order Block တစ်ခုက ဘယ်အချိန်မှာ ပိုအားကောင်းသလဲ?", a: ["BOS ဖြစ်စေခဲ့လျှင်", "အရွယ်အစားသေးလျှင်", "အရောင်တူလျှင်"], correct: 0 },
-                { q: "၅။ Supply Zone မှာ ဘယ်လို Setup မျိုး ရှာရမလဲ?", a: ["Buy Setup", "Sell Setup", "Hold"], correct: 1 }
-            ],
-            3: [
-                { q: "၁။ Liquidity ဆိုတာ ဘာကို ရည်ညွှန်းတာလဲ?", a: ["ဈေးနှုန်းအတက်အကျ", "Stop Loss များ စုပုံနေသောနေရာ", "Market Gap"], correct: 1 },
-                { q: "၂။ Retail Trader တွေက Equal High/Low တွေကို ဘယ်လိုမြင်ကြသလဲ?", a: ["Liquidity Sweep", "Support & Resistance", "BOS"], correct: 1 },
-                { q: "၃။ Smart Money တွေက ဘာကြောင့် Liquidity Sweep လုပ်တာလဲ?", a: ["Trend ပြောင်းချင်လို့", "သူတို့ရဲ့ Order တွေဖြည့်ဖို့ လောင်စာယူခြင်း", "ဈေးကွက်ပိတ်ဖို့"], correct: 1 },
-                { q: "၄။ Trendline အောက်မှာ ဘာတွေရှိနေတတ်သလဲ?", a: ["Liquidity (Stop Losses)", "BOS", "Order Block"], correct: 0 },
-                { q: "၅။ 'Stop Hunt' ဆိုတာ ဘာလဲ?", a: ["အမြတ်ယူခြင်း", "Liquidity Sweep လုပ်ခြင်း", "အရောင်းရပ်ခြင်း"], correct: 1 }
-            ],
-            4: [
-                { q: "၁။ Fair Value Gap (FVG) ကို Candle ဘယ်နှခုနဲ့ ကြည့်ရသလဲ?", a: ["၂ ခု", "၃ ခု", "၅ ခု"], correct: 1 },
-                { q: "၂။ FVG ဖြစ်ပေါ်ရခြင်းရဲ့ အဓိက အကြောင်းရင်းက ဘာလဲ?", a: ["Liquidity Sweep", "Imbalance (မမျှတမှု)", "Market Close"], correct: 1 },
-                { q: "၃။ Bullish FVG မှာ ဘယ်နေရာကို 'Gap' အဖြစ် သတ်မှတ်သလဲ?", a: ["C1 High & C3 Low", "C2 Size", "C1 & C2 Gap"], correct: 0 },
-                { q: "၄။ ဈေးနှုန်းက FVG တွေဆီကို ဘာကြောင့် ပြန်လာတတ်တာလဲ?", a: ["Trend ပြောင်းဖို့", "Rebalance လုပ်ရန်", "Support ရှာရန်"], correct: 1 },
-                { q: "၅။ အကောင်းဆုံး Entry နေရာက ဘယ်လိုမျိုးလဲ?", a: ["FVG Only", "FVG + Order Block", "Gap ကြီးလျှင်"], correct: 1 }
-            ],
-            5: [
-                { q: "၁။ Top-Down Analysis ဆိုတာ ဘာလဲ?", a: ["Lower to Higher", "Higher to Lower", "Indicator Only"], correct: 1 },
-                { q: "၂။ Higher Timeframe ကို ဘာအတွက် အဓိကသုံးသလဲ?", a: ["Execution", "Bias/Direction", "Scalping"], correct: 1 },
-                { q: "၃။ Lower Timeframe ကို ဘာအတွက် အဓိကသုံးသလဲ?", a: ["Trend Knowledge", "Refined Entry", "News Trading"], correct: 1 },
-                { q: "၄။ နိုင်ခြေအမြင့်ဆုံး Setup ဖြစ်ဖို့ ဘာလုပ်ရမလဲ?", a: ["HTF Context နှင့် ညီရမည်", "ချက်ချင်း Buy မည်", "Timeframe တစ်ခုတည်းကြည့်မည်"], correct: 0 },
-                { q: "၅။ Market Structure ပိုခိုင်မာသော Timeframe မှာ ဘယ်ဟာလဲ?", a: ["1m", "15m", "Daily"], correct: 2 }
-            ],
-            6: [
-                { q: "၁။ Trading မှာ အရေးကြီးဆုံးအချက်က ဘာလဲ?", a: ["BOS", "Risk Management", "Signal"], correct: 1 },
-                { q: "၂။ '1% Rule' အရ Trade တစ်ခုမှာ ဘယ်လောက်ရှုံးခံသင့်သလဲ?", a: ["5%", "1%", "10%"], correct: 1 },
-                { q: "၃။ Risk to Reward 1:3 ဆိုတာ ဘာလဲ?", a: ["Risk 1 for Reward 3", "Risk 3 for Reward 1", "Equal Risk/Reward"], correct: 0 },
-                { q: "၄။ Position Sizing က ဘာကို ထိန်းချုပ်ပေးသလဲ?", a: ["Win Rate", "Risk Amount", "Profit Speed"], correct: 1 },
-                { q: "၅။ Trader ၏ ပထမဆုံးတာဝန်မှာ ဘာလဲ?", a: ["အရင်းအနှီးကို ထိန်းသိမ်းခြင်း", "အမြန်ချမ်းသာရန်", "Trade များများလုပ်ရန်"], correct: 0 }
-            ],
-            7: [
-                { q: "၁။ Trading အောင်မြင်မှု၏ ၈၀ ရာခိုင်နှုန်းက ဘာလဲ?", a: ["Strategy", "Psychology", "News"], correct: 1 },
-                { q: "၂။ Revenge Trading ဆိုတာ ဘာလဲ?", a: ["အမြတ်ပြန်ယူခြင်း", "အရှုံးကို စိတ်တိုပြီး ဇွတ်ပြန်ဝင်ခြင်း", "Plan အတိုင်းလုပ်ခြင်း"], correct: 1 },
-                { q: "၃။ FOMO ဆိုတာ ဘာကို ဆိုလိုတာလဲ?", a: ["Fear Of Missing Out", "Fear Of Losing Money", "Full Of Market Order"], correct: 0 },
-                { q: "၄။ Professional Trader က Loss ကို ဘယ်လိုမြင်သလဲ?", a: ["ကျရှုံးမှု", "Business Expense", "ကံဆိုးမှု"], correct: 1 },
-                { q: "၅။ Win Rate ထက် ပိုအရေးကြီးသောအရာမှာ ဘာလဲ?", a: ["Consistency & Discipline", "Lot Size", "Big Profit"], correct: 0 }
+        // ALL 35 QUESTIONS (5 per lesson)
+        const lessonData = {
+            1: { vid: "jyad4g6F8FU", quiz: [
+                { q: "၁။ Uptrend မှာ Previous High ကို ဖောက်ထွက်သွားတာကို ဘယ်လိုခေါ်သလဲ?", a: ["BOS", "CHoCH", "Liquidity"], c: 0 },
+                { q: "၂။ Downtrend တစ်ခုမှာ ဘယ်လို Structure မျိုးရှိသလဲ?", a: ["HH & HL", "LH & LL", "Equal High"], c: 1 },
+                { q: "၃။ Trend ပြောင်းလဲမှုကို ပထမဆုံးပြတဲ့ လက္ခဏာက ဘာလဲ?", a: ["BOS", "CHoCH", "Order Block"], c: 1 },
+                { q: "၄။ Uptrend မှာ ခေတ္တပြန်ဆင်းလာတဲ့ အနိမ့်ပိုင်းကို ဘယ်လိုခေါ်သလဲ?", a: ["Lower Low", "Higher Low", "Market Gap"], c: 1 },
+                { q: "၅။ 'Higher High' တွေ ဆက်တိုက်ဖြစ်နေတာက ဘယ်လို Market လဲ?", a: ["Bearish", "Bullish", "Sideways"], c: 1 }
+            ]},
+            2: { vid: "DDLsFro2bpc", quiz: [
+                { q: "၁။ Order Block ဆိုတာ ဘာလဲ?", a: ["အရောင်တူ Candle များ", "နောက်ဆုံးဖြစ်ပေါ်ခဲ့တဲ့ ဆန့်ကျင်ဘက် Candle", "Market Gap"], c: 1 },
+                { q: "၂။ Bullish Order Block ကို ဘယ်နေရာမှာ ရှာရမလဲ?", a: ["ဈေးမတက်ခင် နောက်ဆုံးကျခဲ့တဲ့ အနီရောင် Candle", "ဈေးမကျခင် နောက်ဆုံးတက်ခဲ့တဲ့ အစိမ်းရောင် Candle", "Chart ရဲ့ အလယ်"], c: 0 },
+                { q: "၃။ Bearish Order Block ဆိုတာ ဘယ်လိုနေရာမျိုးလဲ?", a: ["Demand Zone", "Supply Zone", "Sideways"], c: 1 },
+                { q: "၄။ Order Block တစ်ခုက ဘယ်အချိန်မှာ ပိုအားကောင်းသလဲ?", a: ["BOS ဖြစ်စေခဲ့လျှင်", "အရွယ်အစားသေးလျှင်", "အရောင်တူလျှင်"], c: 0 },
+                { q: "၅။ Supply Zone မှာ ဘယ်လို Setup မျိုး ရှာရမလဲ?", a: ["Buy Setup", "Sell Setup", "Hold"], c: 1 }
+            ]},
+            3: { vid: "DwP9zFAC5EA", quiz: [
+                { q: "၁။ Liquidity ဆိုတာ ဘာကို ရည်ညွှန်းတာလဲ?", a: ["Trend", "Stop Loss များ စုပုံနေသောနေရာ", "Market Gap"], c: 1 },
+                { q: "၂။ Retail Trader တွေက Equal High တွေကို ဘယ်လိုမြင်သလဲ?", a: ["Liquidity Sweep", "Resistance", "BOS"], c: 1 },
+                { q: "၃။ Smart Money တွေက ဘာကြောင့် Liquidity Sweep လုပ်တာလဲ?", a: ["Trend ပြောင်းချင်လို့", "Order ဖြည့်ဖို့ လောင်စာယူခြင်း", "Market Close"], c: 1 },
+                { q: "၄။ Trendline အောက်မှာ ဘာတွေရှိနေတတ်သလဲ?", a: ["Stop Losses", "BOS", "Order Block"], c: 0 },
+                { q: "၅။ 'Stop Hunt' ဆိုတာ ဘာလဲ?", a: ["Profit Taking", "Liquidity Sweep လုပ်ခြင်း", "Buy Order"], c: 1 }
+            ]},
+            4: { vid: "L_zlR6ZxXNg", quiz: [
+                { q: "၁။ FVG ကို Candle ဘယ်နှခုနဲ့ ကြည့်ရသလဲ?", a: ["၂ ခု", "၃ ခု", "၅ ခု"], c: 1 },
+                { q: "၂။ FVG ဖြစ်ရခြင်း၏ အဓိက အကြောင်းရင်း?", a: ["Liquidity Sweep", "Imbalance (မမျှတမှု)", "Market Gap"], c: 1 },
+                { q: "၃။ Bullish FVG မှာ ဘယ်နေရာကို Gap လို့ ခေါ်လဲ?", a: ["C1 High & C3 Low", "C2 Size", "Candle Color"], c: 0 },
+                { q: "၄။ ဈေးနှုန်းက FVG ဆီ ဘာလို့ ပြန်လာတတ်တာလဲ?", a: ["Trend ပြောင်းဖို့", "Rebalance လုပ်ရန်", "Resistance ရှာရန်"], c: 1 },
+                { q: "၅။ အကောင်းဆုံး Entry က ဘယ်လိုမျိုးလဲ?", a: ["FVG Only", "FVG + Order Block", "Large Gap"], c: 1 }
+            ]},
+            5: { vid: "GoRcLqAsYUg", quiz: [
+                { q: "၁။ Top-Down Analysis ဆိုတာ ဘာလဲ?", a: ["Lower to Higher", "Higher to Lower", "Indicator Only"], c: 1 },
+                { q: "၂။ Higher Timeframe ကို ဘာအတွက် သုံးသလဲ?", a: ["Entry Point", "Bias/Direction", "Scalping"], c: 1 },
+                { q: "၃။ Lower Timeframe ကို ဘာအတွက် သုံးသလဲ?", a: ["Direction", "Execution/Entry", "Long term"], c: 1 },
+                { q: "၄။ High Probability Setup ဖြစ်ဖို့ ဘာလိုလဲ?", a: ["HTF Context နှင့် ညီရမည်", "ချက်ချင်း Buy ရမည်", "Color တူရမည်"], c: 0 },
+                { q: "၅။ ပိုခိုင်မာသော Structure က ဘယ်မှာရှိလဲ?", a: ["1m", "15m", "Daily"], c: 2 }
+            ]},
+            6: { vid: "n7owfWxBxmw", quiz: [
+                { q: "၁။ Trading မှာ အရေးကြီးဆုံးက ဘာလဲ?", a: ["Setup", "Risk Management", "Signal"], c: 1 },
+                { q: "၂။ '1% Rule' အရ Trade တစ်ခုမှာ ဘယ်လောက်ရှုံးခံမလဲ?", a: ["5%", "1%", "10%"], c: 1 },
+                { q: "၃။ Risk to Reward 1:3 ဆိုတာ ဘာလဲ?", a: ["Risk 1 for Reward 3", "Risk 3 for Reward 1", "No Risk"], c: 0 },
+                { q: "၄။ Position Sizing က ဘာကို ထိန်းချုပ်တာလဲ?", a: ["Profit", "Risk Amount", "Win Rate"], c: 1 },
+                { q: "၅။ Trader ၏ ပထမဆုံးတာဝန်မှာ?", a: ["အရင်းအနှီး ထိန်းသိမ်းခြင်း", "အမြန်ချမ်းသာရန်", "Daily Entry"], c: 0 }
+            ]},
+            7: { vid: "nYuowB5Wyts", quiz: [
+                { q: "၁။ Trading အောင်မြင်မှု၏ ၈၀% က ဘာလဲ?", a: ["Strategy", "Psychology", "News"], c: 1 },
+                { q: "၂။ Revenge Trading ဆိုတာ ဘာလဲ?", a: ["Swing Trade", "အရှုံးကို စိတ်တိုပြီး ဇွတ်ဝင်ခြင်း", "Scalping"], c: 1 },
+                { q: "၃။ FOMO ဆိုတာ ဘာလဲ?", a: ["Fear Of Missing Out", "Fear Of Loss", "Full Order"], c: 0 },
+                { q: "၄။ Professional က Loss ကို ဘယ်လိုမြင်လဲ?", a: ["Failure", "Business Expense", "Bad Luck"], c: 1 },
+                { q: "၅။ Win Rate ထက် ပိုအရေးကြီးတာက?", a: ["Consistency & Discipline", "Lot Size", "Big Account"], c: 0 }
             ]
         };
 
-        // ALL 12 CATEGORIES (As per GitHub images)
-        const cardLessons = [
-            { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png', 'Entry Setups - 5.png', 'Entry Setups - 6.png'] },
-            { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png', 'Cypher Pattern - 4.png', 'Cypher Pattern - 5.png'] },
-            { title: 'Inducement', images: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png', 'Inducement - 10Apr26 - 3.png', 'Inducement - 10Apr26 - 4.png', 'Inducement - 10Apr26 - 5.png'] },
-            { title: 'Market Mech', images: ['Market Mechanics - 1.png', 'Market Mechanics - 2.png', 'Market Mechanics - 3.png', 'Market Mechanics - 4.png', 'Market Mechanics - 5.png', 'Market Mechanics - 6.png'] },
-            { title: 'M-Average', images: ['Moving Average - 1.png', 'Moving Average - 2.png', 'Moving Average - 3.png', 'Moving Average - 4.png', 'Moving Average - 5.png'] },
-            { title: 'Equal High', images: ['Equal High - 1.png', 'Equal High - 2.png', 'Equal High - 3.png', 'Equal High - 4.png'] },
-            { title: 'Gartley', images: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png', 'Gartley Pattern - 3.png', 'Gartley Pattern - 4.png', 'Gartley Pattern - 5.png'] },
-            { title: 'OCL', images: ['OCL - 1.png', 'OCL - 2.png', 'OCL - 3.png', 'OCL - 4.png'] },
-            { title: 'OTE Setup', images: ['OTE Setup - 1.png', 'OTE Setup - 2.png', 'OTE Setup - 3.png', 'OTE Setup - 4.png'] },
-            { title: 'Quasimodo', images: ['Quasimodo - 1.png', 'Quasimodo - 2.png', 'Quasimodo - 3.png', 'Quasimodo - 4.png'] },
-            { title: 'Risk MGMT', images: ['Risk Management - 1.png', 'Risk Management - 2.png', 'Risk Management - 3.png', 'Risk Management - 4.png'] },
-            { title: 'SMT', images: ['SMT - 1.png', 'SMT - 2.png', 'SMT - 3.png', 'SMT - 4.png'] }
+        const studyCards = [
+            { t: 'Entry Setups', i: ['Entry Setups - 1.png', 'Entry Setups - 2.png', 'Entry Setups - 3.png', 'Entry Setups - 4.png'] },
+            { t: 'Cypher Pattern', i: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png', 'Cypher Pattern - 3.png'] },
+            { t: 'Market Mech', i: ['Market Mechanics - 1.png', 'Market Mechanics - 2.png', 'Market Mechanics - 3.png'] },
+            { t: 'OTE Setup', i: ['OTE Setup - 1.png', 'OTE Setup - 2.png', 'OTE Setup - 3.png'] },
+            { t: 'Inducement', i: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png'] },
+            { t: 'Risk MGMT', i: ['Risk Management - 1.png', 'Risk Management - 2.png', 'Risk Management - 3.png'] },
+            { t: 'Gartley', i: ['Gartley Pattern - 1.png', 'Gartley Pattern - 2.png'] },
+            { t: 'Quasimodo', i: ['Quasimodo - 1.png', 'Quasimodo - 2.png'] },
+            { t: 'SMT Divergence', i: ['SMT - 1.png', 'SMT - 2.png'] }
         ];
 
-        const grid = document.getElementById('main-grid');
-        cardLessons.forEach((lesson, idx) => {
-            const box = document.createElement('div');
-            box.className = 'section-box';
-            box.innerHTML = `<div class="section-label">${lesson.title}</div><div class="stack" onclick="openChapter(${idx})"><img src="${lesson.images[0]}" onerror="this.src='https://placehold.co/300x400/0b0e11/f0b90b?text=${lesson.title}'"></div>`;
-            grid.appendChild(box);
+        let curL = 1;
+        let curQ = 0;
+        let isLock = false;
+
+        // UI Initialization
+        const nav = document.getElementById('nav-tabs');
+        for(let i=1; i<=7; i++) {
+            const b = document.createElement('button');
+            b.className = `nav-btn ${i==1?'active':''}`;
+            b.innerText = `L-${i}`;
+            b.onclick = () => loadLesson(i);
+            nav.appendChild(b);
+        }
+
+        const grid = document.getElementById('card-grid');
+        studyCards.forEach((c, idx) => {
+            grid.innerHTML += `<div class="card-box">
+                <div class="card-label">${c.t}</div>
+                <div class="card-thumb" onclick="viewCard(${idx})"><img src="${c.i[0]}"></div>
+            </div>`;
         });
 
-        window.openChapter = (idx) => {
-            const data = cardLessons[idx];
-            document.getElementById('module-title').innerText = data.title;
-            const content = document.getElementById('viewer-content');
-            content.innerHTML = "";
-            data.images.forEach(img => { content.innerHTML += `<img src="${img}" style="width:100%; border-radius:5px; border:1px solid var(--border);" onerror="this.style.display='none'">`; });
-            document.getElementById('viewer').classList.add('active');
-        };
-        window.closeChapter = () => document.getElementById('viewer').classList.remove('active');
-
-        window.showLesson = (num) => {
-            currentLesson = parseInt(num);
-            document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-l' + num).classList.add('active');
-            document.getElementById('dynamic-quiz-btn').innerText = `✍️ LESSON ${num} QUIZ`;
+        window.loadLesson = (n) => {
+            curL = n; curQ = 0;
+            document.querySelectorAll('.nav-btn').forEach((btn, idx) => btn.classList.toggle('active', idx === n-1));
+            document.getElementById('main-video').src = `https://www.youtube.com/embed/${lessonData[n].vid}`;
+            document.getElementById('quiz-btn-label').innerText = `✍️ L-${n} QUIZ`;
         };
 
-        window.openQuiz = () => { currentQIndex = 0; loadQuestion(); document.getElementById('quiz-overlay').classList.add('active'); };
+        window.startQuiz = () => { curQ = 0; renderQ(); document.getElementById('quiz-ov').classList.add('active'); };
 
-        function loadQuestion() {
-            answered = false;
-            const data = allQuizzes[currentLesson][currentQIndex];
-            document.getElementById('quiz-header-title').innerText = `LESSON ${currentLesson} QUIZ (${currentQIndex+1}/5)`;
-            document.getElementById('question-text').innerText = data.q;
-            document.getElementById('feedback-text').innerText = "";
-            document.getElementById('next-btn').style.display = "none";
-            const container = document.getElementById('options-container');
-            container.innerHTML = "";
+        function renderQ() {
+            isLock = false;
+            const data = lessonData[curL].quiz[curQ];
+            document.getElementById('quiz-title').innerText = `L-${curL} QUIZ (${curQ+1}/5)`;
+            document.getElementById('q-text').innerText = data.q;
+            document.getElementById('next-btn').classList.add('hidden');
+            const cont = document.getElementById('opt-container');
+            cont.innerHTML = "";
             data.a.forEach((opt, idx) => {
-                const b = document.createElement('div');
-                b.className = 'opt-btn'; b.innerText = opt;
-                b.onclick = () => checkAnswer(idx, data.correct, b);
-                container.appendChild(b);
+                const div = document.createElement('div');
+                div.className = 'opt-item';
+                div.innerText = opt;
+                div.onclick = () => check(idx, data.c, div);
+                cont.appendChild(div);
             });
         }
 
-        async function checkAnswer(idx, correct, btn) {
-            if (answered) return;
-            answered = true;
-            const qKey = `L${currentLesson}_Q${currentQIndex}`;
-            const userRef = doc(db, "users", myUserId);
-            const userDoc = await getDoc(userRef);
-            const solvedList = userDoc.data()?.solved_questions || [];
-            const previouslyCorrect = solvedList.includes(qKey);
+        async function check(idx, correct, el) {
+            if(isLock) return; isLock = true;
+            const qKey = `L${curL}_Q${curQ}`;
+            const ref = doc(db, "users", userId);
+            const snap = await getDoc(ref);
+            const solved = snap.data()?.solved || [];
+            const isDone = solved.includes(qKey);
 
-            if (idx === correct) {
-                btn.classList.add('correct');
-                document.getElementById('feedback-text').innerHTML = "✅ Correct!";
-                if (!previouslyCorrect) await updateDoc(userRef, { score: increment(1), solved_questions: arrayUnion(qKey), name: myName });
+            if(idx === correct) {
+                el.classList.add('correct');
+                if(!isDone) await updateDoc(ref, { score: increment(1), solved: arrayUnion(qKey), name: userName });
                 tg.HapticFeedback.notificationOccurred('success');
             } else {
-                btn.classList.add('wrong');
-                document.querySelectorAll('.opt-btn')[correct].classList.add('correct');
-                document.getElementById('feedback-text').innerHTML = "❌ Wrong!";
-                if (previouslyCorrect) await updateDoc(userRef, { score: increment(-1), solved_questions: arrayRemove(qKey) });
+                el.classList.add('wrong');
+                document.querySelectorAll('.opt-item')[correct].classList.add('correct');
+                if(isDone) await updateDoc(ref, { score: increment(-1), solved: arrayRemove(qKey) });
                 tg.HapticFeedback.notificationOccurred('error');
             }
-            document.getElementById('next-btn').style.display = "block";
+            document.getElementById('next-btn').classList.remove('hidden');
         }
 
-        window.nextQuestion = () => { currentQIndex++; if (currentQIndex < 5) loadQuestion(); else closeQuiz(); };
-        window.closeQuiz = () => document.getElementById('quiz-overlay').classList.remove('active');
-
-        window.toggleLeaderboard = () => {
-            const lb = document.getElementById('leaderboard-ui');
-            lb.classList.toggle('active');
-            if(lb.classList.contains('active')) fetchLB();
+        window.handleNext = () => {
+            curQ++;
+            if(curQ < 5) renderQ();
+            else closeQuiz();
         };
 
-        function fetchLB() {
+        window.closeQuiz = () => document.getElementById('quiz-ov').classList.remove('active');
+
+        window.openLeaderboard = () => {
+            document.getElementById('lb-ov').classList.add('active');
             const q = query(collection(db, "users"), orderBy("score", "desc"), limit(10));
-            onSnapshot(q, (snap) => {
-                const body = document.getElementById('lb-table-body');
-                body.innerHTML = "";
-                let i = 1;
-                snap.forEach(d => {
+            onSnapshot(q, (s) => {
+                const b = document.getElementById('lb-body');
+                b.innerHTML = ""; let r = 1;
+                s.forEach(d => {
                     const data = d.data();
-                    body.innerHTML += `<tr><td>${i++}</td><td>${data.name}</td><td style="text-align:right; color:var(--gold); font-weight:bold">${data.score || 0}</td></tr>`;
+                    b.innerHTML += `<tr><td>#${r++}</td><td>${data.name}</td><td style="text-align:right; font-weight:800; color:var(--gold)">${data.score || 0}</td></tr>`;
                 });
             });
-        }
+        };
+        window.closeLeaderboard = () => document.getElementById('lb-ov').classList.remove('active');
 
-        onSnapshot(doc(db, "users", myUserId), (s) => {
+        window.viewCard = (idx) => {
+            const c = studyCards[idx];
+            document.getElementById('viewer-title').innerText = c.t;
+            const cont = document.getElementById('viewer-content');
+            cont.innerHTML = "";
+            c.i.forEach(img => { cont.innerHTML += `<img src="${img}" style="width:100%; border-radius:10px; margin-bottom:15px; border:1px solid var(--border);">`; });
+            document.getElementById('viewer-ov').classList.add('active');
+        };
+        window.closeViewer = () => document.getElementById('viewer-ov').classList.remove('active');
+
+        onSnapshot(doc(db, "users", userId), (s) => {
             if(s.exists() && s.data().is_approved) {
-                document.getElementById('unlocked-section').classList.remove('hidden');
-                showLesson(1);
+                document.getElementById('app-content').classList.remove('hidden');
+                loadLesson(1);
             }
         });
     </script>
