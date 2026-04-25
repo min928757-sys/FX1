@@ -22,14 +22,12 @@
         .video-container { margin-top: 15px; border: 2px solid var(--primary); border-radius: 10px; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         
-        /* Educational Cards Grid */
         .card-title { margin-top: 25px; font-size: 12px; color: var(--primary); font-weight: 800; text-align: left; border-left: 3px solid var(--primary); padding-left: 8px; }
         .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
         .card-item { background: #0f172a; border-radius: 8px; overflow: hidden; border: 1px solid #334155; cursor: pointer; }
         .card-item img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
         .card-label { font-size: 8px; padding: 5px 2px; color: #94a3b8; font-weight: bold; white-space: nowrap; overflow: hidden; }
 
-        /* Card Viewer Overlay */
         .overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95); z-index: 2000; display: none; flex-direction: column; }
         .overlay.active { display: flex; }
         .ov-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: var(--card); border-bottom: 1px solid #334155; }
@@ -38,9 +36,11 @@
 
         .broker-box { margin-top: 20px; padding: 15px; border: 1px dashed var(--primary); border-radius: 10px; background: rgba(56, 189, 248, 0.05); }
         .broker-link { color: var(--primary); text-decoration: none; font-weight: bold; }
-        .quiz-option { background: #334155; color: white; text-align: left; padding: 14px; font-size: 14px; width: 100%; margin-bottom: 8px; border: none; border-radius: 8px; cursor: pointer; }
-        .correct { background: #10b981 !important; }
-        .wrong { background: #ef4444 !important; }
+        
+        .quiz-option { background: #334155; color: white; text-align: left; padding: 14px; font-size: 14px; width: 100%; margin-bottom: 8px; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .correct { background: #10b981 !important; color: white; font-weight: bold; }
+        .wrong { background: #ef4444 !important; color: white; }
+        
         .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #0f172a; border-radius: 10px; overflow: hidden; }
         .leaderboard-table th, .leaderboard-table td { padding: 12px; text-align: center; border-bottom: 1px solid #1e293b; font-size: 12px; }
         .my-rank-row { background: rgba(56, 189, 248, 0.2) !important; font-weight: bold; }
@@ -88,7 +88,7 @@
             <div id="quiz-area" class="hidden">
                 <h4 id="quiz-header" style="color: var(--primary);"></h4>
                 <div id="question-container">
-                    <p id="question-text" style="font-weight: bold; margin-bottom: 20px;"></p>
+                    <p id="question-text" style="font-weight: bold; margin-bottom: 20px; text-align: left;"></p>
                     <div id="options-list"></div>
                     <button id="next-btn" class="hidden" onclick="nextQuestion()">Next Question ➔</button>
                 </div>
@@ -151,7 +151,6 @@
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
         document.getElementById('user-id-display').innerText = myUserId;
 
-        // Educational Cards Data (12 Types)
         const studyCards = [
             { t: 'Entry Setups', i: ['Entry Setups - 1.png','Entry Setups - 2.png','Entry Setups - 3.png'] },
             { t: 'Cypher', i: ['Cypher Pattern - 1.png','Cypher Pattern - 2.png'] },
@@ -188,7 +187,6 @@
             document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-l' + num).classList.add('active');
-            
             document.getElementById('lesson-view').classList.remove('hidden');
             document.getElementById('quiz-area').classList.add('hidden');
             document.getElementById('leaderboard-area').classList.add('hidden');
@@ -231,10 +229,18 @@
             data.a.forEach((opt, i) => {
                 const b = document.createElement('button'); b.className = "quiz-option"; b.innerText = opt;
                 b.onclick = () => {
-                    if (i === data.correct) { b.classList.add('correct'); qScore++; }
-                    else { b.classList.add('wrong'); }
+                    const allOptions = document.querySelectorAll('.quiz-option');
+                    allOptions.forEach(btn => btn.onclick = null); // Disable clicking after selection
+                    
+                    if (i === data.correct) {
+                        b.classList.add('correct');
+                        qScore++;
+                    } else {
+                        b.classList.add('wrong');
+                        // Highlight the correct one
+                        allOptions[data.correct].classList.add('correct');
+                    }
                     document.getElementById('next-btn').classList.remove('hidden');
-                    document.querySelectorAll('.quiz-option').forEach(btn => btn.onclick = null);
                 };
                 list.appendChild(b);
             });
@@ -267,11 +273,9 @@
             document.getElementById('quiz-area').classList.add('hidden');
             document.getElementById('certificate-wrap').classList.add('hidden');
             document.getElementById('leaderboard-area').classList.remove('hidden');
-            
             const q = query(collection(db, "users"), orderBy("total_score", "desc"), limit(10));
             const snap = await getDocs(q);
             const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = "";
-            
             let rank = 1;
             snap.forEach(docSnap => {
                 const data = docSnap.data();
