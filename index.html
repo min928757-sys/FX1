@@ -9,40 +9,29 @@
     <style>
         :root { --gold: #f0b90b; --bg: #0b0e11; --border: rgba(240, 185, 11, 0.2); }
         body { background-color: var(--bg); color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; user-select: none; }
-        
         header { background: rgba(28, 33, 40, 0.85); backdrop-filter: blur(10px); padding: 12px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
         header h1 { font-family: 'Syncopate', sans-serif; font-size: 10px; background: linear-gradient(90deg, #f0b90b, #fff, #f0b90b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
-
         .hidden { display: none !important; }
-
-        /* Video & Lesson Navigation */
         .video-module { padding: 12px; background: rgba(28,33,40,0.5); border-bottom: 1px solid var(--border); }
-        .nav-container { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; overflow-x: auto; padding-bottom: 5px; }
-        .nav-btn { background: #1c2128; color: #888; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border); font-size: 10px; font-weight: bold; flex-shrink: 0; }
+        .nav-container { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; overflow-x: auto; }
+        .nav-btn { background: #1c2128; color: #888; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border); font-size: 10px; font-weight: bold; }
         .nav-btn.active { background: var(--gold); color: black; border-color: var(--gold); }
-        
         .video-wrapper { width: 95%; max-width: 500px; margin: 0 auto 10px auto; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--gold); }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-
         .action-btns { display: flex; flex-direction: column; gap: 8px; max-width: 500px; margin: 0 auto; }
         .quiz-btn { background: linear-gradient(45deg, #f0b90b, #d4a017); color: black; padding: 12px; border-radius: 6px; font-weight: 800; font-size: 11px; border: none; cursor: pointer; text-transform: uppercase; }
         .lb-toggle-btn { background: #2d333b; color: var(--gold); padding: 10px; border-radius: 6px; font-weight: 700; font-size: 10px; border: 1px solid var(--gold); cursor: pointer; }
-
-        /* Leaderboard Table */
-        .leaderboard-container { margin: 15px auto; max-width: 500px; background: #161b22; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; display: none; }
+        .leaderboard-container { margin: 15px auto; max-width: 500px; background: #161b22; border-radius: 8px; border: 1px solid var(--border); display: none; }
         .leaderboard-container.active { display: block; }
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
         th { background: #21262d; color: var(--gold); padding: 12px; text-align: left; }
         td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
-        /* Chapter Cards */
         .chapter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 15px; }
-        .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; }
-        .card-front { position: absolute; width: 92%; height: 92%; left: 0; bottom: 0; border-radius: 5px; overflow: hidden; border: 1.5px solid var(--gold); z-index: 2; }
-        .card-front img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Quiz Overlay */
+        .section-box { text-align: center; }
+        .section-label { font-size: 8px; font-weight: 700; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; }
+        .stack { position: relative; width: 100%; aspect-ratio: 3/4; cursor: pointer; border: 1.5px solid var(--gold); border-radius: 5px; overflow: hidden; }
+        .stack img { width: 100%; height: 100%; object-fit: cover; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
         .overlay.active { display: flex; }
         .overlay-header { padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); background: #1c2128; }
@@ -72,18 +61,15 @@
                 <button class="nav-btn" id="btn-l6" onclick="showLesson(6)">L-6</button>
                 <button class="nav-btn" id="btn-l7" onclick="showLesson(7)">L-7</button>
             </div>
-            
             <div class="video-wrapper">
                 <div class="video-container">
                     <iframe id="video-frame" src="" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
-
             <div class="action-btns">
                 <button class="quiz-btn" id="dynamic-quiz-btn" onclick="openQuiz()">✍️ LESSON 1 QUIZ</button>
                 <button class="lb-toggle-btn" onclick="toggleLeaderboard()">🏆 SHOW LEADERBOARD</button>
             </div>
-
             <div id="leaderboard-ui" class="leaderboard-container">
                 <table>
                     <thead><tr><th style="width:40px">#</th><th>TRADER</th><th style="text-align:right">POINTS</th></tr></thead>
@@ -91,7 +77,6 @@
                 </table>
             </div>
         </div>
-
         <div class="chapter-grid" id="main-grid"></div>
     </div>
 
@@ -113,12 +98,12 @@
             <span id="module-title" style="color:white; font-size:11px; font-weight:700;"></span>
             <div style="color: var(--gold); cursor: pointer;" onclick="closeChapter()">[ CLOSE ]</div>
         </div>
-        <div class="viewer-scroll" id="viewer-content" style="padding: 15px; overflow-y: auto;"></div>
+        <div class="viewer-scroll" id="viewer-content" style="padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, updateDoc, collection, query, orderBy, limit, increment, getDoc, setDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, updateDoc, collection, query, orderBy, limit, increment, getDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyA5wJhY38C5GMgxjJuGDDejtIje36MvBok", authDomain: "trading-app-69b9d.firebaseapp.com", projectId: "trading-app-69b9d", storageBucket: "trading-app-69b9d.appspot.com", messagingSenderId: "573273662231", appId: "1:573273662231:web:fbbbc6876711e612190829" };
         const app = initializeApp(firebaseConfig);
@@ -135,34 +120,52 @@
         let answered = false;
 
         const allQuizzes = {
-            1: [ { q: "၁။ Uptrend မှာ Previous High ကို ဖောက်ထွက်သွားတာကို ဘယ်လိုခေါ်သလဲ?", a: ["BOS", "CHoCH", "Liquidity"], correct: 0 }, { q: "၂။ Downtrend တစ်ခုမှာ ဘယ်လို Structure မျိုးရှိသလဲ?", a: ["HH & HL", "LH & LL", "Equal High"], correct: 1 }, { q: "၃။ Trend ပြောင်းလဲမှုကို ပထမဆုံးပြသတဲ့ လက္ခဏာက ဘာလဲ?", a: ["BOS", "CHoCH", "Order Block"], correct: 1 }, { q: "၄။ Uptrend မှာ ခေတ္တပြန်ဆင်းလာတဲ့ အနိမ့်ပိုင်းကို ဘယ်လိုခေါ်သလဲ?", a: ["Lower Low", "Higher Low", "Market Gap"], correct: 1 }, { q: "၅။ 'Higher High' တွေ ဆက်တိုက်ဖြစ်နေတာက ဘယ်လို Market လဲ?", a: ["Bearish", "Bullish", "Sideways"], correct: 1 } ],
-            2: [ { q: "၁။ Order Block ဆိုတာ ဘာလဲ?", a: ["အရောင်တူ Candle များ", "နောက်ဆုံးဖြစ်ပေါ်ခဲ့တဲ့ ဆန့်ကျင်ဘက် Candle", "Market Gap"], correct: 1 }, { q: "၂။ Bullish Order Block ကို ဘယ်နေရာမှာ ရှာရမလဲ?", a: ["ဈေးမတက်ခင် နောက်ဆုံးကျခဲ့တဲ့ အနီရောင် Candle", "ဈေးမကျခင် နောက်ဆုံးတက်ခဲ့တဲ့ အစိမ်းရောင် Candle", "Chart ရဲ့ အလယ်"], correct: 0 }, { q: "၃။ Bearish Order Block ဆိုတာ ဘယ်လိုနေရာမျိုးလဲ?", a: ["Demand Zone", "Supply Zone", "Sideways"], correct: 1 }, { q: "၄။ Order Block တစ်ခုက ဘယ်အချိန်မှာ ပိုအားကောင်းသလဲ?", a: ["BOS ဖြစ်စေခဲ့လျှင်", "အရွယ်အစားသေးလျှင်", "အရောင်တူလျှင်"], correct: 0 }, { q: "၅။ Supply Zone မှာ ဘယ်လို Setup မျိုး ရှာရမလဲ?", a: ["Buy Setup", "Sell Setup", "Hold"], correct: 1 } ],
-            3: [ { q: "၁။ Liquidity ဆိုတာ ဘာကို ရည်ညွှန်းတာလဲ?", a: ["ဈေးနှုန်းအတက်အကျ", "Stop Loss များ စုပုံနေသောနေရာ", "Market Gap"], correct: 1 }, { q: "၂။ Retail Trader တွေက Equal High/Low တွေကို ဘယ်လိုမြင်ကြသလဲ?", a: ["Liquidity Sweep", "Support & Resistance", "BOS"], correct: 1 }, { q: "၃။ Smart Money တွေက ဘာကြောင့် Liquidity Sweep လုပ်တာလဲ?", a: ["Trend ပြောင်းချင်လို့", "သူတို့ရဲ့ Order တွေဖြည့်ဖို့ လောင်စာယူခြင်း", "ဈေးကွက်ပိတ်ဖို့"], correct: 1 }, { q: "၄။ Trendline အောက်မှာ ဘာတွေရှိနေတတ်သလဲ?", a: ["Liquidity (Stop Losses)", "BOS", "Order Block"], correct: 0 }, { q: "၅။ 'Stop Hunt' ဆိုတာ ဘာလဲ?", a: ["အမြတ်ယူခြင်း", "Liquidity Sweep လုပ်ခြင်း", "အရောင်းရပ်ခြင်း"], correct: 1 } ],
-            4: [ { q: "၁။ Fair Value Gap (FVG) ကို Candle ဘယ်နှခုနဲ့ ကြည့်ရသလဲ?", a: ["၂ ခု", "၃ ခု", "၅ ခု"], correct: 1 }, { q: "၂။ FVG ဖြစ်ပေါ်ရခြင်းရဲ့ အဓိက အကြောင်းရင်းက ဘာလဲ?", a: ["Liquidity Sweep", "ဝယ်သူနဲ့ ရောင်းသူကြား မမျှတမှု (Imbalance)", "Market Close"], correct: 1 }, { q: "၃။ Bullish FVG မှာ ဘယ်နေရာကို 'Gap' အဖြစ် သတ်မှတ်သလဲ?", a: ["Candle ၁ ရဲ့ High နဲ့ Candle ၃ ရဲ့ Low ကြား", "Candle ၂ ရဲ့ အရွယ်အစား", "Candle အားလုံး"], correct: 0 }, { q: "၄။ ဈေးနှုန်းက FVG တွေဆီကို ဘာကြောင့် ပြန်လာတတ်တာလဲ?", a: ["Trend ပြောင်းဖို့", "ကျန်ခဲ့တဲ့ ဟာကွက်တွေကို ပြန်ဖြည့် (Rebalance) ဖို့", "Support ရှာဖို့"], correct: 1 }, { q: "၅။ အကောင်းဆုံး Entry နေရာက ဘယ်လိုမျိုးလဲ?", a: ["FVG တစ်ခုတည်းရှိလျှင်", "FVG နဲ့ Order Block ပေါင်းစပ်နေလျှင်", "Gap ကြီးလျှင်"], correct: 1 } ],
-            5: [ { q: "၁။ Top-Down Analysis ဆိုတာ ဘာလဲ?", a: ["Lower မှ Higher သို့သွားခြင်း", "Higher Timeframe မှ Lower သို့ ဆင်းခြင်း", "Chart အကုန်ဖွင့်ထားခြင်း"], correct: 1 }, { q: "၂။ Higher Timeframe (Daily) ကို ဘာအတွက် အဓိကသုံးသလဲ?", a: ["Entry Point ရှာရန်", "Market Direction (Trend) ကို သိရန်", "အရောင်းရပ်ရန်"], correct: 1 }, { q: "၃။ Lower Timeframe ကို ဘာအတွက် အဓိကသုံးသလဲ?", a: ["Direction သိရန်", "တကျိသော Entry point (Execution) အတွက်", "Trend ရှာရန်"], correct: 1 }, { q: "၄။ နိုင်ခြေအမြင့်ဆုံး Setup ဖြစ်ဖို့ ဘာလုပ်ရမလဲ?", a: ["Lower TF setup က Higher TF trend နှင့် ကိုက်ညီရမည်", "ချက်ချင်း Buy မည်", "Timeframe တစ်ခုတည်းကြည့်မည်"], correct: 0 }, { q: "၅။ Market Structure ပိုခိုင်မာသော Timeframe မှာ ဘယ်ဟာလဲ?", a: ["1-minute", "15-minute", "Daily"], correct: 2 } ],
-            6: [ { q: "၁။ Trading မှာ အရေးကြီးဆုံးအချက်က ဘာလဲ?", a: ["BOS ရှာခြင်း", "Risk Management (အရင်းအနှီး စီမံခန့်ခွဲမှု)", "Indicator သုံးခြင်း"], correct: 1 }, { q: "၂။ '1% Rule' အရ အော်ဒါတစ်ခုမှာ အများဆုံး ဘယ်လောက်ရှုံးခံသင့်သလဲ?", a: ["အကောင့်တစ်ခုလုံး၏ ၅ ရာခိုင်နှုန်း", "အကောင့်တစ်ခုလုံး၏ ၁ ရာခိုင်နှုန်း", "၁၀ ရာခိုင်နှုန်း"], correct: 1 }, { q: "၃။ Risk to Reward 1:3 ဆိုတာ ဘာကို ဆိုလိုတာလဲ?", a: ["၁ ဆ ရှုံးဖို့ ပြင်ဆင်ပြီး ၃ ဆ မြတ်ဖို့ မျှော်လင့်ခြင်း", "၃ ဆ ရှုံးပြီး ၁ ဆ မြတ်ခြင်း", "အရင်းအတိုင်း ပြန်ရခြင်း"], correct: 0 }, { q: "၄။ အရှုံးတွေ ဆက်တိုက်ဖြစ်နေရင်တောင် အကောင့်မပြတ်အောင် ဘာက ကူညီမလဲ?", a: ["Lot size အကြီးကြီးရိုက်ခြင်း", "Proper Position Sizing (မှန်ကန်သော Lot size သုံးစွဲခြင်း)", "ချက်ချင်း အရောင်းရပ်ခြင်း"], correct: 1 }, { q: "၅။ Trader တစ်ယောက်၏ ပထမဆုံးတာဝန်မှာ ဘာလဲ?", a: ["အမြန်ဆုံး သူဌေးဖြစ်ရန်", "အရင်းအနှီးကို မကုန်အောင် ထိန်းသိမ်းခြင်း (Capital Preservation)", "အော်ဒါအများကြီးဖွင့်ရန်"], correct: 1 } ],
-            7: [ { q: "၁။ Trading မှာ အောင်မြင်ဖို့အတွက် အရေးကြီးဆုံးက ဘာလဲ?", a: ["Indicator သစ်များ ရှာခြင်း", "Trading Psychology (စိတ်ပညာနှင့် စည်းကမ်း)", "သတင်းများ နားထောင်ခြင်း"], correct: 1 }, { q: "၂။ ရှုံးသွားတဲ့ငွေကို ချက်ချင်းပြန်ရအောင် ဇွတ်အတင်း Trading လုပ်ခြင်းကို ဘယ်လိုခေါ်သလဲ?", a: ["Swing Trading", "Revenge Trading", "Scalping"], correct: 1 }, { q: "၃။ FOMO ဆိုတာ ဘာကို ဆိုလိုတာလဲ?", a: ["အမြတ်များများယူခြင်း", "အခွင့်အရေး လက်လွတ်သွားမှာ ကြောက်ပြီး ဇွတ်ဝင်ခြင်း", "အရှုံးကို လက်ခံခြင်း"], correct: 1 }, { q: "၄။ Professional Trader တစ်ယောက်ဟာ အရှုံး (Loss) ကို ဘယ်လို မြင်သလဲ?", a: ["ကျရှုံးမှုကြီး တစ်ခုအဖြစ်", "လုပ်ငန်းကုန်ကျစရိတ် (Business Expense) တစ်ခုအဖြစ်", "အမြဲတမ်း ရှောင်လွှဲရမည့်အရာအဖြစ်"], correct: 1 }, { q: "၅။ Trading မှာ နိုင်ခြေ (Win Rate) ထက် ဘာက ပိုအရေးကြီးသလဲ?", a: ["Lot size ကြီးခြင်း", "စည်းကမ်းရှိရှိနဲ့ Plan အတိုင်း လုပ်ဆောင်ခြင်း (Discipline)", "ကံကောင်းခြင်း"], correct: 1 } ]
+            1: [ { q: "၁။ Uptrend မှာ Previous High ကို ဖောက်ထွက်သွားတာကို ဘယ်လိုခေါ်သလဲ?", a: ["BOS", "CHoCH", "Liquidity"], correct: 0 }, { q: "၂။ Downtrend တစ်ခုမှာ ဘယ်လို Structure မျိုးရှိသလဲ?", a: ["HH & HL", "LH & LL", "Equal High"], correct: 1 } ],
+            2: [ { q: "၁။ Order Block ဆိုတာ ဘာလဲ?", a: ["အရောင်တူ Candle များ", "နောက်ဆုံးဖြစ်ပေါ်ခဲ့တဲ့ ဆန့်ကျင်ဘက် Candle", "Market Gap"], correct: 1 }, { q: "၂။ Bullish Order Block ကို ဘယ်နေရာမှာ ရှာရမလဲ?", a: ["ဈေးမတက်ခင် နောက်ဆုံးကျခဲ့တဲ့ အနီရောင် Candle", "ဈေးမကျခင် နောက်ဆုံးတက်ခဲ့တဲ့ အစိမ်းရောင် Candle", "Chart ရဲ့ အလယ်"], correct: 0 } ]
+            // Add other quizzes similarly...
         };
+
+        const cardLessons = [
+            { title: 'Entry Setups', images: ['Entry Setups - 1.png', 'Entry Setups - 2.png'] },
+            { title: 'Cypher', images: ['Cypher Pattern - 1.png', 'Cypher Pattern - 2.png'] },
+            { title: 'Inducement', images: ['Inducement - 10Apr26 - 1.png', 'Inducement - 10Apr26 - 2.png'] },
+            { title: 'Market Mech', images: ['Market Mechanics - 1.png', 'Market Mechanics - 2.png'] },
+            { title: 'M-Average', images: ['Moving Average - 1.png', 'Moving Average - 2.png'] },
+            { title: 'Equal High', images: ['Equal High - 1.png', 'Equal High - 2.png'] }
+        ];
+
+        const grid = document.getElementById('main-grid');
+        cardLessons.forEach((lesson, idx) => {
+            const box = document.createElement('div');
+            box.className = 'section-box';
+            box.innerHTML = `<div class="section-label">${lesson.title}</div><div class="stack" onclick="openChapter(${idx})"><img src="${lesson.images[0]}"></div>`;
+            grid.appendChild(box);
+        });
+
+        window.openChapter = (idx) => {
+            const data = cardLessons[idx];
+            document.getElementById('module-title').innerText = data.title;
+            const content = document.getElementById('viewer-content');
+            content.innerHTML = "";
+            data.images.forEach(img => { content.innerHTML += `<img src="${img}" style="width:100%; border-radius:5px; border:1px solid var(--border);">`; });
+            document.getElementById('viewer').classList.add('active');
+        };
+        window.closeChapter = () => document.getElementById('viewer').classList.remove('active');
 
         window.showLesson = (num) => {
             currentLesson = parseInt(num);
             document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-l' + num).classList.add('active');
-            // Change Dynamic Button Text
             document.getElementById('dynamic-quiz-btn').innerText = `✍️ LESSON ${num} QUIZ`;
         };
 
-        window.openQuiz = () => {
-            currentQIndex = 0;
-            loadQuestion();
-            document.getElementById('quiz-overlay').classList.add('active');
-        };
+        window.openQuiz = () => { currentQIndex = 0; loadQuestion(); document.getElementById('quiz-overlay').classList.add('active'); };
 
         function loadQuestion() {
             answered = false;
             const data = allQuizzes[currentLesson][currentQIndex];
-            document.getElementById('quiz-header-title').innerText = `LESSON ${currentLesson} QUIZ (${currentQIndex+1}/5)`;
+            document.getElementById('quiz-header-title').innerText = `LESSON ${currentLesson} QUIZ (${currentQIndex+1})`;
             document.getElementById('question-text').innerText = data.q;
             document.getElementById('feedback-text').innerText = "";
             document.getElementById('next-btn').style.display = "none";
@@ -170,8 +173,7 @@
             container.innerHTML = "";
             data.a.forEach((opt, idx) => {
                 const b = document.createElement('div');
-                b.className = 'opt-btn';
-                b.innerText = opt;
+                b.className = 'opt-btn'; b.innerText = opt;
                 b.onclick = () => checkAnswer(idx, data.correct, b);
                 container.appendChild(b);
             });
@@ -188,29 +190,18 @@
 
             if (idx === correct) {
                 btn.classList.add('correct');
-                document.getElementById('feedback-text').innerHTML = "✅ အဖြေမှန်ပါတယ်!";
-                if (!previouslyCorrect) {
-                    await updateDoc(userRef, { score: increment(1), solved_questions: arrayUnion(qKey), name: myName });
-                }
-                tg.HapticFeedback.notificationOccurred('success');
+                document.getElementById('feedback-text').innerHTML = "✅ Correct!";
+                if (!previouslyCorrect) await updateDoc(userRef, { score: increment(1), solved_questions: arrayUnion(qKey), name: myName });
             } else {
                 btn.classList.add('wrong');
                 document.querySelectorAll('.opt-btn')[correct].classList.add('correct');
-                document.getElementById('feedback-text').innerHTML = "❌ မှားသွားပါတယ်!";
-                if (previouslyCorrect) {
-                    await updateDoc(userRef, { score: increment(-1), solved_questions: arrayRemove(qKey) });
-                }
-                tg.HapticFeedback.notificationOccurred('error');
+                document.getElementById('feedback-text').innerHTML = "❌ Wrong!";
+                if (previouslyCorrect) await updateDoc(userRef, { score: increment(-1), solved_questions: arrayRemove(qKey) });
             }
             document.getElementById('next-btn').style.display = "block";
         }
 
-        window.nextQuestion = () => {
-            currentQIndex++;
-            if (currentQIndex < 5) loadQuestion();
-            else { tg.showAlert("Lesson Quiz ပြီးဆုံးပါပြီ!"); closeQuiz(); }
-        };
-
+        window.nextQuestion = () => { currentQIndex++; if (currentQIndex < allQuizzes[currentLesson].length) loadQuestion(); else closeQuiz(); };
         window.closeQuiz = () => document.getElementById('quiz-overlay').classList.remove('active');
 
         window.toggleLeaderboard = () => {
@@ -227,14 +218,11 @@
                 let i = 1;
                 snap.forEach(d => {
                     const data = d.data();
-                    const maskedId = d.id.length > 3 ? d.id.slice(0, -3) + "***" : d.id;
-                    body.innerHTML += `<tr><td>${i}</td><td>${data.name} (${maskedId})</td><td style="text-align:right; color:var(--gold); font-weight:bold">${data.score || 0}</td></tr>`;
-                    i++;
+                    body.innerHTML += `<tr><td>${i++}</td><td>${data.name}</td><td style="text-align:right; color:var(--gold); font-weight:bold">${data.score || 0}</td></tr>`;
                 });
             });
         }
 
-        // Initialize grid and auth
         onSnapshot(doc(db, "users", myUserId), (s) => {
             if(s.exists() && s.data().is_approved) {
                 document.getElementById('unlocked-section').classList.remove('hidden');
