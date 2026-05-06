@@ -84,7 +84,13 @@
                     <button class="music-toggle" id="music-btn" onclick="toggleMusic()">PLAY</button>
                 </div>
                 <!-- Hidden Player -->
-                <div id="music-player" style="display:none"></div>
+                <div class="music-bar">
+    <div class="music-info">🎵 FX LOFI RADIO: <span id="track-status">OFF</span></div>
+    <button class="music-toggle" id="music-btn" onclick="toggleMusic()">PLAY</button>
+</div>
+
+<div id="music-player" style="position: absolute; opacity: 0; pointer-events: none; z-index: -1;"></div>
+
 
                 <div class="card-title">EDUCATIONAL CARDS</div>
                 <div class="card-grid" id="main-card-grid"></div>
