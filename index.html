@@ -229,6 +229,93 @@
 
         window.closeViewer = () => document.getElementById('card-viewer').classList.remove('active');
         window.backToLessons = () => showLesson(currentLesson);
+                // --- QUIZ LOGIC ---
+        const quizData = {
+            1: [
+                { q: "Market Structure မှာ Trend တစ်ခု ပြောင်းလဲခြင်းကို ဘယ်လိုခေါ်သလဲ?", o: ["BOS", "CHoCH", "Order Block", "FVG"], a: 1 },
+                { q: "Uptrend မှာ အသစ်ဖြစ်ပေါ်လာတဲ့ High ကို ကျော်သွားရင် ဘာဖြစ်သလဲ?", o: ["CHoCH", "Liquidity Sweep", "BOS", "Inducement"], a: 2 }
+            ],
+            // အခြား Lesson တွေအတွက် မေးခွန်းတွေကို ဒီမှာ ပုံစံတူ ထည့်နိုင်ပါတယ်
+        };
+
+        window.startQuiz = () => {
+            const lessonQuestions = quizData[currentLesson] || quizData[1];
+            qIdx = 0; qScore = 0;
+            document.getElementById('lesson-view').classList.add('hidden');
+            document.getElementById('quiz-area').classList.remove('hidden');
+            showQuestion(lessonQuestions);
+        };
+
+        function showQuestion(questions) {
+            const q = questions[qIdx];
+            document.getElementById('quiz-header').innerText = `Lesson ${currentLesson} Quiz (${qIdx + 1}/${questions.length})`;
+            document.getElementById('question-text').innerText = q.q;
+            const optionsList = document.getElementById('options-list');
+            optionsList.innerHTML = "";
+            q.o.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(i, q.a, questions);
+                optionsList.appendChild(btn);
+            });
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function checkAnswer(selected, correct, questions) {
+            const buttons = document.querySelectorAll('.quiz-option');
+            buttons.forEach(b => b.disabled = true);
+            if (selected === correct) {
+                buttons[selected].classList.add('correct');
+                qScore++;
+            } else {
+                buttons[selected].classList.add('wrong');
+                buttons[correct].classList.add('correct');
+            }
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        window.nextQuestion = () => {
+            const lessonQuestions = quizData[currentLesson] || quizData[1];
+            qIdx++;
+            if (qIdx < lessonQuestions.length) {
+                showQuestion(lessonQuestions);
+            } else {
+                finishQuiz();
+            }
+        };
+
+        async function finishQuiz() {
+            document.getElementById('question-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('current-score-text').innerText = `Your Score: ${qScore}`;
+            
+            if (myUserId !== "Guest") {
+                await setDoc(doc(db, "leaderboard", myUserId), {
+                    userId: myUserId,
+                    score: qScore,
+                    timestamp: new Date()
+                }, { merge: true });
+            }
+        }
+
+        // --- LEADERBOARD LOGIC ---
+        window.showLeaderboard = async () => {
+            document.getElementById('lesson-view').classList.add('hidden');
+            document.getElementById('quiz-area').classList.add('hidden');
+            document.getElementById('leaderboard-area').classList.remove('hidden');
+            
+            const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(10));
+            const querySnapshot = await getDocs(q);
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = "";
+            let rank = 1;
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                tbody.innerHTML += `<tr><td>${rank++}</td><td>${data.userId}</td><td>${data.score}</td></tr>`;
+            });
+        };
+
 
         if (myUserId !== "Guest") {
             onSnapshot(doc(db, "users", myUserId), (docSnap) => {
