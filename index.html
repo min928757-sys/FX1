@@ -27,8 +27,16 @@
         .music-info { font-size: 10px; font-weight: bold; color: var(--primary); text-transform: uppercase; }
         .music-toggle { background: var(--primary); color: #0f172a; padding: 6px 12px; border-radius: 5px; font-size: 10px; width: auto; margin: 0; }
 
+        /* PDF Section UI */
+        .section-title { margin-top: 20px; font-size: 12px; color: var(--primary); font-weight: 800; text-align: left; border-left: 3px solid var(--primary); padding-left: 8px; text-transform: uppercase; }
+        .pdf-box { display: flex; align-items: center; justify-content: space-between; background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 10px; margin-top: 10px; text-align: left; }
+        .pdf-info { display: flex; align-items: center; gap: 10px; }
+        .pdf-icon { font-size: 24px; }
+        .pdf-name { font-size: 12px; font-weight: bold; color: var(--text); }
+        .pdf-btn { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 11px; font-weight: bold; cursor: pointer; width: auto; margin-top: 0; text-decoration: none; display: inline-block; }
+
         /* Card System UI */
-        .card-title { margin-top: 15px; font-size: 12px; color: var(--primary); font-weight: 800; text-align: left; border-left: 3px solid var(--primary); padding-left: 8px; }
+        .card-title { margin-top: 20px; font-size: 12px; color: var(--primary); font-weight: 800; text-align: left; border-left: 3px solid var(--primary); padding-left: 8px; text-transform: uppercase; }
         .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
         .card-item { background: #0f172a; border-radius: 8px; overflow: hidden; border: 1px solid #334155; cursor: pointer; }
         .card-item img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
@@ -86,6 +94,15 @@
                     <button class="music-toggle" id="music-btn" onclick="toggleMusic()">PLAY</button>
                 </div>
                 <div id="music-player" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;"></div>
+
+                <div class="section-title">E-BOOKS & RESOURCES</div>
+                <div class="pdf-box">
+                    <div class="pdf-info">
+                        <span class="pdf-icon">📕</span>
+                        <span class="pdf-name">ICT Concepts Beginner to Advanced</span>
+                    </div>
+                    <a href="https://drive.google.com/file/d/1u5IGe7eRxG6ot7gAKmHVjFj8nJcjXFAj/view?usp=drivesdk" target="_blank" class="pdf-btn">DOWNLOAD</a>
+                </div>
 
                 <div class="card-title">EDUCATIONAL CARDS</div>
                 <div class="card-grid" id="main-card-grid"></div>
@@ -218,16 +235,6 @@
         let currentLesson = 1, qIdx = 0, qScore = 0;
         const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
         const titles = { 1:"Market Structure", 2:"Order Blocks", 3:"Liquidity", 4:"Fair Value Gaps", 5:"Timeframe Correlation", 6:"Risk Management", 7:"Trading Psychology" };
-
-        const questions = {
-            1: [ { q: "၁။ Uptrend မှာ Previous High ကို ဖောက်ထွက်သွားတာကို ဘယ်လိုခေါ်သလဲ?", a: ["BOS", "CHoCH", "Liquidity"], correct: 0 }, { q: "၂။ Downtrend တစ်ခုမှာ ဘယ်လို Structure မျိုးရှိသလဲ?", a: ["HH & HL", "LH & LL", "Equal High"], correct: 1 }, { q: "၃။ Trend ပြောင်းလဲမှုကို ပထမဆုံးပြသတဲ့ လက္ခဏာက ဘာလဲ?", a: ["BOS", "CHoCH", "Order Block"], correct: 1 }, { q: "၄။ Uptrend မှာ ခေတ္တပြန်ဆင်းလာတဲ့ အနိမ့်ပိုင်းကို ဘယ်လိုခေါ်သလဲ?", a: ["Lower Low", "Higher Low", "Market Gap"], correct: 1 }, { q: "၅။ 'Higher High' တွေ ဆက်တိုက်ဖြစ်နေတာက ဘယ်လို Market လဲ?", a: ["Bearish", "Bullish", "Sideways"], correct: 1 } ],
-            2: [ { q: "၁။ Order Block ဆိုတာ ဘာလဲ?", a: ["အရောင်တူ Candle များ", "နောက်ဆုံးဖြစ်ပေါ်ခဲ့တဲ့ ဆန့်ကျင်ဘက် Candle", "Market Gap"], correct: 1 }, { q: "၂။ Bullish Order Block ကို ဘယ်နေရာမှာ ရှာရမလဲ?", a: ["ဈေးမတက်ခင် နောက်ဆုံးကျခဲ့တဲ့ အနီရောင် Candle", "ဈေးမကျခင် နောက်ဆုံးတက်ခဲ့တဲ့ အစိမ်းရောင် Candle", "Chart ရဲ့ အလယ်"], correct: 0 }, { q: "၃။ Bearish Order Block ဆိုတာ ဘယ်လိုနေရာမျိုးလဲ?", a: ["Demand Zone", "Supply Zone", "Sideways"], correct: 1 }, { q: "၄။ Order Block တစ်ခုက ဘယ်အချိန်မှာ ပိုအားကောင်းသလဲ?", a: ["BOS ဖြစ်စေခဲ့လျှင်", "အရွယ်အစားသေးလျှင်", "အရောင်တူလျှင်"], correct: 0 }, { q: "၅။ Supply Zone မှာ ဘယ်လို Setup မျိုး ရှာရမလဲ?", a: ["Buy Setup", "Sell Setup", "Hold"], correct: 1 } ],
-            3: [ { q: "၁။ Liquidity ဆိုတာ ဘာကို ရည်ညွှန်းတာလဲ?", a: ["ဈေးနှုန်းအတက်အကျ", "Stop Loss များ စုပုံနေသောနေရာ", "Market Gap"], correct: 1 }, { q: "၂။ Retail Trader တွေက Equal High/Low တွေကို ဘယ်လိုမြင်ကြသလဲ?", a: ["Liquidity Sweep", "Support & Resistance", "BOS"], correct: 1 }, { q: "၃။ Smart Money တွေက ဘာကြောင့် Liquidity Sweep လုပ်တာလဲ?", a: ["Trend ပြောင်းချင်လို့", "သူတို့ရဲ့ Order တွေဖြည့်ဖို့ လောင်စာယူခြင်း", "ဈေးကွက်ပိတ်ဖို့"], correct: 1 }, { q: "၄။ Trendline အောက်မှာ ဘာတွေရှိနေတတ်သလဲ?", a: ["Liquidity (Stop Losses)", "BOS", "Order Block"], correct: 0 }, { q: "၅။ 'Stop Hunt' ဆိုတာ ဘာလဲ?", a: ["အမြတ်ယူခြင်း", "Liquidity Sweep လုပ်ခြင်း", "အရောင်းရပ်ခြင်း"], correct: 1 } ],
-            4: [ { q: "၁။ Fair Value Gap (FVG) ကို Candle ဘယ်နှခုနဲ့ ကြည့်ရသလဲ?", a: ["၂ ခု", "၃ ခု", "၅ ခု"], correct: 1 }, { q: "၂။ FVG ဖြစ်ပေါ်ရခြင်းရဲ့ အဓိက အကြောင်းရင်းက ဘာလဲ?", a: ["Liquidity Sweep", "ဝယ်သူနဲ့ ရောင်းသူကြား မမျှတမှု (Imbalance)", "Market Close"], correct: 1 }, { q: "၃။ Bullish FVG မှာ ဘယ်နေရာကို 'Gap' အဖြစ် သတ်မှတ်သလဲ?", a: ["Candle ၁ ရဲ့ High နဲ့ Candle ၃ ရဲ့ Low ကြား", "Candle ၂ ရဲ့ အရွယ်အစား", "Candle အားလုံး"], correct: 0 }, { q: "၄။ ဈေးနှုန်းက FVG တွေဆီကို ဘာကြောင့် ပြန်လာတတ်တာလဲ?", a: ["Trend ပြောင်းဖို့", "ကျန်ခဲ့တဲ့ ဟာကွက်တွေကို ပြန်ဖြည့် (Rebalance) ဖို့", "Support ရှာဖို့"], correct: 1 }, { q: "၅။ အကောင်းဆုံး Entry နေရာက ဘယ်လိုမျိုးလဲ?", a: ["FVG တစ်ခုတည်းရှိလျှင်", "FVG နဲ့ Order Block ပေါင်းစပ်နေလျှင်", "Gap ကြီးလျှင်"], correct: 1 } ],
-            5: [ { q: "၁။ Top-Down Analysis ဆိုတာ ဘာလဲ?", a: ["Lower မှ Higher သို့သွားခြင်း", "Higher Timeframe မှ Lower သို့ ဆင်းခြင်း", "Chart အကုန်ဖွင့်ထားခြင်း"], correct: 1 }, { q: "၂။ Higher Timeframe (Daily) ကို ဘာအတွက် အဓိကသုံးသလဲ?", a: ["Entry Point ရှာရန်", "Market Direction (Trend) ကို သိရန်", "အရောင်းရပ်ရန်"], correct: 1 }, { q: "၃။ Lower Timeframe ကို ဘာအတွက် အဓိကသုံးသလဲ?", a: ["Direction သိရန်", "တကျိသော Entry point (Execution) အတွက်", "Trend ရှာရန်"], correct: 1 }, { q: "၄။ နိုင်ခြေအမြင့်ဆုံး Setup ဖြစ်ဖို့ ဘာလုပ်ရမလဲ?", a: ["Lower TF setup က Higher TF trend နှင့် ကိုက်ညီရမည်", "ချက်ချင်း Buy မည်", "Timeframe တစ်ခုတည်းကြည့်မည်"], correct: 0 }, { q: "၅။ Market Structure ပိုခိုင်မာသော Timeframe မှာ ဘယ်ဟာလဲ?", a: ["1-minute", "15-minute", "Daily"], correct: 2 } ],
-            6: [ { q: "၁။ Trading မှာ အရေးကြီးဆုံးအချက်က ဘာလဲ?", a: ["BOS ရှာခြင်း", "Risk Management (အရင်းအနှီး စီမံခန့်ခွဲမှု)", "Indicator သုံးခြင်း"], correct: 1 }, { q: "၂။ '1% Rule' အရ အော်ဒါတစ်ခုမှာ အများဆုံး ဘယ်လောက်ရှုံးခံသင့်သလဲ?", a: ["အကောင့်တစ်ခုလုံး၏ ၅ ရာခိုင်နှုန်း", "အကောင့်တစ်ခုလုံး၏ ၁ ရာခိုင်နှုန်း", "၁၀ ရာခိုင်နှုန်း"], correct: 1 }, { q: "၃။ Risk to Reward 1:3 ဆိုတာ ဘာကို ဆိုလိုတာလဲ?", a: ["၁ ဆ ရှုံးဖို့ ပြင်ဆင်ပြီး ၃ ဆ မြတ်ဖို့ မျှော်လင့်ခြင်း", "၃ ဆ ရှုံးပြီး ၁ ဆ မြတ်ခြင်း", "အရင်းအတိုင်း ပြန်ရခြင်း"], correct: 0 }, { q: "၄။ အရှုံးတွေ ဆက်တိုက်ဖြစ်နေရင်တောင် အကောင့်မပြတ်အောင် ဘာက ကူညီမလဲ?", a: ["Lot size အကြီးကြီးရိုက်ခြင်း", "Proper Position Sizing (မှန်ကန်သော Lot size သုံးစွဲခြင်း)", "ချက်ချင်း အရောင်းရပ်ခြင်း"], correct: 1 }, { q: "၅။ Trader တစ်ယောက်၏ ပထမဆုံးတာဝန်မှာ ဘာလဲ?", a: ["အမြန်ဆုံး သူဌေးဖြစ်ရန်", "အရင်းအနှီးကို မကုန်အောင် ထိန်းသိမ်းခြင်း (Capital Preservation)", "အော်ဒါအများကြီးဖွင့်ရန်"], correct: 1 } ],
-            7: [ { q: "၁။ Trading မှာ အောင်မြင်ဖို့အတွက် အရေးကြီးဆုံးက ဘာလဲ?", a: ["Indicator သစ်များ ရှာခြင်း", "Trading Psychology (စိတ်ပညာနှင့် စည်းကမ်း)", "သတင်းများ နားထောင်ခြင်း"], correct: 1 }, { q: "၂။ ရှုံးသွားတဲ့ငွေကို ချက်ချင်းပြန်ရအောင် ဇွတ်အတင်း Trading လုပ်ခြင်းကို ဘယ်လိုခေါ်သလဲ?", a: ["Swing Trading", "Revenge Trading", "Scalping"], correct: 1 }, { q: "၃။ FOMO ဆိုတာ ဘာကို ဆိုလိုတာလဲ?", a: ["အမြတ်များများယူခြင်း", "အခွင့်အရေး လက်လွတ်သွားမှာ ကြောက်ပြီး ဇွတ်ဝင်ခြင်း", "အရှုံးကို လက်ခံခြင်း"], correct: 1 }, { q: "၄။ Professional Trader တစ်ယောက်ဟာ အရှုံး (Loss) ကို ဘယ်လို မြင်သလဲ?", a: ["ကျရှုံးမှုကြီး တစ်ခုအဖြစ်", "လုပ်ငန်းကုန်ကျစရိတ် (Business Expense) တစ်ခုအဖြစ်", "အမြဲတမ်း ရှောင်လွှဲရမည့်အရာအဖြစ်"], correct: 1 }, { q: "၅။ Trading မှာ နိုင်ခြေ (Win Rate) ထက် ဘာက ပိုအရေးကြီးသလဲ?", a: ["Lot size ကြီးခြင်း", "စည်းကမ်းရှိရှိနဲ့ Plan အတိုင်း လုပ်ဆောင်ခြင်း (Discipline)", "ကံကောင်းခြင်း"], correct: 1 } ]
-        };
 
         window.showLesson = (num) => {
             currentLesson = num;
