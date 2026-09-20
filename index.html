@@ -179,57 +179,53 @@
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
         document.getElementById('user-id-display').innerText = myUserId;
 
-        // Music System
-        let player;
-        const playlist = ['XQEC9qGhE6k', 'MPwwmXdCZGw', 'Pxy8Z2K1pF8'];
-        let isPlaying = false;
+ // Pre-buffered YouTube Music System
+let player;
+const playlist = ['XQEC9qGhE6k', 'MPwwmXdCZGw', 'Pxy8Z2K1pF8']; // ဆရာကြီး ကြိုက်နှစ်သက်ရာ YouTube Video ID များ ထည့်ရန်
+let isPlaying = false;
 
-        window.onYouTubeIframeAPIReady = () => {
-            player = new YT.Player('music-player', {
-                height: '0', width: '0',
-                playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1 },
-                events: {
-                    'onReady': (e) => { e.target.cuePlaylist({ playlist: playlist }); },
-                    'onStateChange': (e) => {
-                        const btn = document.getElementById('music-btn');
-                        const status = document.getElementById('track-status');
-                        
-                        if (e.data === YT.PlayerState.BUFFERING) {
-                            btn.innerText = "LOADING...";
-                            status.innerText = "LOADING...";
-                        } else if (e.data === YT.PlayerState.PLAYING) {
-                            btn.innerText = "STOP";
-                            status.innerText = "ON";
-                            isPlaying = true;
-                        } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-                            btn.innerText = "PLAY";
-                            status.innerText = "OFF";
-                            isPlaying = false;
-                        }
-
-                        if (e.data === YT.PlayerState.ENDED) {
-                            e.target.playVideo();
-                        }
-                    }
+window.onYouTubeIframeAPIReady = () => {
+    player = new YT.Player('music-player', {
+        height: '0', width: '0',
+        playerVars: { 
+            'autoplay': 1, 
+            'controls': 0, 
+            'disablekb': 1,
+            'loop': 1
+        },
+        events: {
+            'onReady': (e) => {
+                e.target.cuePlaylist({ playlist: playlist });
+                e.target.mute(); // အနောက်မှာ အသံပိတ်ပြီး အဆင်သင့် Load လုပ်ထားမည်
+                e.target.playVideo();
+            },
+            'onStateChange': (e) => {
+                if (e.data === YT.PlayerState.ENDED) {
+                    e.target.playVideo();
                 }
-            });
-        };
-
-        window.toggleMusic = () => {
-            const btn = document.getElementById('music-btn');
-            const status = document.getElementById('track-status');
-
-            if (!isPlaying) {
-                btn.innerText = "LOADING...";
-                status.innerText = "LOADING...";
-                player.playVideo();
-            } else {
-                player.pauseVideo();
-                btn.innerText = "PLAY";
-                status.innerText = "OFF";
-                isPlaying = false;
             }
-        };
+        }
+    });
+};
+
+window.toggleMusic = () => {
+    const btn = document.getElementById('music-btn');
+    const status = document.getElementById('track-status');
+
+    if (!isPlaying) {
+        player.unMute(); // နှိပ်လိုက်သည်နှင့် ချက်ချင်း အသံထွက်လာမည်
+        player.playVideo();
+        btn.innerText = "STOP";
+        status.innerText = "ON";
+        isPlaying = true;
+    } else {
+        player.mute(); // ခဏရပ်ထားချိန်တွင် အသံပြန်ပိတ်ထားမည်
+        btn.innerText = "PLAY";
+        status.innerText = "OFF";
+        isPlaying = false;
+    }
+};
+
 
         // Quiz Questions Data (5 Questions per Lesson)
         const questions = {
