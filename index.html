@@ -157,213 +157,238 @@
     </div>
 
     <script src="https://www.youtube.com/iframe_api"></script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, setDoc, getDocs, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, onSnapshot, setDoc, getDocs, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
+    const tg = window.Telegram.WebApp;
+    tg.ready(); tg.expand();
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA5wJhY38C5GMgxjJuGDDejtIje36MvBok",
-            authDomain: "trading-app-69b9d.firebaseapp.com",
-            projectId: "trading-app-69b9d",
-            storageBucket: "trading-app-69b9d.appspot.com",
-            messagingSenderId: "573273662231",
-            appId: "1:573273662231:web:fbbbc6876711e612190829"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5wJhY38C5GMgxjJuGDDejtIje36MvBok",
+        authDomain: "trading-app-69b9d.firebaseapp.com",
+        projectId: "trading-app-69b9d",
+        storageBucket: "trading-app-69b9d.appspot.com",
+        messagingSenderId: "573273662231",
+        appId: "1:573273662231:web:fbbbc6876711e612190829"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
-        document.getElementById('user-id-display').innerText = myUserId;
+    let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
+    document.getElementById('user-id-display').innerText = myUserId;
 
-        // Music System
-        let player;
-        const playlist = ['XQEC9qGhE6k', 'MPwwmXdCZGw', 'Pxy8Z2K1pF8'];
-        let isPlaying = false;
+    // ==========================================
+    // FIXED: Music System Logic (Radio Button)
+    // ==========================================
+    let player;
+    let isPlayerReady = false; // Player Load မပြီးခင် နှိပ်မိပါက Error မတက်အောင် စစ်ဆေးရန်
+    const playlist = ['XQEC9qGhE6k', 'MPwwmXdCZGw', 'Pxy8Z2K1pF8'];
+    let isPlaying = false;
 
-        window.onYouTubeIframeAPIReady = () => {
-            player = new YT.Player('music-player', {
-                height: '0', width: '0',
-                playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1 },
-                events: {
-                    'onReady': (e) => { e.target.cuePlaylist({ playlist: playlist }); },
-                    'onStateChange': (e) => { if (e.data === YT.PlayerState.ENDED) e.target.playVideo(); }
+    window.onYouTubeIframeAPIReady = () => {
+        player = new YT.Player('music-player', {
+            height: '0', 
+            width: '0',
+            playerVars: { 
+                'autoplay': 0, 
+                'controls': 0, 
+                'disablekb': 1,
+                'playsinline': 1 // Mobile / Telegram Mini App မှာ Background ပွင့်နိုင်စေရန်
+            },
+            events: {
+                'onReady': (e) => { 
+                    isPlayerReady = true; 
+                    e.target.cuePlaylist({ playlist: playlist }); 
+                },
+                'onStateChange': (e) => { 
+                    if (e.data === YT.PlayerState.ENDED) e.target.playVideo(); 
                 }
-            });
-        };
+            }
+        });
+    };
 
-        window.toggleMusic = () => {
+    window.toggleMusic = () => {
+        if (!isPlayerReady || !player) {
+            alert("Radio Player ချိတ်ဆက်နေဆဲဖြစ်ပါသည်။ စက္ကန့်အနည်းငယ်စောင့်ပြီး ထပ်မံနှိပ်ပေးပါ။");
+            return;
+        }
+
+        try {
             if (!isPlaying) {
                 player.playVideo();
                 document.getElementById('music-btn').innerText = "STOP";
                 document.getElementById('track-status').innerText = "ON";
+                isPlaying = true;
             } else {
                 player.pauseVideo();
                 document.getElementById('music-btn').innerText = "PLAY";
                 document.getElementById('track-status').innerText = "OFF";
+                isPlaying = false;
             }
-            isPlaying = !isPlaying;
-        };
-
-        // Card System Data
-        const studyCards = [
-            { t: 'Entry Setups', i: ['Entry Setups - 1.png','Entry Setups - 2.png','Entry Setups - 3.png','Entry Setups - 4.png','Entry Setups - 5.png','Entry Setups - 6.png'] },
-            { t: 'Cypher', i: ['Cypher Pattern - 1.png','Cypher Pattern - 2.png','Cypher Pattern - 3.png','Cypher Pattern - 4.png','Cypher Pattern - 5.png'] },
-            { t: 'Market Mech', i: ['Market Mechanics - 1.png','Market Mechanics - 2.png','Market Mechanics - 3.png','Market Mechanics - 4.png','Market Mechanics - 5.png','Market Mechanics - 6.png'] },
-            { t: 'Risk MGMT', i: ['Risk Management - 1.png','Risk Management - 2.png','Risk Management - 3.png','Risk Management - 4.png'] } ,
-            { t: 'Inducement', i: ['Inducement - 1.png','Inducement - 2.png','Inducement - 3.png','Inducement - 4.png','Inducement - 5.png'] } ,
-            { t: 'Equal High', i: ['Equal High - 1.png','Equal High - 2.png','Equal High - 3.png','Equal High - 4.png'] } ,
-            { t: 'Gartley Pattern', i: ['Gartley Pattern - 1.png','Gartley Pattern - 2.png','Gartley Pattern - 3.png','Gartley Pattern - 4.png','Gartley Pattern - 5.png'] } ,
-            { t: 'Moving Average', i: ['Moving Average - 1.png','Moving Average - 2.png','Moving Average - 3.png','Moving Average - 4.png','Moving Average - 5.png'] } ,
-            { t: 'OCL', i: ['OCL - 1.png','OCL - 2.png','OCL - 3.png','OCL - 4.png'] } ,
-            { t: 'Quasimodo', i: ['Quasimodo - 1.png','Quasimodo - 2.png','Quasimodo - 3.png','Quasimodo - 4.png'] } ,
-            { t: 'SMT', i: ['SMT - 1.png','SMT - 2.png','SMT - 3.png','SMT - 4.png'] } ,
-            { t: 'Sellside Liquidity', i: ['Sellside Liquidity - 1.png','Sellside Liquidity - 2.png','Sellside Liquidity - 3.png','Sellside Liquidity - 4.png'] } ,
-            { t: 'Bollinger + RSI', i: ['Bollinger + RSI - 1.png','Bollinger + RSI - 2.png','Bollinger + RSI - 3.png','Bollinger + RSI - 4.png','Bollinger + RSI - 5.png','Bollinger + RSI - 6.png','Bollinger + RSI - 7.png'] },
-            { t: 'Blown Account', i: ['Blown Account - 1.png','Blown Account - 2.png','Blown Account - 3.png','Blown Account - 4.png','Blown Account - 5.png','Blown Account - 6.png'] } ,
-            { t: 'Buyside Liquidity', i: ['Buyside Liquidity - 1.png','Buyside Liquidity - 2.png','Buyside Liquidity - 3.png','Buyside Liquidity - 4.png','Buyside Liquidity - 5.png'] } ,
-            { t: 'Fibonacci', i: ['Fibonacci - 1.png','Fibonacci - 2.png','Fibonacci - 3.png','Fibonacci - 4.png'] } ,
-            { t: 'Probability', i: ['Probability - 1.png','Probability - 2.png','Probability - 3.png','Probability - 4.png'] } ,
-            { t: 'Newyork Open', i: ['Newyork Open - 1.png','Newyork Open - 2.png','Newyork Open - 3.png','Newyork Open - 4.png'] } ,
-            { t: 'London Open', i: ['London Open - 1.png','London Open - 2.png','London Open - 3.png','London Open - 4.png'] } ,
-        ];
-
-        let userScores = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0};
-        let currentLesson = 1, qIdx = 0, qScore = 0;
-        const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
-        const titles = { 1:"Market Structure", 2:"Order Blocks", 3:"Liquidity", 4:"Fair Value Gaps", 5:"Timeframe Correlation", 6:"Risk Management", 7:"Trading Psychology" };
-
-        window.showLesson = (num) => {
-            currentLesson = num;
-            document.getElementById('lesson-title').innerText = "Lesson " + num + ": " + titles[num];
-            document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-l' + num).classList.add('active');
-            
-            document.getElementById('lesson-view').classList.remove('hidden');
-            document.getElementById('quiz-area').classList.add('hidden');
-            document.getElementById('leaderboard-area').classList.add('hidden');
-            document.getElementById('certificate-wrap').classList.add('hidden');
-            initCards();
-        };
-
-        // Card System Logic
-        function initCards() {
-            const grid = document.getElementById('main-card-grid'); grid.innerHTML = "";
-            studyCards.forEach((c, idx) => {
-                grid.innerHTML += `<div class="card-item" onclick="viewCard(${idx})"><img src="${c.i[0]}"><div class="card-label">${c.t}</div></div>`;
-            });
+        } catch (err) {
+            console.error("Music playback error:", err);
         }
+    };
 
-        window.viewCard = (idx) => {
-            const c = studyCards[idx];
-            document.getElementById('ov-title').innerText = c.t;
-            const content = document.getElementById('ov-content'); content.innerHTML = "";
-            c.i.forEach(img => { content.innerHTML += `<img src="${img}">`; });
-            document.getElementById('card-viewer').classList.add('active');
-        };
+    // Card System Data
+    const studyCards = [
+        { t: 'Entry Setups', i: ['Entry Setups - 1.png','Entry Setups - 2.png','Entry Setups - 3.png','Entry Setups - 4.png','Entry Setups - 5.png','Entry Setups - 6.png'] },
+        { t: 'Cypher', i: ['Cypher Pattern - 1.png','Cypher Pattern - 2.png','Cypher Pattern - 3.png','Cypher Pattern - 4.png','Cypher Pattern - 5.png'] },
+        { t: 'Market Mech', i: ['Market Mechanics - 1.png','Market Mechanics - 2.png','Market Mechanics - 3.png','Market Mechanics - 4.png','Market Mechanics - 5.png','Market Mechanics - 6.png'] },
+        { t: 'Risk MGMT', i: ['Risk Management - 1.png','Risk Management - 2.png','Risk Management - 3.png','Risk Management - 4.png'] } ,
+        { t: 'Inducement', i: ['Inducement - 1.png','Inducement - 2.png','Inducement - 3.png','Inducement - 4.png','Inducement - 5.png'] } ,
+        { t: 'Equal High', i: ['Equal High - 1.png','Equal High - 2.png','Equal High - 3.png','Equal High - 4.png'] } ,
+        { t: 'Gartley Pattern', i: ['Gartley Pattern - 1.png','Gartley Pattern - 2.png','Gartley Pattern - 3.png','Gartley Pattern - 4.png','Gartley Pattern - 5.png'] } ,
+        { t: 'Moving Average', i: ['Moving Average - 1.png','Moving Average - 2.png','Moving Average - 3.png','Moving Average - 4.png','Moving Average - 5.png'] } ,
+        { t: 'OCL', i: ['OCL - 1.png','OCL - 2.png','OCL - 3.png','OCL - 4.png'] } ,
+        { t: 'Quasimodo', i: ['Quasimodo - 1.png','Quasimodo - 2.png','Quasimodo - 3.png','Quasimodo - 4.png'] } ,
+        { t: 'SMT', i: ['SMT - 1.png','SMT - 2.png','SMT - 3.png','SMT - 4.png'] } ,
+        { t: 'Sellside Liquidity', i: ['Sellside Liquidity - 1.png','Sellside Liquidity - 2.png','Sellside Liquidity - 3.png','Sellside Liquidity - 4.png'] } ,
+        { t: 'Bollinger + RSI', i: ['Bollinger + RSI - 1.png','Bollinger + RSI - 2.png','Bollinger + RSI - 3.png','Bollinger + RSI - 4.png','Bollinger + RSI - 5.png','Bollinger + RSI - 6.png','Bollinger + RSI - 7.png'] },
+        { t: 'Blown Account', i: ['Blown Account - 1.png','Blown Account - 2.png','Blown Account - 3.png','Blown Account - 4.png','Blown Account - 5.png','Blown Account - 6.png'] } ,
+        { t: 'Buyside Liquidity', i: ['Buyside Liquidity - 1.png','Buyside Liquidity - 2.png','Buyside Liquidity - 3.png','Buyside Liquidity - 4.png','Buyside Liquidity - 5.png'] } ,
+        { t: 'Fibonacci', i: ['Fibonacci - 1.png','Fibonacci - 2.png','Fibonacci - 3.png','Fibonacci - 4.png'] } ,
+        { t: 'Probability', i: ['Probability - 1.png','Probability - 2.png','Probability - 3.png','Probability - 4.png'] } ,
+        { t: 'Newyork Open', i: ['Newyork Open - 1.png','Newyork Open - 2.png','Newyork Open - 3.png','Newyork Open - 4.png'] } ,
+        { t: 'London Open', i: ['London Open - 1.png','London Open - 2.png','London Open - 3.png','London Open - 4.png'] } ,
+    ];
 
-        window.closeViewer = () => document.getElementById('card-viewer').classList.remove('active');
+    let userScores = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0};
+    let currentLesson = 1, qIdx = 0, qScore = 0;
+    const videos = { 1:"jyad4g6F8FU", 2:"DDLsFro2bpc", 3:"DwP9zFAC5EA", 4:"L_zlR6ZxXNg", 5:"GoRcLqAsYUg", 6:"n7owfWxBxmw", 7:"nYuowB5Wyts" };
+    const titles = { 1:"Market Structure", 2:"Order Blocks", 3:"Liquidity", 4:"Fair Value Gaps", 5:"Timeframe Correlation", 6:"Risk Management", 7:"Trading Psychology" };
 
-        window.startQuiz = () => {
-            qIdx = 0; qScore = 0;
-            document.getElementById('lesson-view').classList.add('hidden');
-            document.getElementById('quiz-area').classList.remove('hidden');
-            document.getElementById('quiz-result').classList.add('hidden');
-            document.getElementById('question-container').classList.remove('hidden');
-            loadQ();
-        };
+    window.showLesson = (num) => {
+        currentLesson = num;
+        document.getElementById('lesson-title').innerText = "Lesson " + num + ": " + titles[num];
+        document.getElementById('video-frame').src = "https://www.youtube.com/embed/" + videos[num];
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('btn-l' + num).classList.add('active');
+        
+        document.getElementById('lesson-view').classList.remove('hidden');
+        document.getElementById('quiz-area').classList.add('hidden');
+        document.getElementById('leaderboard-area').classList.add('hidden');
+        document.getElementById('certificate-wrap').classList.add('hidden');
+        initCards();
+    };
 
-        function loadQ() {
-            const data = questions[currentLesson][qIdx];
-            document.getElementById('quiz-header').innerText = "Quiz: " + titles[currentLesson];
-            document.getElementById('question-text').innerText = data.q;
-            const list = document.getElementById('options-list'); list.innerHTML = "";
-            document.getElementById('next-btn').classList.add('hidden');
-            data.a.forEach((opt, i) => {
-                const b = document.createElement('button'); b.className = "quiz-option"; b.innerText = opt;
-                b.onclick = () => {
-                    if (i === data.correct) { b.classList.add('correct'); qScore++; }
-                    else { b.classList.add('wrong'); }
-                    document.getElementById('next-btn').classList.remove('hidden');
-                    document.querySelectorAll('.quiz-option').forEach(btn => btn.onclick = null);
-                };
-                list.appendChild(b);
-            });
-        }
+    // Card System Logic
+    function initCards() {
+        const grid = document.getElementById('main-card-grid'); grid.innerHTML = "";
+        studyCards.forEach((c, idx) => {
+            grid.innerHTML += `<div class="card-item" onclick="viewCard(${idx})"><img src="${c.i[0]}"><div class="card-label">${c.t}</div></div>`;
+        });
+    }
 
-        window.nextQuestion = () => {
-            qIdx++;
-            if (qIdx < 5) loadQ();
-            else {
-                userScores[currentLesson] = qScore;
-                document.getElementById('question-container').classList.add('hidden');
-                document.getElementById('quiz-result').classList.remove('hidden');
-                document.getElementById('current-score-text').innerText = "Score: " + qScore + " / 5";
-                if (currentLesson === 7) {
-                    document.getElementById('final-cert-btn').classList.remove('hidden');
-                    saveFinalScore();
-                }
-            }
-        };
+    window.viewCard = (idx) => {
+        const c = studyCards[idx];
+        document.getElementById('ov-title').innerText = c.t;
+        const content = document.getElementById('ov-content'); content.innerHTML = "";
+        c.i.forEach(img => { content.innerHTML += `<img src="${img}">`; });
+        document.getElementById('card-viewer').classList.add('active');
+    };
 
-        async function saveFinalScore() {
-            let total = 0; for(let k in userScores) total += userScores[k];
-            if (myUserId !== "Guest") {
-                await setDoc(doc(db, "users", myUserId), { total_score: total, last_updated: new Date() }, { merge: true });
+    window.closeViewer = () => document.getElementById('card-viewer').classList.remove('active');
+
+    window.startQuiz = () => {
+        qIdx = 0; qScore = 0;
+        document.getElementById('lesson-view').classList.add('hidden');
+        document.getElementById('quiz-area').classList.remove('hidden');
+        document.getElementById('quiz-result').classList.add('hidden');
+        document.getElementById('question-container').classList.remove('hidden');
+        loadQ();
+    };
+
+    function loadQ() {
+        const data = questions[currentLesson][qIdx];
+        document.getElementById('quiz-header').innerText = "Quiz: " + titles[currentLesson];
+        document.getElementById('question-text').innerText = data.q;
+        const list = document.getElementById('options-list'); list.innerHTML = "";
+        document.getElementById('next-btn').classList.add('hidden');
+        data.a.forEach((opt, i) => {
+            const b = document.createElement('button'); b.className = "quiz-option"; b.innerText = opt;
+            b.onclick = () => {
+                if (i === data.correct) { b.classList.add('correct'); qScore++; }
+                else { b.classList.add('wrong'); }
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.querySelectorAll('.quiz-option').forEach(btn => btn.onclick = null);
+            };
+            list.appendChild(b);
+        });
+    }
+
+    window.nextQuestion = () => {
+        qIdx++;
+        if (qIdx < 5) loadQ();
+        else {
+            userScores[currentLesson] = qScore;
+            document.getElementById('question-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('current-score-text').innerText = "Score: " + qScore + " / 5";
+            if (currentLesson === 7) {
+                document.getElementById('final-cert-btn').classList.remove('hidden');
+                saveFinalScore();
             }
         }
+    };
 
-        function maskUserId(id) {
-            if (id.length <= 3) return "***";
-            return id.slice(0, -3) + "***";
-        }
-
-        window.showLeaderboard = async () => {
-            document.getElementById('lesson-view').classList.add('hidden');
-            document.getElementById('quiz-area').classList.add('hidden');
-            document.getElementById('certificate-wrap').classList.add('hidden');
-            document.getElementById('leaderboard-area').classList.remove('hidden');
-            
-            const q = query(collection(db, "users"), orderBy("total_score", "desc"), limit(10));
-            const snap = await getDocs(q);
-            const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = "";
-            
-            let rank = 1;
-            snap.forEach(docSnap => {
-                const data = docSnap.data();
-                if(data.total_score !== undefined) {
-                    const row = document.createElement('tr');
-                    if(docSnap.id === myUserId) row.className = "my-rank-row";
-                    row.innerHTML = `<td>${rank}</td><td>${maskUserId(docSnap.id)}</td><td>${data.total_score}</td>`;
-                    tbody.appendChild(row);
-                    rank++;
-                }
-            });
-        };
-
-        window.generateCertificate = () => {
-            let total = 0; for(let k in userScores) total += userScores[k];
-            document.getElementById('quiz-area').classList.add('hidden');
-            document.getElementById('certificate-wrap').classList.remove('hidden');
-            document.getElementById('cert-user-id').innerText = myUserId;
-            document.getElementById('cert-total-score').innerText = "Total Score: " + total + " / 35";
-        };
-
-        window.backToLessons = () => showLesson(currentLesson);
-
+    async function saveFinalScore() {
+        let total = 0; for(let k in userScores) total += userScores[k];
         if (myUserId !== "Guest") {
-            onSnapshot(doc(db, "users", myUserId), (docSnap) => {
-                if (docSnap.exists() && docSnap.data().is_approved === true) {
-                    document.getElementById('locked-section').classList.add('hidden');
-                    document.getElementById('unlocked-section').classList.remove('hidden');
-                    showLesson(1);
-                }
-            });
+            await setDoc(doc(db, "users", myUserId), { total_score: total, last_updated: new Date() }, { merge: true });
         }
-    </script>
+    }
+
+    function maskUserId(id) {
+        if (id.length <= 3) return "***";
+        return id.slice(0, -3) + "***";
+    }
+
+    window.showLeaderboard = async () => {
+        document.getElementById('lesson-view').classList.add('hidden');
+        document.getElementById('quiz-area').classList.add('hidden');
+        document.getElementById('certificate-wrap').classList.add('hidden');
+        document.getElementById('leaderboard-area').classList.remove('hidden');
+        
+        const q = query(collection(db, "users"), orderBy("total_score", "desc"), limit(10));
+        const snap = await getDocs(q);
+        const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = "";
+        
+        let rank = 1;
+        snap.forEach(docSnap => {
+            const data = docSnap.data();
+            if(data.total_score !== undefined) {
+                const row = document.createElement('tr');
+                if(docSnap.id === myUserId) row.className = "my-rank-row";
+                row.innerHTML = `<td>${rank}</td><td>${maskUserId(docSnap.id)}</td><td>${data.total_score}</td>`;
+                tbody.appendChild(row);
+                rank++;
+            }
+        });
+    };
+
+    window.generateCertificate = () => {
+        let total = 0; for(let k in userScores) total += userScores[k];
+        document.getElementById('quiz-area').classList.add('hidden');
+        document.getElementById('certificate-wrap').classList.remove('hidden');
+        document.getElementById('cert-user-id').innerText = myUserId;
+        document.getElementById('cert-total-score').innerText = "Total Score: " + total + " / 35";
+    };
+
+    window.backToLessons = () => showLesson(currentLesson);
+
+    if (myUserId !== "Guest") {
+        onSnapshot(doc(db, "users", myUserId), (docSnap) => {
+            if (docSnap.exists() && docSnap.data().is_approved === true) {
+                document.getElementById('locked-section').classList.add('hidden');
+                document.getElementById('unlocked-section').classList.remove('hidden');
+                showLesson(1);
+            }
+        });
+    }
+</script>
+
 </body>
 </html>
