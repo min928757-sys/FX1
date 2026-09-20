@@ -89,11 +89,12 @@
                     <button onclick="startQuiz()">Take Lesson Quiz ✍️</button>
                 </div>
 
+                                <!-- Music Control UI (Violin Music) -->
                 <div class="music-bar">
-                    <div class="music-info">🎵 FX LOFI RADIO: <span id="track-status">OFF</span></div>
-                    <button class="music-toggle" id="music-btn" onclick="toggleMusic()">PLAY</button>
+                    <div class="music-info">🎻 VIOLIN LOFI: <span id="track-status">OFF</span></div>
+                    <button class="music-toggle" id="music-btn" onclick="toggleViolinMusic()">PLAY</button>
                 </div>
-                <div id="music-player" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0;"></div>
+
 
                 <div class="section-title">E-BOOKS & RESOURCES</div>
                 <div class="pdf-box">
@@ -179,52 +180,31 @@
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
         document.getElementById('user-id-display').innerText = myUserId;
 
- // Pre-buffered YouTube Music System
-let player;
-const playlist = ['XQEC9qGhE6k', 'MPwwmXdCZGw', 'Pxy8Z2K1pF8']; // ဆရာကြီး ကြိုက်နှစ်သက်ရာ YouTube Video ID များ ထည့်ရန်
-let isPlaying = false;
+         // Violin Audio System (Instant Play & Infinity Loop)
+        const violinAudio = new Audio('https://stream.zeno.fm/3r3u2a9m28uvv');
+        violinAudio.loop = true; // Infinity Loop အဆုံးမရှိ ပွင့်နေမည်
+        let isPlaying = false;
 
-window.onYouTubeIframeAPIReady = () => {
-    player = new YT.Player('music-player', {
-        height: '0', width: '0',
-        playerVars: { 
-            'autoplay': 1, 
-            'controls': 0, 
-            'disablekb': 1,
-            'loop': 1
-        },
-        events: {
-            'onReady': (e) => {
-                e.target.cuePlaylist({ playlist: playlist });
-                e.target.mute(); // အနောက်မှာ အသံပိတ်ပြီး အဆင်သင့် Load လုပ်ထားမည်
-                e.target.playVideo();
-            },
-            'onStateChange': (e) => {
-                if (e.data === YT.PlayerState.ENDED) {
-                    e.target.playVideo();
-                }
+        window.toggleViolinMusic = () => {
+            const btn = document.getElementById('music-btn');
+            const status = document.getElementById('track-status');
+
+            if (!isPlaying) {
+                violinAudio.play().then(() => {
+                    btn.innerText = "STOP";
+                    status.innerText = "ON";
+                    isPlaying = true;
+                }).catch(error => {
+                    console.log("Audio play error:", error);
+                });
+            } else {
+                violinAudio.pause();
+                btn.innerText = "PLAY";
+                status.innerText = "OFF";
+                isPlaying = false;
             }
-        }
-    });
-};
+        };
 
-window.toggleMusic = () => {
-    const btn = document.getElementById('music-btn');
-    const status = document.getElementById('track-status');
-
-    if (!isPlaying) {
-        player.unMute(); // နှိပ်လိုက်သည်နှင့် ချက်ချင်း အသံထွက်လာမည်
-        player.playVideo();
-        btn.innerText = "STOP";
-        status.innerText = "ON";
-        isPlaying = true;
-    } else {
-        player.mute(); // ခဏရပ်ထားချိန်တွင် အသံပြန်ပိတ်ထားမည်
-        btn.innerText = "PLAY";
-        status.innerText = "OFF";
-        isPlaying = false;
-    }
-};
 
 
         // Quiz Questions Data (5 Questions per Lesson)
