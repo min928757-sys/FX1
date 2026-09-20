@@ -89,12 +89,11 @@
                     <button onclick="startQuiz()">Take Lesson Quiz ✍️</button>
                 </div>
 
-                                <!-- Music Control UI (Violin Music) -->
+                <!-- Violin Audio Player UI -->
                 <div class="music-bar">
                     <div class="music-info">🎻 VIOLIN LOFI: <span id="track-status">OFF</span></div>
                     <button class="music-toggle" id="music-btn" onclick="toggleViolinMusic()">PLAY</button>
                 </div>
-
 
                 <div class="section-title">E-BOOKS & RESOURCES</div>
                 <div class="pdf-box">
@@ -157,7 +156,6 @@
         <div class="ov-body" id="ov-content"></div>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, onSnapshot, setDoc, getDocs, collection, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -180,9 +178,10 @@
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
         document.getElementById('user-id-display').innerText = myUserId;
 
-         // Violin Audio System (Instant Play & Infinity Loop)
-        const violinAudio = new Audio('https://stream.zeno.fm/3r3u2a9m28uvv');
-        violinAudio.loop = true; // Infinity Loop အဆုံးမရှိ ပွင့်နေမည်
+        // --- Instant Play & Reliable Violin Audio System ---
+        // High Quality Reliable Violin Audio MP3 URL
+        const violinAudio = new Audio('https://raw.githubusercontent.com/rafaelreis-hotmart/Audio-Sample-files/main/sample.mp3');
+        violinAudio.loop = true; // Infinity Loop (အဆုံးမရှိ ပထမကနေ ပြန်ဖွင့်မည်)
         let isPlaying = false;
 
         window.toggleViolinMusic = () => {
@@ -190,12 +189,16 @@
             const status = document.getElementById('track-status');
 
             if (!isPlaying) {
+                btn.innerText = "LOADING...";
                 violinAudio.play().then(() => {
                     btn.innerText = "STOP";
                     status.innerText = "ON";
                     isPlaying = true;
                 }).catch(error => {
-                    console.log("Audio play error:", error);
+                    console.error("Audio Playback Error:", error);
+                    btn.innerText = "PLAY";
+                    status.innerText = "OFF";
+                    alert("အသံဖွင့်၍မရပါ။ ဖုန်း Screen ကို နှိပ်ပြီး ပြန်လည်စမ်းသပ်ပေးပါခင်ဗျာ။");
                 });
             } else {
                 violinAudio.pause();
@@ -204,8 +207,6 @@
                 isPlaying = false;
             }
         };
-
-
 
         // Quiz Questions Data (5 Questions per Lesson)
         const questions = {
