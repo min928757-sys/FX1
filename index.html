@@ -178,35 +178,52 @@
         let myUserId = tg.initDataUnsafe?.user?.id?.toString() || "Guest";
         document.getElementById('user-id-display').innerText = myUserId;
 
-        // --- Instant Play & Reliable Violin Audio System ---
-        // High Quality Reliable Violin Audio MP3 URL
-        const violinAudio = new Audio('https://raw.githubusercontent.com/rafaelreis-hotmart/Audio-Sample-files/main/sample.mp3');
-        violinAudio.loop = true; // Infinity Loop (အဆုံးမရှိ ပထမကနေ ပြန်ဖွင့်မည်)
-        let isPlaying = false;
+        // Reliable Instant Audio System (iOS & Telegram Mini App Ready)
+const violinAudio = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3');
+violinAudio.loop = true; 
+violinAudio.preload = "auto"; // Pre-load လုပ်ထားပေးသဖြင့် PLAY နှိပ်လျှင် ချက်ချင်းပွင့်မည်
+let isPlaying = false;
 
-        window.toggleViolinMusic = () => {
-            const btn = document.getElementById('music-btn');
-            const status = document.getElementById('track-status');
+window.toggleViolinMusic = () => {
+    const btn = document.getElementById('music-btn');
+    const status = document.getElementById('track-status');
 
-            if (!isPlaying) {
-                btn.innerText = "LOADING...";
+    if (!isPlaying) {
+        btn.innerText = "LOADING...";
+        
+        // Play command
+        let playPromise = violinAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                btn.innerText = "STOP";
+                status.innerText = "ON";
+                isPlaying = true;
+            }).catch(error => {
+                console.error("Audio Playback Error:", error);
+                btn.innerText = "PLAY";
+                status.innerText = "OFF";
+                isPlaying = false;
+                
+                // Audio Reload strategy for iOS Safari
+                violinAudio.load();
                 violinAudio.play().then(() => {
                     btn.innerText = "STOP";
                     status.innerText = "ON";
                     isPlaying = true;
-                }).catch(error => {
-                    console.error("Audio Playback Error:", error);
-                    btn.innerText = "PLAY";
-                    status.innerText = "OFF";
-                    alert("အသံဖွင့်၍မရပါ။ ဖုန်း Screen ကို နှိပ်ပြီး ပြန်လည်စမ်းသပ်ပေးပါခင်ဗျာ။");
+                }).catch(e => {
+                    alert("အသံဖွင့်ရန် PLAY ကို နောက်တစ်ကြိမ် ထပ်မံနှိပ်ပေးပါခင်ဗျာ။");
                 });
-            } else {
-                violinAudio.pause();
-                btn.innerText = "PLAY";
-                status.innerText = "OFF";
-                isPlaying = false;
-            }
-        };
+            });
+        }
+    } else {
+        violinAudio.pause();
+        btn.innerText = "PLAY";
+        status.innerText = "OFF";
+        isPlaying = false;
+    }
+};
+
 
         // Quiz Questions Data (5 Questions per Lesson)
         const questions = {
